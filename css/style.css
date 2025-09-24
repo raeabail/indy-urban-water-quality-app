@@ -1,0 +1,1278 @@
+/* =========================
+   THEME / BASE
+   ========================= */
+:root{
+  --ink:#162e44;
+  --ink-2:#27475f;
+  --sky:#BFE8FF;
+  --paper:#ffffff;
+  --accent:#0056b3;
+  --gradient-start:#F9FDFF;
+}
+
+/* smoother multi-stop gradient (reduces step size) */
+html{
+  background: linear-gradient(
+    180deg,
+    #f9fdff 0%,
+    #f3f9ff 25%,
+    #e9f5ff 55%,
+    #d6efff 78%,
+    #bfe8ff 100%
+  );
+}
+
+/* keep your existing body styles, but add position:relative for the overlay */
+body{
+  font-family:'Roboto', Arial, sans-serif;
+  margin: 0;
+  color: var(--ink);
+  background: transparent;      /* gradient lives on html */
+  padding-top: 100px;            /* your fixed navbar spacing */
+  display: flex;
+  flex-direction: column;
+  position: relative;            /* <-- needed for ::before stacking */
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;   
+  z-index: 1;             
+}
+
+.navbar.fixed-top{
+  z-index: 1030;          
+}
+.dropdown-menu{
+  z-index: 1040;           
+}
+
+
+/* Ensure main content sits above the overlay */
+body > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   NAVBAR (shared)
+   ========================= */
+.navbar{
+  background: linear-gradient(to right, #ffffff, #eaf7ff);
+  border-bottom: 1px solid #dce7f1;
+  padding: 14px 30px;
+  transition: all 0.3s ease;
+}
+.navbar.scrolled{
+  padding: 8px 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.navbar-brand{
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--ink) !important;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.navbar img.brand-logo{ height: 60px; }
+.navbar-nav .nav-link{
+  color: var(--ink-2) !important;
+  font-weight: 500;
+  margin-right: 20px;
+  transition: color 0.2s ease;
+}
+.navbar-nav .nav-link:hover{ color: var(--accent) !important; }
+.navbar-nav .nav-link.active{
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 4px;
+  color: var(--accent) !important;
+  font-weight: 600;
+  background: none;
+}
+
+/* =========================
+   GENERAL HEADINGS / TEXT
+   ========================= */
+h1, h2, h3{ font-weight: 700; color: #001f3f; }
+h1{ font-weight: 800; font-size: clamp(2rem, 4vw, 3rem); }
+.lead{ color: var(--ink-2); font-size: 1.15rem; }
+
+/* =========================
+   “REPORT” PAGE CONTAINER
+   (use <div class="container body">…)
+   ========================= */
+.container.body{
+  max-width: 1100px;
+  background: #fff;
+  padding: 40px 28px;
+  border-radius: 12px;
+  min-height: auto;
+  margin-top: 10px;  
+}
+
+/* =========================
+   HERO / TITLE PAGE
+   (documentation.html and index.html)
+   ========================= */
+.hero{
+  flex: 1;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+.hero-card{
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.08);
+  padding: 48px 36px;
+  margin: 0 auto;
+}
+.kicker{
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #0b3353;
+  opacity: .7;
+}
+
+/* Secondary links under the primary CTA */
+.secondary-links{
+  color: #5e7a97;
+  margin-top: 6px;
+}
+.secondary-links a{
+  color: #337ab7;
+  text-decoration: none;
+  font-weight: 500;
+}
+.secondary-links a:hover{
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Parameter triggers look like links but are buttons (for accessibility) */
+.param-trigger {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.param-trigger span { text-decoration: underline; text-decoration-color: rgba(0,0,0,0.15); }
+.param-trigger:hover span { color: var(--accent); text-decoration-color: currentColor; }
+
+/* Modal / callout card (using <dialog>) */
+#paramModal {
+  border: 0;
+  border-radius: 16px;
+  padding: 20px;
+  width: min(640px, 92vw);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+#paramModal ul {
+  margin: 0 0 14px 20px;
+  padding: 0;
+  line-height: 1.6;
+}
+
+#paramModal li {
+  margin-bottom: 6px;
+}
+
+#paramModal .param-img-wrapper {
+  text-align: center;
+  margin: 14px 0;
+}
+
+#paramModal .param-img-wrapper img {
+  max-width: 100%;
+  border-radius: 8px;
+  display: block; 
+  margin-left: auto;       
+  margin-right: auto;
+}
+
+#paramModal .param-more-wrapper {
+  text-align: center;
+  margin-top: 12px;
+}
+
+#paramModal a#paramMore {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--accent);
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+#paramModal::backdrop {
+  background: radial-gradient(closest-side, rgba(0,0,0,0.35), rgba(0,0,0,0.6));
+}
+#paramModal img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+#paramModal #paramDesc p {
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+#paramModal h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 700;
+}
+#paramModal p {
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+#paramModal a#paramMore {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--accent);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+#paramModal .param-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+#paramModal .param-close:hover { color: var(--accent); }
+
+/* =========================
+   STUDY AREA
+   (studyarea.html)
+   ========================= */
+.section-divider{
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #dce7f1, transparent);
+  margin: 22px 0;
+}
+.study-row{
+  --bs-gutter-x: 2rem;
+  row-gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.container.body h3{ margin-bottom: .5rem; }
+.container.body h4{ margin-top: .25rem; margin-bottom: .75rem; }
+.container.body p{ margin-bottom: .75rem; }
+.container.body ul{ margin-bottom: .75rem; }
+
+.study-figure{
+  width: 100%;
+  max-width: 380px;            /* keeps images a friendly size on desktop */
+  border: 1px solid #e6eef6;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+.figure-note{
+  color: #5e7a97;
+  font-size: .92rem;
+  margin-top: .5rem;
+}
+@media (max-width: 575.98px){
+  .study-figure{ max-width: 100%; }
+}
+
+ul li a {
+    color: #05212e;   /* your custom dark greenish-blue */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+ul li a:hover {
+    color: #003366;   /* optional hover shade — you can also use a lighter version of #05212e */
+    text-decoration: underline;
+}
+
+.callout {
+  background:#f1f9ff;
+  border-left:4px solid #05212e;
+  padding:10px 15px;
+  border-radius:4px;
+  margin-top:12px;
+}
+.callout h6 { margin:0 0 6px 0; font-weight:700; }
+.callout ul { margin:0 0 0 18px; }
+
+/* =========================
+   INTERACTIVE MAP
+   (interactivemap.html)
+   ========================= */
+     .ee-embed {
+    width: 100%;
+    height: 750px;         /* adjust to taste */
+    border: 0;
+    border-radius: 8px;
+    display: block;
+  }
+  @media (max-width: 576px) {
+    .ee-embed { height: 520px; }  /* shorter on phones if you want */
+  }
+
+/* =========================
+   PCA EXPLANATION 
+   (pca_exp.html)
+   ========================= */
+
+.note-bridge{
+  border-left: 3px solid #cbd5e0;   /* subtle accent */
+  padding: 8px 0 8px 14px;          /* light padding */
+  margin: 14px 0 12px;              /* small vertical rhythm */
+  background: transparent;          /* no fill */
+}
+.note-bridge p{ margin: 6px 0; line-height: 1.45; }
+
+.bridge-sep{ border: 0; border-top: 1px dashed #d9e2ec; margin: 12px 0; }
+.bridge-text p{ margin: 6px 0; }
+
+/* ===== PCA EXPLANATION (pca_exp.html) – fullscreen flip, no grey ===== */
+
+/* === PCA EXP — fullscreen flip, no backdrop, no shifting === */
+
+/* grid stays as-is */
+.pca-exp .card-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(280px,1fr));
+  gap:16px;
+  margin:16px 0;
+}
+@media (max-width:900px){ .pca-exp .card-grid{ grid-template-columns:1fr; } }
+
+/* card shell (front height = 300px) */
+.pca-exp .flip-card{ position:relative; perspective:1000px; cursor:pointer; }
+.pca-exp .flip-card-inner{
+  position:relative;
+  width:100%;
+  height:300px;                     /* front height */
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  transform-style:preserve-3d;
+  transition:transform 0.7s cubic-bezier(.25,.8,.25,1);
+}
+
+/* faces */
+.pca-exp .flip-card-front,
+.pca-exp .flip-card-back{
+  position:absolute; inset:0;
+  padding:18px;
+  border-radius:12px;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+.pca-exp .flip-card-front{
+  display:flex; align-items:center; justify-content:center; text-align:center;
+}
+.pca-exp .flip-card-back{
+  transform:rotateY(180deg);          /* 3D flip */
+  background:#fff; color:#162e44;
+  display:block; text-align:left; line-height:1.55;
+  overflow:hidden;                    /* becomes scroll in fullscreen */
+}
+.pca-exp .flip-card-back p{ margin:10px 0; }
+.pca-exp .flip-card-back ul{ margin:8px 0 0 1.25rem; }
+.pca-exp .flip-card-back img{ max-width:100%; height:auto; border-radius:6px; }
+
+/* flip */
+.pca-exp .flip-card.open .flip-card-inner{ transform:rotateY(180deg); }
+
+/* FULLSCREEN (centered, white, back scrolls) */
+.pca-exp .flip-card.expanded{
+  position:fixed;
+  top:5vh; left:50%;
+  transform:translateX(-50%);         /* centered */
+  width:min(1040px, 96vw);
+  max-height:90vh;                     /* never off-screen */
+  z-index:99999;                       /* above everything */
+  isolation:isolate;
+}
+.pca-exp .flip-card.expanded .flip-card-inner{
+  height:auto;                         /* allow content height */
+  min-height:0;
+  box-shadow:0 14px 34px rgba(0,0,0,.22);
+  transform:rotateY(180deg);           /* show back */
+}
+.pca-exp .flip-card.expanded .flip-card-back{
+  height:auto;
+  max-height:calc(90vh - 24px);
+  overflow:auto;                       /* ← inner scrollbar */
+  -webkit-overflow-scrolling:touch;
+  background:#fff;                     /* stays white */
+}
+
+/* center the contents INSIDE the back while keeping text left-aligned */
+.pca-exp .flip-card.expanded .flip-card-back > *{
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* make sure the front never overlays the back while expanded */
+.pca-exp .flip-card.expanded .flip-card-front{
+  opacity:0; pointer-events:none;
+}
+
+/* placeholder that keeps the grid from shifting while a card is fixed */
+.pca-exp .flip-placeholder{
+  height:300px;                        /* same as front height */
+}
+
+/* safety: if any global ".back { rotate(180deg) }" exists, kill it here */
+.pca-exp .back{ transform:none !important; rotate:0deg !important; }
+
+/* optional: tidy close button (if you want it) */
+.pca-exp .flip-card .flip-close{
+  position:sticky; top:8px; float:right;
+  background:#162e44; color:#fff; border:0; border-radius:8px;
+  padding:6px 10px; font-weight:600; cursor:pointer; margin-bottom:8px;
+  display:none;
+}
+.pca-exp .flip-card.expanded .flip-close{ display:inline-block; }
+.pca-exp .flip-card .flip-close:hover{ background:#BFE8FF; color:#162e44; }
+
+/* === FIX: make expanded card truly fullscreen and the back fill/scroll === */
+.pca-exp .flip-card.expanded{
+  height: 90vh;                /* occupy viewport height */
+}
+
+.pca-exp .flip-card.expanded .flip-card-inner{
+  height: 100% !important;     /* fill the fullscreen box */
+}
+
+.pca-exp .flip-card.expanded .flip-card-back{
+  height: 100% !important;     /* fill the inner */
+  max-height: none !important; /* do NOT shrink */
+  overflow: auto;               /* scroll inside the card */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* make sure the front can't sit on top while expanded */
+.pca-exp .flip-card.expanded .flip-card-front{
+  opacity: 0; pointer-events: none;
+}
+
+/* Fill the viewport on expand (no gap = no line) */
+.pca-exp .flip-card.expanded{
+  top: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1040px, 96vw);
+  height: calc(100vh - 4vh);      /* full viewport minus 2vh top + 2vh bottom */
+  max-height: none;               /* kill previous max-height */
+  z-index: 99999;
+  isolation: isolate;
+}
+
+/* Make the inner fill the box */
+.pca-exp .flip-card.expanded .flip-card-inner{
+  height: 100% !important;
+  transform: rotateY(180deg);     /* show back */
+  box-shadow: 0 14px 34px rgba(0,0,0,.22);
+}
+
+/* Make the back fill and scroll inside */
+.pca-exp .flip-card.expanded .flip-card-back{
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: auto;                 /* scrollbar INSIDE the card */
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+}
+
+/* Ensure the front never overlays the back while expanded */
+.pca-exp .flip-card.expanded .flip-card-front{
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* === PCA EXP: fill viewport, hide the line, center contents, keep scroll === */
+
+/* 1) Pin the expanded card top AND bottom (no gap = no line) */
+.pca-exp .flip-card.expanded{
+  position: fixed;
+  top: 2vh !important;
+  bottom: 2vh !important;         /* <-- fills to bottom; replaces max-height */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(1040px, 96vw) !important;
+  height: auto !important;
+  max-height: none !important;
+  z-index: 99999;
+  isolation: isolate;
+}
+
+/* 2) Make the inner fill the fixed box */
+.pca-exp .flip-card.expanded .flip-card-inner{
+  height: 100% !important;
+  transform: rotateY(180deg) !important;  /* show the back */
+  box-shadow: 0 14px 34px rgba(0,0,0,.22);
+}
+
+/* 3) Back fills and scrolls */
+.pca-exp .flip-card.expanded .flip-card-back{
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: auto !important;              /* scrollbar INSIDE the card */
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+}
+
+/* 4) Center the contents of the back (text & images) */
+.pca-exp .flip-card.expanded .flip-card-back{
+  display: flex;
+  flex-direction: column;
+  align-items: center;                    /* center horizontally */
+  text-align: center;                     /* center text */
+  padding: 20px;
+  gap: 12px;
+}
+
+/* Constrain line length so it looks tidy while centered */
+.pca-exp .flip-card.expanded .flip-card-back > *{
+  width: 100%;
+  max-width: 900px;                       /* adjust to taste */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Keep images neat when centered */
+.pca-exp .flip-card.expanded .flip-card-back img{
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ensure front never overlays the back while expanded */
+.pca-exp .flip-card.expanded .flip-card-front{
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ---- PCA EXP: tighter text + guaranteed side-by-side images ---- */
+
+/* Tighter copy and cleaner rhythm (while expanded) */
+.pca-exp .flip-card.expanded .flip-card-back{
+  text-align: left !important;
+  line-height: 1.45 !important;
+  padding: 18px 20px !important;
+}
+.pca-exp .flip-card.expanded .flip-card-back > *{
+  max-width: 840px !important;    /* shorter line length */
+  margin: 6px auto !important;    /* consistent spacing */
+}
+.pca-exp .flip-card.expanded .flip-card-back p{ margin: 6px 0 !important; }
+.pca-exp .flip-card.expanded .flip-card-back ul{ margin: 6px 0 0 1.1rem !important; }
+.pca-exp .flip-card.expanded .flip-card-back li{ margin: 4px 0 !important; }
+.pca-exp .flip-card.expanded .flip-card-back > :first-child{ margin-top: 0 !important; }
+.pca-exp .flip-card.expanded .flip-card-back > :last-child{ margin-bottom: 0 !important; }
+
+/* Preferred: wrap related images in a container .fc-imgs */
+.pca-exp .flip-card.expanded .flip-card-back .fc-imgs{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;  /* 3 across */
+  gap: 12px !important;
+  align-items: start !important;
+  justify-items: center !important;
+  margin-top: 8px !important;
+}
+@media (max-width: 900px){
+  .pca-exp .flip-card.expanded .flip-card-back .fc-imgs{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 560px){
+  .pca-exp .flip-card.expanded .flip-card-back .fc-imgs{
+    grid-template-columns: 1fr !important;
+  }
+}
+/* Make images fill their grid cell regardless of inline widths */
+.pca-exp .flip-card.expanded .flip-card-back .fc-imgs img{
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: 6px;
+}
+
+/* Fallback: if images are inside a <p> without the class, still lay them out */
+.pca-exp .flip-card.expanded .flip-card-back p.fc-imgs,
+.pca-exp .flip-card.expanded .flip-card-back p:has(img + img){
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  justify-items: center !important;
+}
+.pca-exp .flip-card.expanded .flip-card-back p.fc-imgs img,
+.pca-exp .flip-card.expanded .flip-card-back p:has(img + img) img{
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  display: block !important;
+}
+@media (max-width: 900px){
+  .pca-exp .flip-card.expanded .flip-card-back p.fc-imgs,
+  .pca-exp .flip-card.expanded .flip-card-back p:has(img + img){
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 560px){
+  .pca-exp .flip-card.expanded .flip-card-back p.fc-imgs,
+  .pca-exp .flip-card.expanded .flip-card-back p:has(img + img){
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Keep the Close pill compact (same styles you like) */
+.pca-exp .flip-card .flip-close{
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;               /* keep height */
+  line-height: 24px;
+  padding: 0 8px;             /* short length */
+  background: #162e44;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,.18);
+}
+
+/* Reserve space under the button so it never overlaps text/images */
+.pca-exp .flip-card.expanded .flip-card-back{
+  padding-top: 48px !important;  /* 24px button + ~24px breathing room */
+}
+
+/* If your phone layout needs a bit more room, bump it slightly */
+@media (max-width: 560px){
+  .pca-exp .flip-card.expanded .flip-card-back{
+    padding-top: 56px !important;
+  }
+}
+
+/* Close pill: same height, SHORT length */
+.pca-exp .flip-card .flip-close{
+  position: absolute;
+  top: 8px; right: 12px;
+
+  display: inline-flex !important;
+  align-items: center; justify-content: center;
+  flex: 0 0 auto !important;
+
+  height: 24px;                /* keep height */
+  line-height: 24px;
+  padding: 0 8px;              /* tight sides */
+  width: auto !important;      /* <-- no stretching */
+  max-width: 80px !important;  /* hard cap just in case */
+  min-width: 44px;             /* still tappable */
+
+  background:#162e44; color:#fff;
+  border:0; border-radius:10px;
+  font-size: 12px; font-weight:700;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,.18);
+}
+
+/* Side-by-side image rows inside any flip card back */
+.pca-exp .flip-card-back .fc-imgs{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3-up desktop */
+  gap: 12px;
+  justify-items: center;
+  align-items: start;
+  margin-top: 8px;
+}
+
+/* responsive breakpoints */
+@media (max-width: 900px){
+  .pca-exp .flip-card-back .fc-imgs{
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2-up tablet */
+  }
+}
+@media (max-width: 560px){
+  .pca-exp .flip-card-back .fc-imgs{
+    grid-template-columns: 1fr; /* 1-up phone */
+  }
+}
+
+/* make each image fill its grid cell (overrides inline widths) */
+.pca-exp .flip-card-back .fc-imgs img{
+  width: 100% !important;
+  max-width: none !important;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+  /* =========================
+   PCA RESULTS
+   (pca_results.html and pca_intp.html)
+   ========================= */
+/* The wrapper around all step sections */
+.pca-steps{
+  position: relative;
+}
+
+/* Each step/panel/section (name-agnostic) */
+.pca-steps > section,
+.pca-steps > .step,
+.pca-steps > .panel,
+.pca-steps > .pca-step,
+.pca-steps > .tab-pane{
+  display: none;              /* hide by default */
+  margin: 0 0 2rem 0;
+}
+
+/* Whatever your JS marks as the current one — show it */
+.pca-steps > section.active,
+.pca-steps > section.is-active,
+.pca-steps > section.show,
+.pca-steps > .step.active,
+.pca-steps > .step.is-active,
+.pca-steps > .step.show,
+.pca-steps > .panel.active,
+.pca-steps > .panel.is-active,
+.pca-steps > .panel.show,
+.pca-steps > .pca-step.active,
+.pca-steps > .pca-step.is-active,
+.pca-steps > .pca-step.show,
+.pca-steps > .tab-pane.active,
+.pca-steps > .tab-pane.show{
+  display: block;
+}
+
+/* If you’re using aria-hidden instead of classes */
+.pca-steps > *[aria-hidden="true"]{ display: none !important; }
+.pca-steps > *[aria-hidden="false"]{ display: block !important; }
+
+/* Optional: keep the nav buttons fixed in place on wide screens */
+.pca-nav{
+  display:flex; gap:.75rem; justify-content:space-between; align-items:center;
+  margin: 1.25rem 0 0 0;
+}
+
+/* Make sure dropdowns/menus sit above tables/figures if needed */
+.dropdown-menu{ z-index: 1040; }
+
+
+/* 1) Bootstrap tab panes: hide all, show only the active one */
+.tab-content > .tab-pane { 
+  display: none;            /* prevents stacking */
+}
+.tab-content > .active { 
+  display: block;
+}
+
+/* Optional: if you keep .fade on panes, avoid opacity glitches */
+.tab-content > .tab-pane.fade { 
+  opacity: 1; 
+  transition: none;
+}
+
+/* 2) Within each site: only show the current step */
+.pca-slideshow .step { 
+  display: none;
+}
+.pca-slideshow .step.active { 
+  display: block;
+}
+
+/* 3) Placeholder: show only when no tab is active */
+#pcaPlaceholder { display: block; }
+/* Modern browsers: hide placeholder when any pane is active */
+body:has(.tab-content > .tab-pane.active) #pcaPlaceholder { 
+  display: none;
+}
+
+/* 4) Make the tab buttons look “selected” when active */
+#pcaTabs .btn.active {
+  background-color: #162e44;
+  border-color: #162e44;
+}
+
+/* 5) Keep dropdowns above content if used nearby */
+.dropdown-menu { z-index: 1040; }
+
+/* 6) Minor: make prev/next group neat on narrow screens */
+.prev-btn, .next-btn { min-width: 9rem; }
+
+.btn-primary, .prev-btn, .next-btn {
+  background-color: #162e44 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 5px;
+  padding: 8px 18px;
+  font-size: 16px;
+  transition: all .2s ease;
+}
+.btn-primary:hover, .prev-btn:hover, .next-btn:hover {
+  background-color: #BFE8FF !important;
+  color: #162e44 !important;
+}
+
+/* Step dots */
+.step-dots {
+  text-align:center;
+  margin: 20px 0 0 0;
+}
+.step-dot {
+  display:inline-block;
+  height:12px; width:12px;
+  margin:0 4px;
+  background-color:#bbb;
+  border-radius:50%;
+}
+.step-dot.active-dot { background-color:#28a745; }
+
+/* DataTables */
+table.dataTable thead th {
+  background-color:#162e44;
+  color:white;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border:1px solid #162e44;
+  border-radius:4px;
+  padding:4px 6px;
+}
+
+/* Image lightbox */
+.lightbox {
+  display:none; position:fixed; z-index:2000;
+  left:0; top:0; width:100%; height:100%;
+  background:rgba(0,0,0,.85); text-align:center;
+}
+.lightbox img {
+  max-width:90%; max-height:80%;
+  margin-top:5%;
+  border:4px solid #fff; border-radius:8px;
+}
+.lightbox:target { display:block; }
+.lightbox a.close {
+  position:absolute; top:20px; right:40px;
+  font-size:40px; color:#fff; text-decoration:none;
+}
+
+/* --- PCA site buttons: persistent per-button borders + active highlight --- */
+
+/* Re-enable borders for these three buttons and make them solid */
+#pcaTabs .btn {
+  border-width: 3px !important;
+  border-style: solid !important;
+  border-radius: 6px;
+}
+
+/* 1) Eagle Creek */
+#pcaTabs .nav-item:nth-of-type(1) .btn { border-color: #fed700 !important; }
+/* 2) Fall Creek */
+#pcaTabs .nav-item:nth-of-type(2) .btn { border-color: #ff4502 !important; }
+/* 3) Lower White River */
+#pcaTabs .nav-item:nth-of-type(3) .btn { border-color: #0002fd !important; }
+
+/* Keep the same border color on hover/focus */
+#pcaTabs .nav-item .btn:hover,
+#pcaTabs .nav-item .btn:focus {
+  border-color: inherit !important;
+}
+
+/* When a tab is selected, keep its border and show the highlight */
+#pcaTabs .nav-item:nth-of-type(1) .btn.active {
+  background: #BFE8FF !important; color: #162e44 !important; border-color: #fed700 !important;
+}
+#pcaTabs .nav-item:nth-of-type(2) .btn.active {
+  background: #BFE8FF !important; color: #162e44 !important; border-color: #ff4502 !important;
+}
+#pcaTabs .nav-item:nth-of-type(3) .btn.active {
+  background: #BFE8FF !important; color: #162e44 !important; border-color: #0002fd !important;
+}
+
+/* Optional: subtle focus ring for the active one */
+#pcaTabs .btn.active { box-shadow: 0 0 0 2px rgba(22,46,68,.12); }
+
+/* DataTables theming to match your colors */
+table.dataTable thead th {
+  background:#162e44; color:#fff;
+}
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+  border:1px solid #162e44; border-radius:4px; padding:4px 6px;
+}
+.dataTables_wrapper .dataTables_filter label,
+.dataTables_wrapper .dataTables_length label {
+  color:#162e44;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background:#BFE8FF !important; color:#162e44 !important; border:1px solid #162e44 !important;
+}
+
+/* Make DataTables header span full width when scrollX is on */
+.dataTables_wrapper .dataTables_scrollHead {
+  background: #162e44;                 /* navy strip across the whole width */
+  border-radius: 4px 4px 0 0;
+}
+.dataTables_wrapper .dataTables_scrollHead th {
+  background: transparent;              /* let the strip show through */
+  color: #fff;
+}
+
+/* Keep header/body widths in sync */
+.dataTables_wrapper .dataTables_scrollHeadInner,
+.dataTables_wrapper .dataTables_scrollHeadInner table,
+.dataTables_wrapper .dataTables_scrollBody table {
+  width: 100% !important;
+}
+
+/* 1) Make the "View Key Insights…" button look like your primary */
+.custom-toggle-btn{
+  background-color:#162e44 !important;
+  border-color:#162e44 !important;
+  color:#fff !important;
+  border-radius:6px;
+  padding:.55rem 1rem;
+}
+.custom-toggle-btn:hover,
+.custom-toggle-btn:focus{
+  background-color:#BFE8FF !important;
+  color:#162e44 !important;
+  border-color:#BFE8FF !important;
+  box-shadow:0 0 0 .2rem rgba(22,46,68,.12);
+}
+
+/* 2) Dock the Prev/Next controls to bottom-left / bottom-right of the step */
+.pca-slideshow{                /* the steps wrapper */
+  position:relative;
+  padding-bottom:84px;         /* reserve space for the buttons */
+}
+
+.pca-slideshow .prev-btn,
+.pca-slideshow .next-btn{
+  position:absolute;
+  bottom:16px;
+  min-width:9rem;
+  border-radius:6px;
+}
+
+/* corners */
+.pca-slideshow .prev-btn{ left:16px; }
+.pca-slideshow .next-btn{ right:16px; }
+
+/* when Prev is hidden on step 1, keep Next at the right edge */
+.pca-slideshow .next-btn{ margin-left:auto; }
+
+/* keep the same primary look on these buttons */
+.pca-slideshow .prev-btn,
+.pca-slideshow .next-btn{
+  background:#162e44 !important;
+  border-color:#162e44 !important;
+  color:#fff !important;
+}
+.pca-slideshow .prev-btn:hover,
+.pca-slideshow .next-btn:hover{
+  background:#BFE8FF !important;
+  color:#162e44 !important;
+  border-color:#BFE8FF !important;
+}
+
+/* small screens: tuck in a bit */
+@media (max-width: 576px){
+  .pca-slideshow .prev-btn{ left:10px; }
+  .pca-slideshow .next-btn{ right:10px; }
+  .pca-slideshow{ padding-bottom:72px; }
+}
+
+/* Constrain the big Eagle Creek correlation matrix image */
+#eagle-pca-steps img[alt*="correlation" i],
+#eagle-pca-steps img[src*="corr"],
+#eagle .step h5:has(+ p + p + p + hr) ~ img {  /* fallback if alt/src unknown */
+  display: block;
+  margin: 12px auto;
+  max-width: min(100%, 780px);   /* cap width on desktop */
+  max-height: 70vh;              /* avoid super-tall images */
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+/* General safety: keep all step images responsive (doesn't shrink already-perfect ones) */
+.pca-slideshow img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Component deck */
+.component-deck{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:12px;
+  margin:10px 0 14px;
+}
+.component-card{
+  position:relative;
+  padding:14px 14px 12px 16px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.component-card::before{
+  content:"";
+  position:absolute; inset:0 auto 0 0;
+  width:6px; border-radius:12px 0 0 12px;
+  background:var(--accent,#162e44);
+}
+.component-card h6{ margin:0 0 6px; color:#162e44; }
+
+/* Variance badge */
+.variance-badge{
+  position:absolute; top:10px; right:10px;
+  font-weight:700; font-size:12px;
+  background:#BFE8FF; color:#162e44;
+  border-radius:999px; padding:4px 8px;
+}
+
+/* Chips for variables + loadings */
+.chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.chip{
+  background:#f3f9ff; color:#162e44;
+  border:1px solid #dbe7f6; border-radius:999px;
+  padding:4px 8px; font-size:14px; line-height:1;
+}
+.chip small{ opacity:.7; margin-left:4px; }
+
+/* Accent colors for the three components (adjust if you like) */
+.component-deck .component-card:nth-child(1){ --accent:#08306B; } /* C1 */
+.component-deck .component-card:nth-child(2){ --accent:#4292C6; } /* C2 */
+.component-deck .component-card:nth-child(3){ --accent:#DEEBF7; } /* C3 */
+
+/* Source “ribbon” */
+.source-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:10px; margin-top:8px;
+}
+.source-card{
+  background:#f8fbff;
+  border:1px dashed #cfe2f3;
+  border-radius:10px;
+  padding:10px 12px;
+}
+.source-card h6{ margin:0 0 6px; color:#162e44; }
+.source-card .chip{ background:#fff; }
+
+/* keep the app at a 16:9 ratio, scales with width */
+iframe[src*="earthengine.app"],
+iframe[src*="earthengine.google.org"]{
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: 600px !important;    /* lets aspect-ratio drive height */
+  border: 0; border-radius: 8px;
+}
+
+#imgModal .modal-content{ background:transparent; border:0; box-shadow:none; }
+#imgModal img{ max-width:92vw; max-height:85vh; }
+
+/* Make any .expandable-img toggle to fullscreen-ish on click */
+.expandable-img {
+  cursor: zoom-in;
+  transition: transform .2s ease;
+}
+
+.expandable-img.expanded {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* center it */
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  z-index: 1060;           /* above page stuff, below modals if any */
+  cursor: zoom-out;
+}
+
+  /* =========================
+   PCA INTERPRETATIONS
+   (pca_intp.html)
+   ========================= */
+   /* Page: PCA Interpretations */
+.interp-callout{
+  background:#F4FAFF;
+  border:1px solid #cfe3ff;
+  border-left:4px solid #2b5ea8;
+  border-radius:10px;
+  padding:12px 14px;
+  margin:14px 0 18px;
+}
+.interp-callout ul{ padding-left:18px; margin:8px 0 0; }
+.interp-callout li{ margin:4px 0; }
+
+/* interpretation layout (keep as-is) */
+.interp-grid{display:grid; gap:12px}
+@media (min-width:900px){.interp-grid{grid-template-columns:1fr 1fr}}
+.interp-section{
+  background:#F7FAFF; border:1px solid #e3ecf7; border-left:4px solid var(--accent, #162e44);
+  border-radius:10px; padding:12px 14px;
+}
+.interp-section.full{grid-column:1 / -1}
+.interp-section h6{margin:0 0 6px; font-weight:700; letter-spacing:.2px}
+.interp-list{margin:0; padding-left:1.1rem}
+.interp-list li{margin:.35rem 0}
+.interp-list li::marker{color:var(--accent, #162e44)}
+
+/* map section types -> site vars */
+.interp-see   { --accent: var(--see,   #162e44); }
+.interp-why   { --accent: var(--why,   #28a745); }
+.interp-other { --accent: var(--other, #c27b2a); }
+.interp-now   { --accent: var(--now,   #1f7a8c); }
+
+/* ---- unified site palettes ---- */
+.theme-eagle {
+  /* card accents (all yellow) */
+  --see:#fed700; --why:#fed700; --other:#fed700; --now:#fed700;
+  /* accordion border colors */
+  --acc:#fed700;            /* normal */
+  --acc-active:#d6b600;     /* when open */
+}
+.theme-fall {
+  --see:#ff4502; --why:#ff4502; --other:#ff4502; --now:#ff4502;
+  --acc:#ff4502;
+  --acc-active:#cc3702;
+}
+.theme-white {
+  --see:#0002fd; --why:#0002fd; --other:#0002fd; --now:#0002fd;
+  --acc:#0002fd;
+  --acc-active:#0002c8;
+}
+
+/* accordion uses the site vars */
+#interpAccordion .accordion-item{border:none; margin-bottom: 10px;}
+#interpAccordion .accordion-button{
+  border: 2px solid var(--acc, #cfe3ff);
+  border-radius:10px; background:#f8fbff; box-shadow:none;
+}
+#interpAccordion .accordion-button:not(.collapsed){
+  border-color:var(--acc-active, var(--acc, #2b5ea8));
+  background:#eef5ff;
+}
+#interpAccordion .accordion-button:focus{box-shadow:none;}
+
+
+/* Cross-site synthesis layout */
+.synth-wrap{background:#F4FAFF;border:1px solid #cfe3ff;border-radius:12px;padding:16px 18px;margin-top:12px}
+.synth-lead{margin-bottom:10px}
+.synth-grid{display:grid;gap:12px}
+@media(min-width:900px){.synth-grid{grid-template-columns:1fr 1fr}}
+.card-lite{background:#fff;border:1px solid #e7eef7;border-radius:10px;padding:12px 14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:.25rem 0 .5rem}
+.chip{background:#eef4ff;border:1px solid #dbe5ff;border-radius:20px;padding:2px 10px;font-size:.9rem}
+.chip-salt{background:#eaf4ff;border-color:#b9d4ff}
+.chip-metals{background:#fff5e6;border-color:#ffd8a8}
+.chip-nitro{background:#eafaf4;border-color:#b6efda}
+.muted-sm{font-size:.9rem;color:#5b6a7d}
+
+  /* =========================
+   KEY TAKEAWAYS
+   ========================= */
+.takeaway-card{
+  border: 1px solid #e6eef6;
+  border-radius: 14px;
+  padding: 18px;
+  background: #fbfdff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  margin-bottom: 10px;
+}
+.pill{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .9rem;
+}
+.pill-dominant{ background: linear-gradient(90deg,#d9f2ff,#bfe8ff); color:#063d63; border:1px solid #b0d7ec; }
+.pill-salts{    background: linear-gradient(90deg,#e7ffe7,#c9f7d7); color:#0c3d1f; border:1px solid #bfe7ca; }
+.pill-sewage{   background: linear-gradient(90deg,#fff1e0,#ffe0b3); color:#6a3e00; border:1px solid #ffd59f; }
+.pill-stability{background: linear-gradient(90deg,#ffe5e9,#ffd4da); color:#6a0010; border:1px solid #ffc2cb; }
+
+/* Footer “Back / Next” buttons on analysis pages */
+.step-footer{
+  display:flex;
+  justify-content:space-between;
+  margin-top:40px;
+}
+.step-footer .btn{
+  background-color:#162e44;
+  color:white;
+  border-radius:6px;
+  padding:10px 20px;
+  font-weight:500;
+  transition:.3s;
+}
+.step-footer .btn:hover{ background-color:#BFE8FF; color:#162e44; }
+
+/* =========================
+   BUTTONS (shared)
+   ========================= */
+.btn-primary{ background:#162e44; border:none; }
+.btn-primary:hover{ background:#BFE8FF; color:#162e44; }
+.btn-outline-dark{ border-color:#162e44; color:#162e44; }
+.btn-outline-dark:hover{ background:#162e44; color:#fff; }
+
+/* =========================
+   FOOTER
+   ========================= */
+footer{
+  text-align: center;
+  padding: 20px 10px;
+  color: #5e7a97;
+  margin-top: auto;  
+  background: transparent;
+}
+
+/* kill any stray transforms INSIDE the PCA explanation page only */
+.pca-exp #main,
+.pca-exp .container.body,
+.pca-exp .card-grid,
+.pca-exp .tab-content {
+  transform: none !important;
+  rotate: 0deg !important;   /* covers the individual 'rotate' property */
+  scale: 1 !important;       /* covers scale(-1) cases */
+}
+
+/* if you had a global `.back { transform: rotate(180deg) }`, stop it here */
+.pca-exp .back { transform: none !important; rotate: 0deg !important; }

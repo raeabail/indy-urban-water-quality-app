@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCA Explanation • Marion County Water Quality</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body class="pca-exp">
+    <div class="noise-overlay"></div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="documentation.html">
+          <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+          <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+          <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navMain" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+            <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+            <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                PCA
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+                <li><a class="dropdown-item active" href="pca_exp.html">What is a PCA?</a></li>
+                <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+                <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+                <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div id="main">
+        <div class="container body">
+            <h3 style="text-align: center;">Detective Work for Data: How PCA Reveals Hidden Stories</h3>
+
+            <p style="margin-top: 15px;">Imagine you are analyzing a group of people, but you're not just curious about one trait like height...
+                you're curious about many traits including height <b><u>AND</u></b> hair color, eye color, weight, and shoe size.</p>
+
+            <p>That’s a lot of variables about each person. How do you figure out what really sets them apart? 
+                Where are the biggest differences?</p>
+
+            <p><b>Principal Component Analysis (PCA)</b> is a tool that can help you with that.
+                It finds patterns in the chaos and highlights the differences that matter most—like a detective narrowing down a list of suspects to the most telling evidence.</p>
+
+            <div class="callout">
+              <h6>In simple terms, a PCA:</h6>
+              <ul>
+                <li>Combines related variables into a few new ones called <b>principal components</b></li>
+                <li>Helps you see <b>patterns and trends</b> more easily</li>
+                <li>Keeps most of the original information—but with fewer variables</li>
+                <li>Makes <b>data visualization</b> much clearer</li>
+              </ul>
+              <p>
+                Think of PCA like shrinking a playlist of 100 songs down to the top 10 that capture the whole vibe.
+                You keep most of the story—just with fewer tracks.
+              </p>
+            </div>
+
+            <!-- Bridge panel to the video -->
+            <div class="note-bridge">
+              <p>
+                <i>Want to see it in action?</i> In just five minutes, Josh Starmer clearly explains what PCA is and how it works, using intuitive visuals and
+                simple language. It’s a helpful way to reinforce what you’ve just read, especially if you’re a visual learner.
+              </p>
+            </div>
+
+            <div id="pca-video" style="max-width: 800px; margin: 2rem auto;">
+              <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px;">
+                <iframe src="https://www.youtube.com/embed/HMOI_lkzW08"
+                        title="PCA explained visually by Josh Starmer"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                </iframe>
+              </div>
+            </div>
+
+            <hr style="border: 1px solid #162e44; margin: 15px 0;">
+
+            <h4 style="text-align: center;"><b>Step-by-Step: How Does a PCA Work?</b></h4>
+
+            <div class="card-grid">
+                <!-- Card 1 -->
+                <div class="flip-card">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                      <h5>Step 1: Standardize the Data</h5>
+                    </div>
+                    <div class="flip-card-back">
+                      <p>Imagine you’re comparing people’s heights (in centimeters) and weights (in kilograms). 
+                        The numbers are very different sizes; therefore, a PCA might treat height (cm) as a more important variable soley because the values
+                        of height (cm) are on a larger scale than the values of weight (kg).</p>
+                
+                        <p>We need the values to be on a level playing field, so we need to put them on the <b>same scale</b>. That’s what “standardizing” means.</p>
+                      
+                        <p>Solution: <i>We calculate a z-score for every value, so all values have a mean of 0 and are on the same scale.</i>
+                        </p>
+                        <p><b>Mathmatically, it looks like this:</b></p>
+                        <p>
+                          <img src="images/og_data.png" alt="Original Data icon" style="width: 250px; border: none;">
+                          <img src="images/z_score.png" alt="Z score Equation icon" style="width: 250px; border: none;">
+                          <img src="images/std_data.png" alt="Standardized Data icon" style="width: 250px; border: none;">
+                        </p>
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Card 2 -->
+                <div class="flip-card">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                      <h5>Step 2: Find Relationships Between Variables</h5>
+                    </div>
+                    <div class="flip-card-back">
+                      <p>Next, we ask: <i>Do some variables change together?  </i> For example: <i>Do taller people usually weigh more?</i></p>
+                   
+                      <p>To find out, we build a <b>correrlation matrix</b>—a table that shows how every pair of variables relates.</p>
+                      <ul>
+                      <li>📈 Positive values = they go up together (e.g., As height increases/decreases, weight also increases/decreases.)</li>
+                      <li>📉 Negative values = one goes up, the other goes down (e.g., As height increases, weight decreases.)</li>
+                  </ul>
+                      <p>In this example, weight and height correlate negatively, meaning as height increase, weight decreases and vice versa. 
+                      </p>
+                        <img src="images/corr_matrix.png" alt="Covariance Matrix icon" style="width: 300px; border: none;">
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Card 3 -->
+                <div class="flip-card">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                      <h5>Step 3: Identify the Principal Components</h5>
+                    </div>
+                    <div class="flip-card-back">
+                      <p style="margin-top: 50px;">Once we know how variables move together, whether they’re positively or negatively related,
+                        the next step is to <b>reorganize the data</b> to make those patterns easier to see.</p>
+                      <p>That’s where <b>PCA steps in</b>: it uses those relationships (from the correlation matrix) to build <b>new, clearer axes</b>. 
+                        These are called <b>principal components</b>, and they help us see the biggest differences in the data.</p>
+                     <p>The <b>first principal component</b> holds the most information. The <b>second</b> holds the next most, etc.</p>
+                      <p>A <b>scree plots</b> visualizes how much information each principal component holds.
+                      Usually, you’ll only keep the <b>first 2 or 3</b>, which tell you most of what you need to know as shown below:</p>
+                      <img src="images/screeplot.png" alt="screeplot icon" style="width: 370px; border: none; margin-top: -20px;">
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Card 4 -->
+                <div class="flip-card">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                      <h5>Step 4: Plot the Data</h5>
+                    </div>
+                    <div class="flip-card-back">
+                      <p>Now comes the behind-the-scenes math magic: PCA uses <b>eigenvectors</b> and <b>eigenvalues</b> to 
+                        rotate the data and align it with the new principal components.
+                      </p>
+                        <ul>
+                          <li><b>Eigenvectors</b> give the direction (our new axes).</li>
+                          <li><b>Eigenvalues</b> tell us how important each direction is (i.e., how much variance they explain).</li>
+                        </ul>
+                      <p>We use these to rebuild the data from a clearer angle. Then, we can plot it to spot clusters, trends, and outliers.
+                        Here are a few examples of PCA plots:
+                      </p>
+                      <div class="fc-imgs">
+                        <img src="images/pc_ex2.png" alt="screeplot icon" style="width: 350px; border: none;">
+                         <img src="images/pc_ex1.png" alt="screeplot icon" style="width: 350px; border: none;">
+                         <img src="images/pca_ex3.png" alt="screeplot icon" style="width: 350px; border: none;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fullscreen backdrop (for expanded cards) -->
+              <div class="fc-backdrop" id="fcBackdrop"></div>
+
+              <hr style="border: 1px solid #162e44; margin: 15px 0;">
+              <h4 style="text-align: center;"><b>Let's Put This Into Action!</b></h4>
+                <p style="margin-top: 15px;">In the next section, we’ll walk through the actual PCA results from water quality data in <b>Marion County, Indiana</b>. 
+                  You’ll see how this tool helps uncover pollution patterns in:</p>
+                  <ul>
+                    <li>Eagle Creek</li>
+                    <li>Fall Creek</li>
+                    <li>Lower White River</li>
+                  </ul>
+              <div class="callout">
+                <h6>And we will answer big questions such as:</h6>
+                  <ul>
+                    <li>What does the data tell us about water quality in the White River, Eagle Creek, and Fall Creek over the past two decades?</li>
+                    <li>Do pollutant levels vary between the White River, Eagle Creek, and Fall Creek? For example,
+                      Can we see unique pollution “signatures” in each waterway—like high nitrogen in one and low in another?</li>
+                  </ul>  
+            </div>
+              <div class="d-flex justify-content-between" style="margin-top: 40px;">
+                <button type="button" class="btn btn-primary" onclick="window.location.href = 'interactivemap.html'">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href = 'pca_results.html'">Next: PCA Results →</button>
+            </div>
+        </div>
+    </div>
+
+  <footer>
+    <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+  </footer>
+
+<script>
+    function openFullscreen() {
+        var img = document.getElementById("upperwhite");
+        if (img.requestFullscreen) {
+            img.requestFullscreen();
+        } else if (img.mozRequestFullScreen) { /* Firefox */
+            img.mozRequestFullScreen();
+        } else if (img.webkitRequestFullscreen) { /* Chrome, Safari, and Opera */
+            img.webkitRequestFullscreen();
+        } else if (img.msRequestFullscreen) { /* IE/Edge */
+            img.msRequestFullscreen();
+        }
+    }
+</script>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+
+<script>
+(function(){
+  let openCardEl = null;   // only one open at a time
+
+  function ensureCloseButton(card){
+    if (card.querySelector('.flip-close')) return;
+    const btn = document.createElement('button');
+    btn.className = 'flip-close';
+    btn.type = 'button';
+    btn.textContent = 'Close';
+    btn.setAttribute('aria-label','Close card');
+    card.querySelector('.flip-card-back')?.prepend(btn);
+  }
+
+  function addPlaceholder(card){
+    if (card._placeholder) return;
+    const ph = document.createElement('div');
+    ph.className = 'flip-placeholder';
+    card.after(ph);
+    card._placeholder = ph;
+  }
+
+  function removePlaceholder(card){
+    if (card && card._placeholder){
+      card._placeholder.remove();
+      card._placeholder = null;
+    }
+  }
+
+  function openCard(card){
+    if (openCardEl && openCardEl !== card) return;  // block second open
+    ensureCloseButton(card);
+    addPlaceholder(card);
+    card.classList.add('open','expanded');          // flip + fullscreen
+    openCardEl = card;
+  }
+
+  function closeCard(card){
+    const target = card || openCardEl;
+    if (!target) return;
+    target.classList.remove('open','expanded');
+    removePlaceholder(target);
+    if (openCardEl === target) openCardEl = null;
+  }
+
+  // Toggle by clicking the card; clicking another card while one is open does nothing
+  document.addEventListener('click', (e)=>{
+    // close button
+    if (e.target.closest('.flip-close')) { closeCard(e.target.closest('.flip-card')); return; }
+    // card
+    const card = e.target.closest('.pca-exp .flip-card');
+    if (!card) return;
+    if (openCardEl && openCardEl !== card) return;  // block second open
+    card.classList.contains('expanded') ? closeCard(card) : openCard(card);
+  });
+
+  // Esc closes the open card
+  document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeCard(); });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

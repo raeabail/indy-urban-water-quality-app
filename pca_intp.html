@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCA Interpretations • Marion County Water Quality</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              PCA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item active" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div id="main">
+    <div class="container body">
+        <h3><b><center>PCA Interpretations</center></b></h3>
+        <div class="interp-callout">
+        <p style="margin-top: 15px;">
+          Think of this as the <b>“what it really means”</b> page. We translate the rotated PCA components and clustering into
+          clear, decision-ready narratives for Eagle Creek, Fall Creek, and the Lower White River. For each site, we outline:
+        </p>
+
+        <ol style="margin-top:-6px; margin-bottom:8px;">
+          <li><b>What We See</b></li>
+          <li><b>Why We Think That</b></li>
+          <li><b>Other Explanations</b></li>
+          <li><b>What Now</b></li>
+        </ol>
+        <p style="margin-top:0;">
+          We keep the focus on processes and potential management rather than statistics. A short cross-site synthesis, limits,
+          and future directions appear at the end.
+        </p>
+       </div>
+    
+      <strong>Additional notes:</strong>
+      <ul class="mb-0">
+        <li>Open a site below to read: <b>what we see → why → other explanations → so what</b>.</li>
+        <li>“+ / –” in PCA indicates axis direction only; <b>magnitude</b> carries the meaning.</li>
+        <li>Rotation is used for clarity; clustering is a light reality-check on patterns.</li>
+      </ul>
+   
+
+        <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+
+      <!-- Accordion: Site-by-site interpretation -->
+      <section class="mb-4">
+        <div class="accordion" id="interpAccordion">
+          <!-- Eagle Creek -->
+          <div class="accordion-item theme-eagle">
+            <h2 class="accordion-header" id="ec-heading">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ec-collapse" aria-expanded="true" aria-controls="ec-collapse">
+                Site 1 — Eagle Creek: PCA + Source Interpretation
+              </button>
+            </h2>
+            <div id="ec-collapse" class="accordion-collapse collapse show" aria-labelledby="ec-heading" data-bs-parent="#interpAccordion">
+              <div class="accordion-body">
+                <div class="interp-grid theme-eagle">
+                  <section class="interp-section interp-see full">
+                    <h6>What We See</h6>
+                    <p>A primarily <b>agricultural signal</b> with elevated phosphate and periodic microbial indicators, consistent with runoff from fertilized fields and occasional fecal inputs. Sub-catchment differences likely reflect varying farm practices and buffer conditions.</p>
+                  </section>
+
+                  <section class="interp-section interp-why">
+                    <h6>Why We Think That</h6>
+                    <ul class="interp-list">
+                      <li>Rotated components group <b>nutrients with trace elements</b>, a pattern typical of fertilizer-driven runoff mobilizing residues.</li>
+                      <li>Microbial pulses follow <b>storm timing</b> and drainage pathways connected to fields and ditches.</li>
+                      <li>Clustering shows a generally coherent regime with <b>upper vs. lower</b> contrasts across land-use transitions.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-other">
+                    <h6>Other Explanations</h6>
+                    <ul class="interp-list">
+                      <li>Failing septics or CSO events can mimic microbial signals; targeted bacterial source tracking would clarify.</li>
+                      <li>Legacy materials or bank sediments may intermittently contribute trace elements during high flows.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-now full">
+                    <h6>What Now</h6>
+                    <ul class="interp-list">
+                      <li><b>Reduce nutrient pulses:</b> riparian buffers, cover crops, edge-of-field practices in high-contribution sub-catchments.</li>
+                      <li><b>Time monitoring:</b> focus sampling after storm events and during fertilizer windows.</li>
+                      <li><b>Fecal risk:</b> coordinate with wastewater/septic programs where hotspots persist.</li>
+                    </ul>
+                  </section>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Fall Creek -->
+          <div class="accordion-item theme-fall">
+            <h2 class="accordion-header" id="fc-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fc-collapse" aria-expanded="false" aria-controls="fc-collapse">
+                Site 2 — Fall Creek: PCA + Cluster Reinterpretation
+              </button>
+            </h2>
+            <div id="fc-collapse" class="accordion-collapse collapse" aria-labelledby="fc-heading" data-bs-parent="#interpAccordion">
+              <div class="accordion-body">
+                <!-- Fall Creek -->
+                <div class="interp-grid theme-fall">
+                  <section class="interp-section interp-see full">
+                    <h6>What We See</h6>
+                    <p>
+                      An <b>urban footprint</b> dominated by salts/ionic strength and <b>legacy/heavy metals</b>. 
+                      Chloride tracks winter maintenance and concentrated runoff; metals reflect older infrastructure 
+                      and historical industry.
+                    </p>
+                  </section>
+
+                  <section class="interp-section interp-why">
+                    <h6>Why We Think That</h6>
+                    <ul class="interp-list">
+                      <li>Rotated components align <b>chloride/TDS/sulfate</b>, typical of road salt and urban runoff.</li>
+                      <li>Metal patterns match areas with <b>older pipes, fill, and industrial corridors</b>.</li>
+                      <li>Clustering suggests <b>one main regime</b> with <b>localized anomalies</b>, not multiple stable groups.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-other">
+                    <h6>Other Explanations</h6>
+                    <ul class="interp-list">
+                      <li><b>WWTP effluent</b> can elevate ions; check timing against plant operations/flows.</li>
+                      <li>Natural background is unlikely to explain the metals signal but should be screened.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-now full">
+                    <h6>What Now</h6>
+                    <ul class="interp-list">
+                      <li><b>Salt-smart operations:</b> storage covers, calibrated spreaders, brining, and post-storm sweeping.</li>
+                      <li><b>Legacy materials:</b> prioritize lead service/pipe replacement zones and industrial pretreatment checks.</li>
+                      <li><b>Green infrastructure:</b> retrofit high-runoff blocks with infiltration practices and tree canopy.</li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lower White River -->
+          <div class="accordion-item theme-white">
+            <h2 class="accordion-header" id="wr-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#wr-collapse" aria-expanded="false" aria-controls="wr-collapse">
+                Site 3 — Lower White River: PCA + Cluster Synthesis
+              </button>
+            </h2>
+            <div id="wr-collapse" class="accordion-collapse collapse" aria-labelledby="wr-heading" data-bs-parent="#interpAccordion">
+              <div class="accordion-body">
+               <!-- Lower White River -->
+                <div class="interp-grid theme-white">
+                  <section class="interp-section interp-see full">
+                    <h6>What We See</h6>
+                    <p>
+                      A <b>mixed regime</b>: salts/ionic strength with <b>industrial metals</b> and <b>reduced nitrogen</b>. 
+                      Signals reflect both agricultural and industrial pathways, with influences from <b>legacy sediments</b>.
+                    </p>
+                  </section>
+
+                  <section class="interp-section interp-why">
+                    <h6>Why We Think That</h6>
+                    <ul class="interp-list">
+                      <li>Ionic strength pairs with <b>sulfate</b> (and related markers), consistent with road salt and <b>industrial/WWTP</b> signatures.</li>
+                      <li>Metals (e.g., <b>chromium/nickel</b>) indicate <b>industrial or legacy inputs</b> plus sediment interactions.</li>
+                      <li>Clustering shows a <b>dominant regime</b> with smaller pockets of variability rather than distinct site regimes.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-other">
+                    <h6>Other Explanations</h6>
+                    <ul class="interp-list">
+                      <li><b>Geogenic</b> contributions to some metals are possible; bank erosion can expose legacy deposits.</li>
+                      <li><b>Ammonia</b> may reflect sewage influence or <b>redox conditions</b> in slower reaches.</li>
+                    </ul>
+                  </section>
+
+                  <section class="interp-section interp-now full">
+                    <h6>What Now</h6>
+                    <ul class="interp-list">
+                      <li><b>Sediment & bank work:</b> stabilize hotspots; assess legacy deposits near bends/outfalls.</li>
+                      <li><b>Industrial controls:</b> strengthen pretreatment and stormwater BMPs where metals recur.</li>
+                      <li><b>Wetland/riparian restoration:</b> boost retention and denitrification; add storm- and winter-timed monitoring.</li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+              <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+
+      <section class="synth-wrap">
+        <h3 class="text-center fw-bold">Cross-site synthesis</h3>
+
+        <p class="synth-lead">
+          Across sites, three recurring patterns emerge:
+          <span class="fw-semibold">salts and ionic strength</span>,
+          <span class="fw-semibold">metals linked to legacy materials</span>, and
+          <span class="fw-semibold">nitrogen–microbial dynamics</span>.
+          The prominence of these patterns shifts with land use: agricultural versus urban or industrial. Salts typically rise during winter
+          maintenance and with urban runoff. Metals tend to track legacy infrastructure and industrial pathways. Nitrogen–microbial dynamics
+          often reflect sewage influence and redox processes.
+          <span class="d-block mt-1">Within each site, the overall regime is fairly uniform with localized anomalies, suggesting some effectiveness of existing controls and natural resilience.</span>
+        </p>
+
+        <div class="synth-grid">
+          <!-- Left column -->
+          <div class="card-lite">
+            <h6 class="mb-2"><u>Site Snapshots:</u></h6>
+            <ul class="mb-2">
+              <li><b>Eagle Creek:</b> agriculture-linked nutrients with periodic microbial pulses</li>
+              <li><b>Fall Creek:</b> urban salts with a metals signature from legacy infrastructure</li>
+              <li><b>Lower White River:</b> mixed regime of salts + industrial metals + reduced nitrogen</li>
+            </ul>
+
+            <!-- Optional: reveal the “results-y” parameter lists only on click -->
+            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#paramCollapse">
+              Review Dominant Parameters
+            </button>
+            <div id="paramCollapse" class="collapse mt-2">
+              <ul class="mb-0">
+                <li><b>Eagle Creek:</b> PO₄, Cl⁻, Cr</li>
+                <li><b>Fall Creek:</b> Cl⁻, Pb, <i>E. coli</i> (negative on VC3)</li>
+                <li><b>Lower White River:</b> TDS, SO₄²⁻, Cr, Ni, Cl⁻, NH₃</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div class="card-lite">
+            <h6 class="mb-2"><u>Potential Management Priorities:</u></h6>
+            <ul class="mb-0">
+              <li><b>Target salts:</b> optimize deicing & expand salt-smart storage and operations</li>
+              <li><b>Address metals:</b> replace legacy materials & tighten pretreatment & stormwater BMPs</li>
+              <li><b>Reduce nutrient pulses:</b> agricultural BMPs & riparian buffers & coordinate upstream</li>
+              <li><b>Sewage signals:</b> continue CSO mitigation & add real-time E. coli/NH₃ checks</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="muted-sm mt-2 mb-0">
+          <b>Notes on interpretation.</b> Loadings and “dominant parameters” reflect the rotated PCA tables. Clustering references use silhouette-guided k and LDA verification. Patterns are interpreted alongside likely pathways: deicing salts, urban/industrial discharge, agriculture, and CSO/sewage influences.
+        </p>
+      </section>
+
+      <div class="d-flex justify-content-between" style="margin-top: 40px;">
+        <a class="btn btn-primary" href="pca_results.html">← Back to PCA Results</a>
+        <a class="btn btn-primary" href="key_takeaways.html">Next: Key Takeaways →</a>
+      </div>
+    </div>
+  </div>
+
+    <footer>
+    <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function openNav() {
+      document.getElementById('mySidebar').style.width = '250px';
+      document.getElementById('main').style.marginLeft = '250px';
+    }
+    function closeNav() {
+      document.getElementById('mySidebar').style.width = '0';
+      document.getElementById('main').style.marginLeft= '0';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Area • Marion County Water Quality</title>
+
+  <!-- Bootstrap + theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" class="me-2" style="height:60px;width:auto;">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" class="me-2" style="height:60px;width:auto;">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link active" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">PCA</a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="container body">
+    <h3 class="text-center mb-3">Study Area: Marion County, Indiana</h3>
+
+    <!-- Section: Where is Marion County? -->
+      <div class="row study-row">
+        <div class="col-md-7">
+        <p style="margin-top: 15px;">Marion County is in the middle of Indiana and is home to the state’s capital, Indianapolis. It’s a mix of busy cities, quiet neighborhoods, farms, and parks. This makes it the perfect place to study how people and nature affect the water in rivers and streams.</p>
+        
+        <p class="mb-2" style="margin-top: 23px;"><u>Here’s what you should know:</u></p>
+        <ul class="mb-0">
+          <li>Marion County is big, covering about <b>403 square miles</b>.</li>
+          <li>It’s part of something called the <b>Upper White River Watershed</b>, which means all the rainwater that falls here eventually flows into the <b>White River</b>.</li>
+          <li>Some of the biggest rivers in the county are:
+            <ul>
+              <li><a href="https://ourwaterways.org/waterways/white-river/" target="_blank">White River</a></li>
+              <li><a href="https://ourwaterways.org/waterways/little-eagle-creek/" target="_blank">Eagle Creek</a></li>
+              <li><a href="https://ourwaterways.org/waterways/fall-creek/" target="_blank">Fall Creek</a></li>
+            </ul>
+          </li>
+        </ul>
+        </div>
+
+    <div class="col-md-5 text-center">
+        <a href="https://www.hecweb.org/issues/water-wilderness/water-protection/protecting-the-white-river/" target="_blank">
+        <img id="upperwhite" src="images/upperwhite_map.jpg"
+            alt="Map of the Upper White River Watershed"
+            class="expandable-img study-figure"
+            style="margin-top: 15px;">
+        </a>
+        <p class="figure-note">
+        Click to enlarge, or use Ctrl + click (⌘ + click on Mac) to open more information on the
+        importance of protecting this watershed.
+        </p>
+    </div>
+
+        <div class="callout" style="margin-top: -20px;">
+            <h6>What Makes Marion County an Ideal Testbed?</h6>
+            <p>Marion County has a little bit of everything:</p>
+                <ul>
+                <li><b>Cities:</b> like Indianapolis, where roads and buildings can cause rainwater to run off into rivers.</li>
+                <li><b>Farmlands:</b> where fertilizers and chemicals can sometimes get into streams.</li>
+                <li><b>Natural areas:</b> like forests and parks, where water stays clean.</li>
+                </ul>
+                <p>By studying the rivers here, scientists can learn how to make the water better for everyone—fish, animals, and people!</p>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 1px solid #162e44; margin: 20px 0;">
+
+
+    <!-- Section: What’s Happening to the Water? -->
+    <h4 class="mb-3" style="text-align: center;"><b>What’s Happening to the Water?</b></h4>
+    <div class="row g-4 align-items-center">
+    <div class="col-md-6">
+        <p>Over the years, as more people moved in and more buildings were built, something called <b>stormwater runoff</b> has increased. When it rains, the water:</p>
+        <ul>
+        <li>Picks up oil from roads, trash, and other yucky stuff.</li>
+        <li>Washes this into rivers and streams.</li>
+        <li>Hurts fish and plants that live in the water.</li>
+        </ul>
+
+        <!-- Callout box -->
+        <div class="callout">
+        <p style="margin:0; font-weight:bold;">Why it matters to you:</p>
+        <ul style="margin:5px 0 0 20px;">
+            <li>Puddles near parking lots and sidewalks often carry oil and trash.</li>
+            <li>Fertilizer and lawn chemicals can wash into nearby creeks.</li>
+            <li>Road salt in winter ends up in streams when the snow melts.</li>
+        </ul>
+        </div>
+        <p style="margin-top: 15px; text-align: center;"><b>But don’t worry! Scientists are working on ways to clean it up!</b></p>
+    </div>
+
+    <div class="col-md-6 text-center">
+        <a href="https://rainwaterharvesting.tamu.edu/stormwater-management/" target="_blank">
+        <img id="stormwaterrunoff" src="images/stormwaterrunoff.webp"
+            alt="Diagram of Stormwater Runoff"
+            class="expandable-img study-figure" style="max-width:420px;">
+        </a>
+        <p class="text-muted small">
+        Click to enlarge, or use Ctrl + click (⌘ + click on Mac) to open more information on stormwater runoff and management.
+        </p>
+    </div>
+    </div>
+
+<hr style="border: 1px solid #162e44; margin: 20px 0;">
+
+    <!-- Section: Mapping blurb -->
+    <h4 class="mb-3" style="text-align: center;"><b>Exploring Water Quality Through Mapping</b></h4>
+    <p>Now that we understand the challenges facing Marion County’s water, let’s take a closer look at how scientists track changes in water quality over time. One of the best ways to do this is through consistent
+      sampling over time.</p>
+
+    <div class="callout">
+    <h6>What You’ll Find on the Map:</h6>
+    <ul>
+        <li><b>Sampling Sites:</b> The map displays 51 sampling locations where water quality is tested.</li>
+        <li><b>Major Rivers and Their Tributaries:</b> You’ll see the White River, Fall Creek, and Eagle Creek, along with the smaller streams that flow into them.</li>
+        <li><b>Click for More Information:</b> Each site provides details about what’s being measured.</li>
+        <li><b>Understanding Local Water Quality:</b> Discover how different areas of Marion County contribute to water health and why monitoring is important.</li>
+        <li><b>Upper White River Watershed:</b> The map shows the watershed that encompasses Marion County in order to highlight the surrounding areas that may impact water quality.</li>
+    </ul>
+    </div>
+
+    <!-- Page nav buttons -->
+    <div class="step-footer">
+      <a class="btn" href="index.html">← Back</a>
+      <a class="btn" href="interactivemap.html">Next: Explore the Interactive Sampling Map →</a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+  </footer>
+
+  <!-- Image Modal (shared behavior) -->
+  <div class="modal fade" id="imgModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-transparent border-0">
+        <img id="modalImage" src="" alt="Expanded view" class="img-fluid rounded shadow">
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // navbar shrink on scroll (matches other pages)
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.navbar');
+      (window.scrollY > 20) ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
+    });
+
+    // Click-to-enlarge behavior, but preserve ctrl/⌘ click to follow link
+    document.querySelectorAll('.expandable-img').forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', e => {
+        if (e.ctrlKey || e.metaKey || e.button === 1) return; // let browser open link
+        e.preventDefault();
+        const modalImg = document.getElementById('modalImage');
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        new bootstrap.Modal(document.getElementById('imgModal')).show();
+      });
+    });
+  </script>
+</body>
+</html>

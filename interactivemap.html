@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampling Map • Marion County Water Quality</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+      <div class="noise-overlay"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link active" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              PCA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <div id="main">
+        <div class="container body">
+            <h3 style="text-align: center;"><b>MCPHD Surface Water Sampling Sites</b></h3>
+
+            <p style="margin-top: 15px;">This interactive map highlights the Upper White River Watershed and its impact on water quality in Marion County, 
+                Indiana.</p>
+
+                <p>You'll find:</p>
+                <ul style="margin-top: -10px;">
+                    <li>Major rivers like <b>White River</b>, <b>Fall Creek</b>, and <b>Eagle Creek</b></li>
+                    <li>Dozens of <b>sampling sites</b> used by the Marion County Public Health Department (MCPHD)</li>
+                    <li>A look at how <b>urban</b>, <b>suburban</b>, and <b>rural areas</b> all influence the quality of our local waterways</li>
+                </ul>
+
+            <hr style="border: 1px solid #162e44; margin: 15px 0;">
+            <h4 style="margin-bottom: 10px; text-align: center;"><b>Features of the Sampling Site Map</b></h4>
+                <div class="row align-items-center" style="margin-top: 15px;">
+                    <p>This map is built using <b>Google Earth Engine</b>, a platform that helps scientists explore environmental data. 
+                        Here’s what you can do with this interactive tool:</p>
+                    <div class="row g-3 text-start" style="margin-top: -20px;">
+                        <!-- Layer Controls -->
+                        <div class="col-md-3">
+                            <div style="background:#f9fdff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; height:100%;">
+                            <h6 style="font-weight:700; color:#05212e; margin-bottom:8px; text-align: center;">📂 Layer Controls</h6>
+                            <ul style="padding-left:18px; margin:0; font-size:15px; line-height:1.5;">
+                                <li><b>Rivers & Streams:</b> Waterways flowing through the county</li>
+                                <li><b>Sampling Sites:</b> Colored dots for each site</li>
+                                <li><b>Watershed:</b> Tan background shows full drainage area</li>
+                                <li><b>County Boundary:</b> Black outline of Marion County</li>
+                            </ul>
+                            </div>
+                        </div>
+
+                        <!-- Zoom & Explore -->
+                        <div class="col-md-3">
+                            <div style="background:#f9fdff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; height:100%;">
+                            <h6 style="font-weight:700; color:#05212e; margin-bottom:8px; text-align: center;" >🔍 Zoom & Explore</h6>
+                            <ul style="padding-left:18px; margin:0; font-size:15px; line-height:1.5;">
+                                <li>Use the <b>+/- buttons</b> to zoom</li>
+                                <li>Drag the map to explore tributaries</li>
+                            </ul>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Pop-ups -->
+                        <div class="col-md-3">
+                            <div style="background:#f9fdff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; height:100%;">
+                            <h6 style="font-weight:700; color:#05212e; margin-bottom:8px; text-align: center;">📍 Interactive Pop-ups</h6>
+                            <ul style="padding-left:18px; margin:0; font-size:15px; line-height:1.5;">
+                                <li>See each site’s <b>name</b> and <b>location</b></li>
+                                <li>Check which <b>river</b> it belongs to</li>
+                            </ul>
+                            </div>
+                        </div>
+
+                        <!-- Map Styles -->
+                        <div class="col-md-3">
+                            <div style="background:#f9fdff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; height:100%;">
+                            <h6 style="font-weight:700; color:#05212e; margin-bottom:8px; text-align: center;">🗺️ Map Styles</h6>
+                            <ul style="padding-left:18px; margin:0; font-size:15px; line-height:1.5;">
+                                <li>Switch between <b>Map</b> and <b>Satellite</b> view</li>
+                                <li>Explore <b>land cover</b>—forests, farms, neighborhoods</li>
+                            </ul>
+                            </div>
+                        </div>
+                        </div>
+
+            
+                        <hr style="border: 1px solid #162e44; margin: 15px 0;">
+
+            <iframe
+                class="ee-embed"
+                src="https://baileyrava.users.earthengine.app/view/mcphd-surface-water-sampling-sites"
+                allowfullscreen
+                ></iframe>
+
+            <div class="callout">
+            <h6>Why Does This Map Matter?</h6>
+            <p>It helps us see <b>where</b> water is being tested and <b>how different areas compare</b>. 
+                By looking at patterns in the data, scientists can:</p>
+            <ul>
+                <li>Spot pollution problems early</li>
+                <li>Connect water quality to land use (like roads, neighborhoods, and farmland)</li>
+                <li>Make better decisions to protect people and nature</li>
+            </ul>
+            </div>
+
+            <hr style="border: 1px solid #162e44; margin: 15px 0;">
+            <h4 style="margin-bottom: 15px; text-align: center; font-weight:700; color:#05212e;">
+                What Comes Next?
+                </h4>
+
+                <div class="row align-items-center" style="margin-top: 10px;">
+                <div class="col">
+                    <p>
+                    Over <b>30 years of monitoring</b> has produced a <b>huge dataset</b> —
+                    dozens of parameters measured at more than <b>50 locations</b>. 
+                    It’s too much to fully understand by looking at one site or one factor at a time.
+                    </p>
+
+                    <p>
+                    That’s where <b>Principal Component Analysis (PCA)</b> comes in.
+                    </p> 
+
+                    <p>
+                    PCA helps scientists <b>find patterns in big datasets</b>. With it, we can:
+                    </p>
+
+                    <ul style="margin-left: 1.5rem; line-height:1.5;">
+                    <li>Identify the most important factors influencing water quality</li>
+                    <li>Group sites with similar conditions</li>
+                    <li>Reveal how pollution patterns have shifted over time</li>
+                    </ul>
+
+                    <p>
+                    On the next page, we’ll break down <b>how a PCA works</b> and 
+                    <b>what it tells us</b> about water in Marion County.
+                    </p>
+                </div>
+                </div>
+
+    <div class="d-flex justify-content-between" style="margin-top: 40px;">
+        <button type="button" class="btn btn-primary" onclick="window.location.href = 'studyarea.html'">← Back</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href = 'pca_exp.html'">Next: How PCA Works →</button>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</body>
+</html>

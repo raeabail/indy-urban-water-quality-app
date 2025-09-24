@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCA Results • Marion County Water Quality</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              PCA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item active" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <div id="main">
+      <div class="container body">
+        <h3 style="margin-top: 20px">
+          <center>
+            <b>Step-by-Step: How PCA Was Used To Analyze Water Quality</b>
+          </center>
+        </h3>
+        <ul class="nav justify-content-center my-4" id="pcaTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="btn btn-primary mx-2"
+              id="eagle-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#eagle"
+              type="button"
+              role="tab"
+            >
+              Site 1: Eagle Creek
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="btn btn-primary mx-2"
+              id="fall-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#fall"
+              type="button"
+              role="tab"
+            >
+              Site 2: Fall Creek
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="btn btn-primary mx-2"
+              id="white-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#white"
+              type="button"
+              role="tab"
+            >
+              Site 3: Lower White River
+            </button>
+          </li>
+        </ul>
+
+        <div
+          id="pcaPlaceholder"
+          class="text-center text-muted"
+          style="padding: 100px 0"
+        >
+          <p style="color: rgb(54, 54, 54); margin-top: -80px">
+            A map of the sampling locations for each site is displayed below.
+          </p>
+
+          <!-- Centered image -->
+          <img
+            id="waterways"
+            src="images/mc_samplingsites.png"
+            alt="Sampling Locations in Marion County"
+            style="
+              width: 785px;
+              height: 585px;
+              border-radius: 3px;
+              border: 3px solid #162e44;
+              margin: 60px 0;
+              margin-top: 0px;
+            "
+          />
+
+          <div class="d-flex justify-content-between mt-3 w-100">
+            <button
+              class="btn btn-primary prev-btn"
+              style="margin-left: 0"
+              onclick="window.location.href='pca_exp.html'"
+            >
+              ← Previous: What is a PCA?
+            </button>
+
+            <button
+              class="btn btn-primary next-btn"
+              style="margin-right: 0"
+              onclick="window.location.href='pca_intp.html'"
+            >
+              Next: PCA Interpretations →
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-content p-4 border border-top-0 rounded-bottom bg-white" id="pcaTabsContent">
+          <!-- EAGLE CREEK TAB -->
+          <div class="tab-pane fade" id="eagle" role="tabpanel"  aria-labelledby="eagle-tab">
+            <div class="pca-slideshow mt-4" id="eagle-pca-steps"  role="eagle-pca-steps" aria-labelledby="eagle-tab">
+              <!-- Step 1 -->
+              <div class="step active">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 1: Descriptive Statistics</u></center>
+                  </h4>
+                  <p>
+                    Before diving into patterns, we first needed to understand
+                    the <b>basic makeup</b> of the water quality data collected
+                    from <b><i>Eagle Creek</i></b>.
+                  </p>
+                  <p>
+                    Key descriptive statistics were calculated for each
+                    pollutant including the <b>mean</b>,
+                    <b>standard deviation</b>, <b>minimum</b>, and
+                    <b>maximum</b>. These values help us get a sense of overall
+                    conditions and early variability in the dataset.
+                  </p>
+                  <div class="callout">
+                  <h6>This step helps answer questions like:</h6>
+                  <ul style="margin-left: 3rem">
+                    <li>What’s the typical range for each pollutant?</li>
+                    <li>Which variables show the most variability?</li>
+                    <li>
+                      Are there any extreme values or outliers we should pay
+                      attention to?
+                    </li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    To explore these questions, the descriptive statistics are
+                    summarized in the table below, showing the full range of
+                    values for each water quality parameter measured at <b>Eagle
+                    Creek</b> between 1995 and 2019 (Table 1).
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="table-responsive">
+                  <table
+                    id="eagle-stats-table"
+                    class="display nowrap"
+                    style="width: 100%"
+                  >
+                  <caption class="table-caption">Table 1. Descriptive Statistics for Eagle Creek (1995–2019)</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Units</th>
+                        <th>Mean</th>
+                        <th>Standard Deviation</th>
+                        <th>Minimum</th>
+                        <th>Maximum</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Temp</td>
+                        <td>Deg C</td>
+                        <td>20.0194</td>
+                        <td>11.6221</td>
+                        <td>-0.3000</td>
+                        <td>82.9400</td>
+                      </tr>
+                      <tr>
+                        <td>pH</td>
+                        <td>Units</td>
+                        <td>7.9358</td>
+                        <td>0.5847</td>
+                        <td>6.5900</td>
+                        <td>12.6000</td>
+                      </tr>
+                      <tr>
+                        <td>SpCond</td>
+                        <td>uS/cm</td>
+                        <td>2.6081</td>
+                        <td>1.09132</td>
+                        <td>0.5005</td>
+                        <td>5982.000</td>
+                      </tr>
+                      <tr>
+                        <td>TDS</td>
+                        <td>Kmg/L</td>
+                        <td>403.7268</td>
+                        <td>235.5649</td>
+                        <td>0.7000</td>
+                        <td>7100</td>
+                      </tr>
+                      <tr>
+                        <td>DO</td>
+                        <td>mg/L</td>
+                        <td>10.2087</td>
+                        <td>30.1639</td>
+                        <td>0.8700</td>
+                        <td>747.5000</td>
+                      </tr>
+                      <tr>
+                        <td><i>E. coli</i></td>
+                        <td>colonies/100mL</td>
+                        <td>140.4058</td>
+                        <td>994.5570</td>
+                        <td>1.0000</td>
+                        <td>24192</td>
+                      </tr>
+                      <tr>
+                        <td>NH3</td>
+                        <td>mg/L</td>
+                        <td>0.1886</td>
+                        <td>1.3728</td>
+                        <td>0.1000</td>
+                        <td>60.20</td>
+                      </tr>
+                      <tr>
+                        <td>NO3</td>
+                        <td>mg/L</td>
+                        <td>2.8615</td>
+                        <td>2.8826</td>
+                        <td>0.5000</td>
+                        <td>42.0</td>
+                      </tr>
+                      <tr>
+                        <td>NO2</td>
+                        <td>mg/L</td>
+                        <td>0.3137</td>
+                        <td>0.0994</td>
+                        <td>0.3000</td>
+                        <td>2.6000</td>
+                      </tr>
+                      <tr>
+                        <td>Chloride</td>
+                        <td>mg/L</td>
+                        <td>49.9095</td>
+                        <td>35.3015</td>
+                        <td>4.0000</td>
+                        <td>370.0000</td>
+                      </tr>
+                      <tr>
+                        <td>SO4</td>
+                        <td>mg/L</td>
+                        <td>31.2274</td>
+                        <td>14.4002</td>
+                        <td>6.0000</td>
+                        <td>108.0000</td>
+                      </tr>
+                      <tr>
+                        <td>PO4</td>
+                        <td>mg/L</td>
+                        <td>0.3130</td>
+                        <td>0.4607</td>
+                        <td>0.3000</td>
+                        <td>25.4000</td>
+                      </tr>
+                      <tr>
+                        <td>Arsenic</td>
+                        <td>ug/L</td>
+                        <td>0.0015</td>
+                        <td>0.0043</td>
+                        <td>0.0000</td>
+                        <td>0.2180</td>
+                      </tr>
+                      <tr>
+                        <td>Barium</td>
+                        <td>ug/L</td>
+                        <td>0.0647</td>
+                        <td>0.0488</td>
+                        <td>0.0150</td>
+                        <td>1.7100</td>
+                      </tr>
+                      <tr>
+                        <td>Cadmium</td>
+                        <td>ug/L</td>
+                        <td>0.0011</td>
+                        <td>0.0025</td>
+                        <td>0.0000</td>
+                        <td>0.0862</td>
+                      </tr>
+                      <tr>
+                        <td>Chromium</td>
+                        <td>ug/L</td>
+                        <td>0.0028</td>
+                        <td>0.0061</td>
+                        <td>0.0010</td>
+                        <td>0.1310</td>
+                      </tr>
+                      <tr>
+                        <td>Copper</td>
+                        <td>ug/L</td>
+                        <td>0.0030</td>
+                        <td>0.0166</td>
+                        <td>0.0010</td>
+                        <td>0.5720</td>
+                      </tr>
+                      <tr>
+                        <td>Mercury</td>
+                        <td>ug/L</td>
+                        <td>0.0000</td>
+                        <td>0.0000</td>
+                        <td>0.0000</td>
+                        <td>0.0004</td>
+                      </tr>
+                      <tr>
+                        <td>Nickel</td>
+                        <td>ug/L</td>
+                        <td>0.0028</td>
+                        <td>0.0061</td>
+                        <td>0.0010</td>
+                        <td>0.0970</td>
+                      </tr>
+                      <tr>
+                        <td>Lead</td>
+                        <td>ug/L</td>
+                        <td>0.0015</td>
+                        <td>0.0086</td>
+                        <td>0.0000</td>
+                        <td>0.3840</td>
+                      </tr>
+                      <tr>
+                        <td>Zinc</td>
+                        <td>ug/L</td>
+                        <td>0.0042</td>
+                        <td>0.0103</td>
+                        <td>0.0000</td>
+                        <td>0.4490</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="eaglestep1-btn"
+                      class="btn custom-toggle-btn"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#eaglestep1-collapse"
+                      aria-expanded="false"
+                      aria-controls="eaglestep1-collapse"
+                    >
+                      View Key Insights from the Statistics
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="eaglestep1-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What stands out in the table?</b></p>
+                      <ul style="margin-left: 1.5rem">
+                        <li>
+                          <b>Chloride</b> levels ranged from 4 to 370 mg/L,
+                          indicating possible road salt impacts or urban runoff
+                          spikes during winter months.
+                        </li>
+                        <li>
+                          <b><i>E. coli</i></b> showed extremely high
+                          variability, with a maximum of 24,192 colonies/100mL —
+                          suggesting sporadic but severe contamination events.
+                        </li>
+                        <li>
+                          <b>Dissolved Oxygen (DO)</b> had an unusually high
+                          maximum of 747.5 mg/L, which may reflect instrument
+                          error or outlier events that require further review.
+                        </li>
+                        <li>
+                          <b>Phosphate (PO₄)</b> concentrations were generally
+                          low, but the maximum value of 25.4 mg/L is notably
+                          elevated — potentially linked to fertilizer or
+                          wastewater input.
+                        </li>
+                        <li>
+                          Most heavy metals (like <b>Arsenic</b>,
+                          <b>Cadmium</b>, <b>Lead</b>) were present in very
+                          small amounts but showed a wide range relative to
+                          their means — indicating occasional spikes.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                    <!-- Prev/Next Buttons -->
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="returnToPlaceholder()"></button>
+                      <button class="btn btn-primary next-btn" onclick="nextStep('eagle-pca-steps')"></button>
+                    </div>
+
+              </div>             
+
+              <!-- Step 2 -->
+              <div class="step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 2: Standardize the Data</u></center>
+                  </h4>
+                  <p>
+                    Each pollutant is measured in different units. Some are measured in mg/L,
+                    others in μg/L, some with small values, others much bigger.
+                  </p>
+                  <div class="callout">
+                  <p>
+                    To fairly compare them, we <b>standardized</b> all variables
+                    by calculating a <b>z-score</b> for every value.
+                  </p>
+                  <p>
+                    This puts everything on the same scale, where each variable now
+                    has:
+                  </p>
+                  <ul>
+                    <li>A mean of <b>0</b></li>
+                    <li>A standard deviation of <b>1</b></li>
+                  </ul>
+                  <p>
+                    Without this, bigger-numbered pollutants (like TDS) could
+                    dominate the results just because of their scale.
+                  </p>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    Additionally, data passed the Kaiser-Meyer-Olkin (KMO) and
+                    Bartlett’s tests, confirming it was suitable for PCA.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>KMO Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Is this data good for
+                      finding patterns?"
+                    </li>
+                    <li>
+                      It tells you if your variables share enough in common to
+                      group them into broader trends.
+                    </li>
+                    <li>
+                      A KMO value of 0.6 or greater indicates the data works well
+                      for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="eckmoInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#eckmoInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="eckmoInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center>KMO value = <b>0.602</b></center>
+                        </p>
+                        <p>
+                          This score suggests the dataset is <b>acceptable</b> for
+                          pattern detection, which means PCA can uncover
+                          meaningful groupings.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>Bartlett's Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Are these variables
+                      connected at all?"
+                    </li>
+                    <li>
+                      It tells you if there are real connections between your
+                      variables or if they’re all doing their own thing.
+                    </li>
+                    <li>
+                      If the test result is significant (<i>p</i> < 0.05), it
+                      means your variables are related and good for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="ecbartlettInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#ecbartlettInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="ecbartlettInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center><i>p</i> = <b>0</b></center>
+                        </p>
+                        <p>
+                          A <i>p-value</i> of 0 indicates that the variables are
+                          <b>strongly correlated</b>, meaning PCA has a good
+                          chance of revealing meaningful patterns in the data.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                    <div class="d-flex justify-content-between mt-3">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('eagle-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="nextStep('eagle-pca-steps')"></button>
+                    </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 3: Correlation Matrix</u></center>
+                  </h4>
+                  <p>Now we ask: <b>How do the variables move together?</b></p>
+                  <div class="callout">
+                  <p>
+                    To find out, we created a <b>correlation matrix</b>: a table
+                    that compares each pair of variables.
+                  </p>
+                  <ul>
+                    <li>
+                      A <b>positive value</b> means both variables tend to
+                      increase (or decrease) together
+                    </li>
+                    <li>
+                      A <b>negative value</b> means one increases as the other
+                      decreases
+                    </li>
+                  </ul>
+                  <p>
+                    This step lays the groundwork for uncovering patterns hidden
+                    across all variables.
+                  </p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+                  <p>
+                    Below, the correlation plot gives a visual summary of those
+                    relationships, where darker shades of either
+                    <b style="color: #003b2c">green (positive)</b> or
+                    <b style="color: #623100">orange (negative)</b> indicate
+                    stronger connections (Figure 1).
+                  </p>
+                  <div style="text-align: center">
+                    <figure class="figure">
+                      
+                    <img
+                      src="images/ec_corrplot.png"
+                      class="expandable-img"
+                      alt="Pearson correlation plot for Eagle Creek"
+                      style="width: auto; height: auto; border: none"/>
+                      
+                      <figcaption class="figure-caption">Figure 1. Eagle Creek correlation matrix</figcaption>
+                    </figure>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="eaglestep3-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#eaglestep3-collapse"
+                      aria-expanded="false"
+                      aria-controls="eaglestep3-collapse"
+                    >
+                      View Key Insights from the Correlation Matrix
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="eaglestep3-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What does the correlation matrix reveal?</b></p>
+                      <p>
+                        Now, we can really see the correlations! Significant ones
+                        are any where <b>r > 0.60</b>. In this case, there are
+                        <b>three strongly positive correlations</b>:
+                      </p>
+                      <ul style="margin-left: 1.5rem">
+                        <li>
+                          <b>Arsenic & PO₄³⁻</b>:
+                          <span style="color: green"><b>r = 0.91</b></span> (very
+                          strong positive correlation)
+                        </li>
+                        <li>
+                          <b>SO₄²⁻ & Chloride</b>:
+                          <span style="color: green"><b>r = 0.63</b></span>
+                          (moderate positive correlation)
+                        </li>
+                        <li>
+                          <b>Cadmium & PO₄³⁻</b>:
+                          <span style="color: green"><b>r = 0.53</b></span>
+                          (moderate positive correlation)
+                        </li>
+                      </ul>
+
+                      <p>
+                        All of these had <b>p-values less than 0.05</b>, which
+                        means the relationships are statistically significant.
+                      </p>
+                    </div>
+                  </div>
+
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('eagle-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="nextStep('eagle-pca-steps')"></button>
+                    </div>
+
+              </div>
+
+              <!-- Step 4 -->
+              <div class="step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 4: Extract Principal Components</u></center>
+                  </h4>
+                  <p>Here’s where the real pattern-finding begins.</p>
+                  <div class="callout">
+                  <p>
+                    We used PCA to transform our dataset into a set of
+                    <b>principal components</b>: new variables that capture the
+                    biggest differences in the data. PCA does this by calculating:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>
+                      <b>Eigenvectors:</b> The new directions or axes that
+                      maximize variance.
+                    </li>
+                    <li>
+                      <b>Eigenvalues:</b> How much variance is explained along
+                      each direction.
+                    </li>
+                  </ul>
+                  <p>
+                    The <b>first component</b> captures the most important
+                    variation. The <b>second</b> captures the next most. In many
+                    cases, only the first few components are needed to explain the
+                    majority of the variance in the dataset.
+                  </p>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <h4><b><center>Scree Plots</center></b></h4>
+                  <div>
+                    <p>
+                        We used two scree plots to decide how many components to
+                        keep. <b>Figure 2</b> displays the eigenvalues from the PCA, where according to the <b>Kaiser Criterion</b> (Chatfield &
+                            Collin, 1980), only components with eigenvalues
+                            greater than 1 are retained. <b>Figure 3</b> displays the principal components, showing how much of the total variance is
+                            explained by each component.
+                    </p>
+                    <p style="margin-bottom: 50px;"></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <img
+                          src="images/ec_eigenvalue_plot.png"
+                          class="expandable-img"
+                          alt="EC Scree plot - Eigenvalues"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption" >
+                          <i
+                            >Figure 2. Eagle Creek eigenvalues from PCA
+                          </i>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <img
+                          src="images/ec_variance_plot.png"
+                          class="expandable-img"
+                          alt="Explained EC Variance Plot"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption">
+                          <i
+                            >Figure 3. Eagle Creek scree plot of the principal components
+                          </i>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4><b><center>Principal Component Loadings</center></b></h4>
+                  <p>
+                    The table below shows how strongly each original variable is
+                    associated with the first three principal components (Table 2):
+                  </p>
+                  <table
+                    class="table table-bordered table-striped mt-3"
+                    style="font-size: 16px"
+                  >
+                  <caption class="table-caption">Table 2. Eagle Creek PCA results</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>PC1</th>
+                        <th>PC2</th>
+                        <th>PC3</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>TDS</td>
+                        <td>0.076</td>
+                        <td>-0.096</td>
+                        <td>0.068</td>
+                      </tr>
+                      <tr>
+                        <td><i>E. coli</i></td>
+                        <td>-0.013</td>
+                        <td>-0.035</td>
+                        <td>-0.121</td>
+                      </tr>
+                      <tr>
+                        <td>Arsenic</td>
+                        <td>0.001</td>
+                        <td>0.014</td>
+                        <td>-0.033</td>
+                      </tr>
+                      <tr>
+                        <td>Cadmium</td>
+                        <td>0.009</td>
+                        <td>0.025</td>
+                        <td>-0.043</td>
+                      </tr>
+                      <tr>
+                        <td>Chromium</td>
+                        <td>0.027</td>
+                        <td>0.117</td>
+                        <td>0.963</td>
+                      </tr>
+                      <tr>
+                        <td>Copper</td>
+                        <td>-0.005</td>
+                        <td>0.003</td>
+                        <td>-0.008</td>
+                      </tr>
+                      <tr>
+                        <td>Chloride</td>
+                        <td>0.486</td>
+                        <td>-0.860</td>
+                        <td>0.075</td>
+                      </tr>
+                      <tr>
+                        <td>NO₂</td>
+                        <td>0.008</td>
+                        <td>0.029</td>
+                        <td>-0.195</td>
+                      </tr>
+                      <tr>
+                        <td>PO₄³⁻</td>
+                        <td>0.002</td>
+                        <td>0.020</td>
+                        <td>-0.039</td>
+                      </tr>
+                      <tr>
+                        <td>SO₄²⁻</td>
+                        <td>0.870</td>
+                        <td>0.484</td>
+                        <td>-0.078</td>
+                      </tr>
+                      <tr class="table-primary">
+                        <td><b>Total Variance (%)</b></td>
+                        <td><b>64.5%</b></td>
+                        <td><b>11.9%</b></td>
+                        <td><b>5.7%</b></td>
+                      </tr>
+                      <tr class="table-info">
+                        <td><b>Cumulative Variance (%)</b></td>
+                        <td><b>64.5%</b></td>
+                        <td><b>76.5%</b></td>
+                        <td><b>82.1%</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="eaglestep4-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#eaglestep4-collapse"
+                      aria-expanded="false"
+                      aria-controls="eaglestep4-collapse"
+                    >
+                      View Key Insights from the Scree Plots and PCA Table
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="eaglestep4-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What do the scree plots and PCA table reveal?</b></p>
+                      <ul style="margin-left: 3rem">
+                        <li>
+                          <b>Three components</b> were retained based on the
+                          Kaiser Criterion (eigenvalues > 1), which together
+                          explain <b>over 82% of the total variance</b>.
+                        </li>
+                        <li>
+                          <b>PC1 alone accounts for 64.5%</b> of the total
+                          variance and is heavily influenced by <b>SO₄²⁻</b> and
+                          <b>Chloride</b>, suggesting a strong signal from
+                          possible urban or road salt runoff.
+                        </li>
+                        <li>
+                          <b>PC2</b> (11.9%) is dominated by a strong negative
+                          loading of <b>Chloride</b> and positive loading of
+                          <b>SO₄²⁻</b>, which may indicate mixed source influences
+                          or seasonal variation.
+                        </li>
+                        <li>
+                          <b>PC3</b> (5.7%) is overwhelmingly defined by
+                          <b>Chromium</b> (loading = 0.963), pointing to a unique,
+                          likely anthropogenic, trace metal signal.
+                        </li>
+                        <li>
+                          The <b>steep drop</b> in both scree plots after the
+                          first component confirms that
+                          <b>most variation is captured early</b>, reinforcing the
+                          decision to retain only 2–3 components.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('eagle-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="nextStep('eagle-pca-steps')"></button>
+                    </div>
+              </div>
+
+              <!-- Step 5 -->
+              <div class="step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 5: Identify Dominant Parameters</u></center>
+                  </h4>
+                  <p>
+                    Each principal component is essentially a new “axis” built from combinations of pollutants. </p>
+                    
+                  <div class="callout">
+                  <p>To understand what those axes really mean, we look at the <b>loadings</b> which are the pollutants that most strongly shape each component. 
+                    Loadings answer two questions:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>Which pollutants are driving the patterns?</li>
+                    <li>How much each one matters?</li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    We then used <b>Varimax Rotation</b>, a method that sharpens the 
+                    picture by rotating the axes so pollutants cluster more neatly 
+                    onto specific components. This makes interpretation easier and highlights 
+                    the strongest contributors.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <p>
+                    This table shows the rotated loadings for each parameter
+                    across the three principal components (<b>VC1</b>, <b>VC2</b>, <b>VC3</b>). Strong
+                    loadings help identify which pollutants are most influential
+                    for each component.
+                  </p>
+
+                  <table
+                    class="table table-bordered table-striped mt-3"
+                    style="font-size: 16px"
+                  >
+                    <caption class="table-caption">Table 3. PCA results after varimax rotation</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>VC1</th>
+                        <th>VC2</th>
+                        <th>VC3</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>TDS</td>
+                        <td>-0.01</td>
+                        <td>0.64</td>
+                        <td>0.08</td>
+                      </tr>
+                      <tr>
+                        <td><i>E. coli</i></td>
+                        <td>0.01</td>
+                        <td>0.02</td>
+                        <td>-0.71</td>
+                      </tr>
+                      <tr>
+                        <td>Arsenic</td>
+                        <td>0.93</td>
+                        <td>-0.02</td>
+                        <td>0.03</td>
+                      </tr>
+                      <tr>
+                        <td>Cadmium</td>
+                        <td>0.72</td>
+                        <td>0.02</td>
+                        <td>0.06</td>
+                      </tr>
+                      <tr>
+                        <td>Chromium</td>
+                        <td>-0.01</td>
+                        <td>0.04</td>
+                        <td>0.70</td>
+                      </tr>
+                      <tr>
+                        <td>Copper</td>
+                        <td>0.00</td>
+                        <td>-0.07</td>
+                        <td>0.03</td>
+                      </tr>
+                      <tr>
+                        <td>Chloride</td>
+                        <td>-0.01</td>
+                        <td>0.87</td>
+                        <td>-0.01</td>
+                      </tr>
+                      <tr>
+                        <td>NO₂</td>
+                        <td>0.34</td>
+                        <td>0.05</td>
+                        <td>-0.20</td>
+                      </tr>
+                      <tr>
+                        <td>PO₄</td>
+                        <td>0.94</td>
+                        <td>-0.01</td>
+                        <td>0.02</td>
+                      </tr>
+                      <tr>
+                        <td>SO₄</td>
+                        <td>0.04</td>
+                        <td>0.83</td>
+                        <td>0.12</td>
+                      </tr>
+                      <tr class="table-primary">
+                        <td><b>Proportion %</b></td>
+                        <td><b>0.45</b></td>
+                        <td><b>0.35</b></td>
+                        <td><b>0.20</b></td>
+                      </tr>
+                      <tr class="table-info">
+                        <td><b>Cumulative %</b></td>
+                        <td><b>0.45</b></td>
+                        <td><b>0.80</b></td>
+                        <td><b>1.00</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4 class="mb-2" style="text-align: center;"><strong>From Loadings to Groups</strong></h4> 
+                  <p class="mb-2"> The PCA axes were rotated (varimax), and each pollutant was assigned to the component where it had the <em>largest absolute loading</em>. Think of each component as a pattern of pollutants that tend to change together.</p>
+
+                  <ul class="mb-3" style="margin-left:1.25rem;">
+                    <li><strong>Explained variance (%)</strong> = how much of the total variation that component explains</li>
+                    <li><strong>Loading</strong> = loading strength (closer to 1 = stronger tie). A negative (“–”) sign means it moves in the opposite direction of a component.</li>
+                  </ul>
+
+                  <div class="component-deck">
+                    <div class="component-card">
+                      <h6>Component 1</h6>
+                      <span class="variance-badge">45% variance</span>
+                      <div class="chips">
+                        <span class="chip">Arsenic <small>0.93</small></span>
+                        <span class="chip">PO₄ <small>0.94</small></span>
+                        <span class="chip">Cadmium <small>0.72</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 2</h6>
+                      <span class="variance-badge">35% variance</span>
+                      <div class="chips">
+                        <span class="chip">Chloride <small>0.87</small></span>
+                        <span class="chip">SO₄ <small>0.83</small></span>
+                        <span class="chip">TDS <small>0.64</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 3</h6>
+                      <span class="variance-badge">20% variance</span>
+                      <div class="chips">
+                        <span class="chip">Chromium <small>0.70</small></span>
+                        <span class="chip">E. coli <small>−0.71</small></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="fw-semibold mb-1" style="margin-top: 25px;">Likely source signals</p>
+                  <div class="source-grid">
+                    <div class="source-card">
+                      <h6>Industrial activities</h6>
+                      <div class="chips">
+                        <span class="chip">Arsenic</span><span class="chip">Chromium</span><span class="chip">Cadmium</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Agricultural runoff</h6>
+                      <div class="chips">
+                        <span class="chip">PO₄</span><span class="chip">SO₄</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Urban / road salt runoff</h6>
+                      <div class="chips">
+                        <span class="chip">Chloride</span><span class="chip">TDS</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="eaglestep5-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#eaglestep5-collapse"
+                      aria-expanded="false"
+                      aria-controls="eaglestep5-collapse"
+                    >
+                      What are the Most Dominant Pollutants?
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="eaglestep5-collapse">
+                    <div class="card card-body custom-card">
+                      <p>
+                        Among all variables, three emerged as the most dominant
+                        pollutants across components:
+                      </p>
+                      <ol style="margin-left: 2rem">
+                        <li>
+                          <b>Phosphate (PO₄):</b> Highest loading in PC1 (0.94). A
+                          major signal of <b>nutrient pollution</b>, potentially from
+                          <b>fertilizers</b> or <b>wastewater discharge</b>.
+                        </li>
+                        <li>
+                          <b>Chloride:</b> Highest loading in PC2 (0.87). Likely
+                          related to <b>road salts</b>, <b>urban runoff</b>, and possibly
+                          <b>industrial discharges</b>.
+                        </li>
+                        <li>
+                          <b>Chromium:</b> Strongest contributor in PC3 (0.70).
+                          Suggests industrial sources such as <b>metal manufacturing</b>
+                          or <b>effluent discharge</b>.
+                        </li>
+                      </ol>
+                      <p>
+                        These dominant parameters help us understand what’s
+                        shaping water quality at this site and point to likely
+                        sources such as <b>agriculture</b>, <b>urban runoff</b>, and <b>industry</b>.
+                      </p>
+                    </div>
+                  </div>
+
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('eagle-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="nextStep('eagle-pca-steps')"></button>
+                    </div>
+
+              </div>
+
+              <!-- Step 6 -->
+              <div class="step" id="final-step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 6: Cluster the Results</u></center>
+                  </h4>
+                  <div class="callout">
+                  <p>To explore how water quality varies across sampling locations at this site, we used two statistical tools:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>K-means Clustering:</b> An unsupervised technique that groups sites based on similar pollutant profiles.</li>
+                      <li><b>Linear Discriminant Analysis (LDA):</b> A supervised technique that tests how well the groupings separate and identifies which pollutants matter most for that separation.</li>
+                    </ul>
+
+                    <p>These tools allow us to turn complex PCA results into clear spatial patterns tied to actual sampling locations.</p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+                    <h4><center><b>K-means Clustering</center></b></h4>
+                    <p><b>K-means clustering</b> groups sampling sites based on similar water quality patterns. To figure out how many groups made the most sense, we used the <b>silhouette method</b>, which measures how well each site fits within its group compared to others.</p>
+                    <p>Based on the graph below, the <b>optimal number of clusters is 2</b>, meaning the data naturally separates into two distinct groups (Figure 4).</p>
+                    <p>Spatially, these clusters correspond to different parts of the watershed (Figure 5):
+                      <ul style="margin-left: 3rem;">
+                        <li><b>Upper Eagle Creek:</b> Cluster 1 — likely influenced by suburban/residential runoff</li>
+                        <li><b>Lower Eagle Creek:</b> Cluster 2 — possibly impacted by downstream accumulation or urban discharges</li>
+                      </ul>
+                        <div class="row mt-4">
+                          <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                            <img src="images/ec_clusters.png" alt="K-means Cluster Results" style="max-width: 100%; border: none;" class="expandable-img">
+                            <figcaption class="figure-caption">Figure 4. K-means clustering groups the 11 sampling sites into 2 main clusters based on water quality similarities.
+                            </figcaption>
+                          </div>
+                                      
+                          <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                            <iframe src="https://baileyrava.users.earthengine.app/view/eagle-creek-water-quality-clusters" alt="Cluster Map by Location" style="max-width: 100%; border: none; border-radius: 8px;"></iframe>
+                            <figcaption class="figure-caption">Figure 5. Mapping the clusters reveals a geographic split: Cluster 1 (Upper Eagle Creek) vs. 
+                              Cluster 2 (Lower Eagle Creek).</figcaption>
+                          </div>
+                        </div>                                    
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <h4><center><b>Linear Discriminant Analysis (LDA)</b></center></h4>
+
+                    <div class="callout">
+                    <p>To validate the clustering, we applied <b>Linear Discriminant Analysis (LDA)</b>. This confirmed the separation between the two groups with:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>100%</b> training accuracy</li>
+                      <li><b>93.5%</b> cross-validation accuracy</li>
+                    </ul>
+                    </div>
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <div class="mt-4 d-flex justify-content-center">
+                      <button
+                        id="eaglestep6-btn"
+                        class="btn btn-primary"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#eaglestep6-collapse"
+                        aria-expanded="false"
+                        aria-controls="eaglestep6-collapse"
+                      >
+                      View Key Insights from Clustering
+                      </button>
+                    </div>
+
+                    <div class="collapse mt-3" id="eaglestep6-collapse">
+                      <div class="card card-body custom-card">
+                        <ul style="margin-left: 2rem">
+                          <li>
+                            Water quality patterns can be grouped into <b>two distinct zones</b> across Eagle Creek.
+                          </li>
+                          <li>
+                            The clustering lined up with spatial differences (upstream vs. downstream) and may reflect <b>land use</b>, <b>discharge points</b>, or <b>watershed dynamics</b>.
+                          </li>
+                          <li>
+                            Using both K-means and LDA helped confirm the structure of the data and identify which sites were most alike in pollutant profiles.
+                          </li>
+                        </ul>
+                        <p>
+                          This final step helps us translate PCA’s statistical patterns into meaningful, place-based insights linking data back to geography and potential management strategies.
+                        </p>
+                      </div>
+                    </div>  
+
+                      <div class="d-flex justify-content-between mt-4 w-100">
+                        <button class="btn btn-primary prev-btn" onclick="prevStep('eagle-pca-steps')"></button>
+                        <button class="btn btn-primary next-btn" onclick="window.location.href='pca_intp.html'"></button>
+                      </div>
+              </div>
+
+              <!-- Dot Indicators-->
+              <div class="step-dots text-center mt-3">
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+              </div>
+
+            </div>
+          </div>
+            
+          <!-- FALL CREEK TAB -->
+          <div class="tab-pane fade" id="fall" role="tabpanel" aria-labelledby="fall-tab">
+            <div class="pca-slideshow mt-4" id="fall-pca-steps" role="fall-pca-steps" aria-labelledby="fall-tab">
+              <!-- Step 1 -->
+              <div class="step active">
+                <h4 style="margin-top: -40px"><center><u>Step 1: Descriptive Statistics</u></center></h4>
+                  <p>
+                    Before diving into patterns, we first needed to understand
+                    the <b>basic makeup</b> of the water quality data collected
+                    from <b><i>Fall Creek</i></b>.
+                  </p>
+                  <p>
+                    Key descriptive statistics were calculated for each
+                    pollutant including the <b>mean</b>,
+                    <b>standard deviation</b>, <b>minimum</b>, and
+                    <b>maximum</b>. These values help us get a sense of overall
+                    conditions and early variability in the dataset.
+                  </p>
+                  <div class="callout">
+                  <h6>This step helps answer questions like:</h6>
+                  <ul style="margin-left: 3rem">
+                    <li>What’s the typical range for each pollutant?</li>
+                    <li>Which variables show the most variability?</li>
+                    <li>
+                      Are there any extreme values or outliers we should pay
+                      attention to?
+                    </li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    To explore these questions, the descriptive statistics are
+                    summarized in the table below, showing the full range of
+                    values for each water quality parameter measured at <b>Fall
+                    Creek</b> between 1995 and 2019 (Table 4).
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="table-responsive">
+                  <table id="fall-stats-table" class="table display nowrap" style="width: 100%">
+                    <caption class="table-caption">Table 4. Descriptive Statistics for Fall Creek (1995–2019)</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Units</th>
+                        <th>Mean</th>
+                        <th>Standard Deviation</th>
+                        <th>Minimum</th>
+                        <th>Maximum</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Temp</td><td>Deg C</td><td>19.1254</td><td>12.9939</td><td>0.1000</td><td>80.2400</td></tr>
+                      <tr><td>pH</td><td>Units</td><td>7.8840</td><td>0.4903</td><td>0.3627</td><td>12.2000</td></tr>
+                      <tr><td>SpCond</td><td>uS/cm</td><td>0.6018</td><td>0.2583</td><td>0.1403</td><td>6.0590</td></tr>
+                      <tr><td>TDS</td><td>Kmg/L</td><td>0.4032</td><td>0.4049</td><td>0.0036</td><td>8.0800</td></tr>
+                      <tr><td>DO</td><td>mg/L</td><td>8.5294</td><td>4.2245</td><td>1.8600</td><td>69.6200</td></tr>
+                      <tr><td><i>E. coli</i></td><td>colonies/100mL</td><td>1493.2950</td><td>4488.7630</td><td>1.0000</td><td>24192.0000</td></tr>
+                      <tr><td>NH3</td><td>mg/L</td><td>0.4778</td><td>9.2352</td><td>0.1000</td><td>253.0000</td></tr>
+                      <tr><td>NO3</td><td>mg/L</td><td>1.0355</td><td>0.7372</td><td>0.1000</td><td>5.1300</td></tr>
+                      <tr><td>NO2</td><td>mg/L</td><td>0.4283</td><td>3.1993</td><td>0.0500</td><td>87.9000</td></tr>
+                      <tr><td>Chloride</td><td>mg/L</td><td>50.1561</td><td>30.1631</td><td>3.5000</td><td>537.0000</td></tr>
+                      <tr><td>SO4</td><td>mg/L</td><td>32.5841</td><td>12.9716</td><td>6.0000</td><td>101.0000</td></tr>
+                      <tr><td>PO4</td><td>mg/L</td><td>0.3041</td><td>0.0353</td><td>0.0400</td><td>0.8400</td></tr>
+                      <tr><td>Arsenic</td><td>ug/L</td><td>0.0022</td><td>0.0017</td><td>0.0010</td><td>0.0420</td></tr>
+                      <tr><td>Barium</td><td>ug/L</td><td>0.0660</td><td>0.0254</td><td>0.0150</td><td>0.6200</td></tr>
+                      <tr><td>Cadmium</td><td>ug/L</td><td>0.0010</td><td>0.0006</td><td>0.0010</td><td>0.0174</td></tr>
+                      <tr><td>Chromium</td><td>ug/L</td><td>0.0101</td><td>0.0029</td><td>0.0011</td><td>0.0541</td></tr>
+                      <tr><td>Copper</td><td>ug/L</td><td>0.0402</td><td>0.0098</td><td>0.0025</td><td>0.2170</td></tr>
+                      <tr><td>Mercury</td><td>ug/L</td><td>0.0004</td><td>0.0005</td><td>0.0004</td><td>0.0121</td></tr>
+                      <tr><td>Nickel</td><td>ug/L</td><td>0.0049</td><td>0.0021</td><td>0.0010</td><td>0.0292</td></tr>
+                      <tr><td>Lead</td><td>ug/L</td><td>0.0117</td><td>0.0016</td><td>0.0020</td><td>0.0204</td></tr>
+                      <tr><td>Zinc</td><td>ug/L</td><td>0.0472</td><td>0.0101</td><td>0.0039</td><td>0.1100</td></tr>
+                    </tbody>
+                  </table>
+                  </div>
+
+                <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fallstep1-btn"
+                      class="btn custom-toggle-btn"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fallstep1-collapse"
+                      aria-expanded="false"
+                      aria-controls="fallstep1-collapse"
+                    >
+                      View Key Insights from the Statistics
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="fallstep1-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What stands out in the table?</b></p>
+                      <ul style="margin-left: 1.5rem">
+                        <li>
+                          <b><i>E. coli</i></b> levels were extremely high and variable, with a mean of 1,493 colonies/100mL and a maximum of 24,192 — pointing to substantial fecal contamination, possibly from combined sewer overflows (CSOs), leaking septic systems, or pet and wildlife waste.
+                        </li>
+                        <li>
+                          <b>Chloride</b> levels peaked at 537 mg/L, which is very elevated and indicative of winter road salt use, especially in urban areas with high runoff potential.
+                        </li>
+                        <li>
+                          Both <b>NO₂</b> and <b>NH₃</b> showed extreme variability (NO₂ max = 87.9 mg/L; NH₃ max = 253 mg/L), suggesting periodic surges from aging sewer infrastructure, industrial effluent, or storm-related flushing.
+                        </li>
+                        <li>
+                          <b>Dissolved Oxygen</b> levels ranged widely (1.86–69.6 mg/L), which may indicate varying biological activity or sample inconsistencies.
+                        </li>
+                        <li>
+                          Several metals (e.g., <b>Chromium, Copper, Zinc</b>) were consistently detected, highlighting potential point-source pollution from nearby industrial or urban runoff inputs.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="returnToPlaceholder()"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('fall-pca-steps')"></button>
+                  </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="step" id="step-2">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 2: Standardize the Data</u></center>
+                  </h4>
+                  <p>
+                    Each pollutant is measured in different units. Some are measured in mg/L,
+                    others in μg/L, some with small values, others much bigger.
+                  </p>
+                    <div class="callout">
+                  <p>
+                    To fairly compare them, we <b>standardized</b> all variables
+                    by calculating a <b>z-score</b> for every value.
+                  </p>
+                  <p>
+                    This puts everything on the same scale, where each variable now
+                    has:
+                  </p>
+                  <ul>
+                    <li>A mean of <b>0</b></li>
+                    <li>A standard deviation of <b>1</b></li>
+                  </ul>
+                  <p>
+                    Without this, bigger-numbered pollutants (like TDS) could
+                    dominate the results just because of their scale.
+                  </p>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    Additionally, data passed the Kaiser-Meyer-Olkin (KMO) and
+                    Bartlett’s tests, confirming it was suitable for PCA.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>KMO Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Is this data good for
+                      finding patterns?"
+                    </li>
+                    <li>
+                      It tells you if your variables share enough in common to
+                      group them into broader trends.
+                    </li>
+                    <li>
+                      A KMO value of 0.6 or greater indicates the data works well
+                      for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fckmoInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fckmoInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="fckmoInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center>KMO value = <b>0.613</b></center>
+                        </p>
+                        <p>
+                          This score suggests the dataset is <b>acceptable</b> for
+                          pattern detection, which means PCA can uncover
+                          meaningful groupings.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>Bartlett's Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Are these variables
+                      connected at all?"
+                    </li>
+                    <li>
+                      It tells you if there are real connections between your
+                      variables or if they’re all doing their own thing.
+                    </li>
+                    <li>
+                      If the test result is significant (<i>p</i> < 0.05), it
+                      means your variables are related and good for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fcbartlettInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fcbartlettInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="fcbartlettInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center><i>p</i> = <b>0</b></center>
+                        </p>
+                        <p>
+                          A <i>p-value</i> of 0 indicates that the variables are
+                          <b>strongly correlated</b>, meaning PCA has a good
+                          chance of revealing meaningful patterns in the data.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('fall-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('fall-pca-steps')"></button>
+                  </div>
+                  
+              </div>
+
+              <!--Step 3-->
+              <div class="step" id="step-3">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 3: Correlation Matrix</u></center>
+                  </h4>
+                  <p>Now we ask: <b>How do the variables move together?</b></p>
+                        <div class="callout">
+                  <p>
+                    To find out, we created a <b>correlation matrix</b>: a table
+                    that compares each pair of variables.
+                  </p>
+                  <ul>
+                    <li>
+                      A <b>positive value</b> means both variables tend to
+                      increase (or decrease) together
+                    </li>
+                    <li>
+                      A <b>negative value</b> means one increases as the other
+                      decreases
+                    </li>
+                  </ul>
+                  <p>
+                    This step lays the groundwork for uncovering patterns hidden
+                    across all variables.
+                  </p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+                  <p>
+                    Below, the correlation plot gives a visual summary of those
+                    relationships, where darker shades of either
+                    <b style="color: #003b2c">green (positive)</b> or
+                    <b style="color: #623100">orange (negative)</b> indicate
+                    stronger connections (Figure 6).
+                  </p>
+                  <div style="text-align: center">
+                    <img
+                      src="images/fc_corrplot1.png"
+                      class="expandable-img"
+                      alt="Pearson correlation plot for Fall Creek"
+                      style="width: auto; height: auto; border: none"
+                    />
+                  </div>
+                  <figcaption class="figure-caption">Figure 6. Fall Creek correlation matrix</figcaption>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fallstep3-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fallstep3-collapse"
+                      aria-expanded="false"
+                      aria-controls="fallstep3-collapse"
+                    >
+                      View Key Insights from the Correlation Matrix
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="fallstep3-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What does the correlation matrix reveal?</b></p>
+                      <p>
+                        Now, we can really see the correlations! Significant ones
+                        are any where <b>r > 0.60</b>. From the figure, only <b>one</b> pair exceeded this threshold:
+                      </p>
+                      <ul style="margin-left: 1.5rem">
+                        <li>
+                          <b>SO₄ & Chloride</b>:
+                          <span style="color: green"><b>r = 0.63</b></span>
+                          (moderate positive correlation)
+                        </li>  
+                        <li>
+                          <p>Other low or moderate correlations (like <b>Chloride–Barium</b> at r = 0.29, or <b>TDS–SpCond</b> at r = 0.22) show weak associations and may reflect background geochemistry or variable loading patterns.</p>
+                        </li>
+                      </ul>
+                      <p>
+                        This pair had a <b>p-value less than 0.05</b>, which
+                        means the relationship is statistically significant.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('fall-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('fall-pca-steps')"></button>
+                  </div>
+                
+              </div>
+
+              <!-- Step 4 -->
+              <div class="step" id="step-4">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 4: Extract Principal Components</u></center>
+                  </h4>
+                  <p>Here’s where the real pattern-finding begins.</p>
+                                    <div class="callout">
+                  <p>
+                    We used PCA to transform our dataset into a set of
+                    <b>principal components</b>: new variables that capture the
+                    biggest differences in the data. PCA does this by calculating:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>
+                      <b>Eigenvectors:</b> The new directions or axes that
+                      maximize variance.
+                    </li>
+                    <li>
+                      <b>Eigenvalues:</b> How much variance is explained along
+                      each direction.
+                    </li>
+                  </ul>
+                  <p>
+                    The <b>first component</b> captures the most important
+                    variation. The <b>second</b> captures the next most. In many
+                    cases, only the first few components are needed to explain the
+                    majority of the variance in the dataset.
+                  </p>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <h4><b><center>Scree Plots</center></b></h4>
+                  <div>
+                    <p>
+                        We used two scree plots to decide how many components to
+                        keep. <b>Figure 7</b> displays the eigenvalues from the PCA, where according to the <b>Kaiser Criterion</b> (Chatfield &
+                            Collin, 1980), only components with eigenvalues
+                            greater than 1 are retained. <b>Figure 8</b> displays the principal components, showing how much of the total variance is
+                            explained by each component.
+                    </p>
+                    <p style="margin-bottom: 50px;"></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <img
+                          src="images/fc_eigenvalue_plot.png"
+                          class="expandable-img"
+                          alt="FC Scree plot - Eigenvalues"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption" >
+                          <i
+                            >Figure 7. Fall Creek eigenvalues from PCA
+                          </i>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <img
+                          src="images/fc_variance_plot.png"
+                          class="expandable-img"
+                          alt="Explained FC Variance Plot"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption">
+                          <i
+                            >Figure 8. Fall Creek scree plot of the principal components
+                          </i>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4><b><center>Principal Component Loadings</center></b></h4>
+                  <p>
+                    The table below shows how strongly each original variable is
+                    associated with the first three principal components (Table 5):
+                  </p>
+                  <table class="table table-bordered table-striped mt-3" style="font-size: 16px">
+                    <caption class="table-caption">Table 5. Fall Creek PCA Loadings</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>PC1</th>
+                        <th>PC2</th>
+                        <th>PC3</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>TDS</td><td>0.007</td><td>0.056</td><td>0.026</td></tr>
+                      <tr><td><i>E. coli</i></td><td>0.999</td><td>-0.050</td><td>0.004</td></tr>
+                      <tr><td>Barium</td><td>0.005</td><td>0.103</td><td>-0.025</td></tr>
+                      <tr><td>Chromium</td><td>-0.004</td><td>0.002</td><td>0.031</td></tr>
+                      <tr><td>Copper</td><td>0.001</td><td>0.023</td><td>-0.127</td></tr>
+                      <tr><td>Lead</td><td>0.003</td><td>-0.037</td><td>0.557</td></tr>
+                      <tr><td>Zinc</td><td>-0.015</td><td>-0.112</td><td>0.811</td></tr>
+                      <tr><td>Chloride</td><td>0.025</td><td>0.273</td><td>0.042</td></tr>
+                      <tr><td>SO4</td><td>0.043</td><td>0.946</td><td>0.110</td></tr>
+                      <tr><td>NH3</td><td>-0.001</td><td>0.011</td><td>0.007</td></tr>
+                      <tr class="table-primary">
+                        <td><b>Total Variance (%)</b></td><td><b>41.30%</b></td><td><b>24.46%</b></td><td><b>12.13%</b></td>
+                      </tr>
+                      <tr class="table-info">
+                        <td><b>Cumulative Variance (%)</b></td><td><b>41.30%</b></td><td><b>65.76%</b></td><td><b>77.89%</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fallstep4-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fallstep4-collapse"
+                      aria-expanded="false"
+                      aria-controls="fallstep4-collapse"
+                    >
+                      View Key Insights from the Scree Plots and PCA Table
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="fallstep4-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What do the scree plots and PCA table reveal?</b></p>
+                      <ul style="margin-left: 3rem">
+                        <li>
+                          <b>Three components</b> were retained based on the Kaiser Criterion (eigenvalues > 1), which together explain nearly <b>78%</b> of the total variance.
+                        </li>
+                        <li>
+                          <b>PC1 (41.3%)</b> is dominated by <b><i>E. coli</i></b> (loading = 0.999), indicating a clear signal of <b>fecal contamination</b> from raw sewage or animal waste.
+                        </li>
+                        <li>
+                          <b>PC2 (24.5%)</b> is heavily defined by <b>SO₄²⁻</b> (0.946), with moderate and low contributions from <b>Chloride</b> (0.273) and <b>Barium</b> (0.103), suggesting possible <b>urban runoff, road salt, or light industrial discharge</b>.
+                        </li>
+                        <li>
+                          <b>PC3 (12.1%)</b> is driven by <b>Zinc</b> (0.811) and <b>Lead</b> (0.557), pointing to <b>metal contamination</b> possibly linked to aging infrastructure or historical industrial activity.
+                        </li>
+                        <li>
+                          The <b>steep drop</b> in both scree plots after the
+                          first component confirms that
+                          <b>most variation is captured early</b>, reinforcing the
+                          decision to retain only 2–3 components.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('fall-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('fall-pca-steps')"></button>
+                  </div>
+                
+              </div>
+
+              <!-- Step 5 -->
+              <div class="step" id="step-5">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 5: Identify Dominant Parameters</u></center>
+                  </h4>
+                  <p>
+                    Each principal component is essentially a new “axis” built from combinations of pollutants. </p>
+                    
+                  <div class="callout">
+                  <p>To understand what those axes really mean, we look at the <b>loadings</b> which are the pollutants that most strongly shape each component. 
+                    Loadings answer two questions:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>Which pollutants are driving the patterns?</li>
+                    <li>How much each one matters?</li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    We then used <b>Varimax Rotation</b>, a method that sharpens the 
+                    picture by rotating the axes so pollutants cluster more neatly 
+                    onto specific components. This makes interpretation easier and highlights 
+                    the strongest contributors.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <p>
+                    This table shows the rotated loadings for each parameter
+                    across the three principal components (<b>VC1</b>, <b>VC2</b>, <b>VC3</b>). Strong
+                    loadings help identify which pollutants are most influential
+                    for each component.
+                  </p>
+
+                  <table class="table table-bordered table-striped mt-3" style="font-size: 16px">
+                  <caption class="table-caption">Table 6. PCA results after varimax rotation</caption>  
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>VC1</th>
+                        <th>VC2</th>
+                        <th>VC3</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>TDS</td><td>0.41</td><td>0.10</td><td>-0.10</td></tr>
+                      <tr><td><i>E. coli</i></td><td>0.11</td><td>0.06</td><td>-0.72</td></tr>
+                      <tr><td>Barium</td><td>0.57</td><td>-0.19</td><td>0.08</td></tr>
+                      <tr><td>Chromium</td><td>0.01</td><td>0.11</td><td>0.45</td></tr>
+                      <tr><td>Copper</td><td>0.03</td><td>-0.67</td><td>0.02</td></tr>
+                      <tr><td>Lead</td><td>0.04</td><td>0.74</td><td>-0.01</td></tr>
+                      <tr><td>Zinc</td><td>-0.08</td><td>0.60</td><td>0.11</td></tr>
+                      <tr><td>Chloride</td><td>0.85</td><td>0.00</td><td>0.01</td></tr>
+                      <tr><td>SO4</td><td>0.83</td><td>-0.06</td><td>0.07</td></tr>
+                      <tr><td>NH3</td><td>0.06</td><td>0.00</td><td>0.52</td></tr>
+                      <tr class="table-primary">
+                        <td><b>Total Variance (%)</b></td><td><b>44%</b></td><td><b>33%</b></td><td><b>23%</b></td>
+                      </tr>
+                      <tr class="table-info">
+                        <td><b>Cumulative Variance (%)</b></td><td><b>44%</b></td><td><b>77%</b></td><td><b>100%</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4 class="mb-2" style="text-align: center;"><strong>From Loadings to Groups</strong></h4>
+                  <p class="mb-2">The PCA axes were rotated (varimax), and each pollutant was assigned to the component where it had the <em>largest absolute loading</em>. Think of each component as a pattern of pollutants that tend to change together.</p>
+
+                  <ul class="mb-3" style="margin-left:1.25rem;">
+                    <li><strong>Explained variance (%)</strong> = how much of the total variation that component explains</li>
+                    <li><strong>Loading</strong> = loading strength (closer to 1 = stronger tie). A negative (“–”) sign means it moves in the opposite direction of a component.</li>
+                  </ul>
+
+                  <div class="component-deck">
+                    <div class="component-card">
+                      <h6>Component 1</h6>
+                      <span class="variance-badge">44% variance</span>
+                      <div class="chips">
+                        <span class="chip">Chloride <small>0.85</small></span>
+                        <span class="chip">SO₄ <small>0.83</small></span>
+                        <span class="chip">Barium <small>0.57</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 2</h6>
+                      <span class="variance-badge">33% variance</span>
+                      <div class="chips">
+                        <span class="chip">Lead <small>0.74</small></span>
+                        <span class="chip">Zinc <small>0.60</small></span>
+                        <span class="chip">Copper <small>−0.67</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 3</h6>
+                      <span class="variance-badge">23% variance</span>
+                      <div class="chips">
+                        <span class="chip">NH₃ <small>0.52</small></span>
+                        <span class="chip">E. coli <small>−0.72</small></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="fw-semibold mb-1" style="margin-top: 25px;">Likely source signals</p>
+                  <div class="source-grid">
+                    <div class="source-card">
+                      <h6>Urban / road salt runoff</h6>
+                      <div class="chips">
+                        <span class="chip">Chloride</span><span class="chip">SO₄</span><span class="chip">Barium</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Industrial or infrastructure</h6>
+                      <div class="chips">
+                        <span class="chip">Lead</span><span class="chip">Zinc</span><span class="chip">Copper</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Organic / biological contamination</h6>
+                      <div class="chips">
+                        <span class="chip">E. coli</span><span class="chip">NH₃</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="fallstep5-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#fallstep5-collapse"
+                      aria-expanded="false"
+                      aria-controls="fallstep5-collapse"
+                    >
+                      What are the Most Dominant Pollutants?
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="fallstep5-collapse">
+                    <div class="card card-body custom-card">
+                      <p>
+                        Among all variables, three emerged as the most dominant
+                        pollutants across components:
+                      </p>
+                      <ol style="margin-left: 2rem">
+                        <li>
+                          <b>Chloride:</b> Highest loading in PC1 (0.85). This strong signal indicates influence from <b>road salts, urban runoff, or industrial discharge</b>.
+                        </li>
+                        <li>
+                          <b>Lead:</b> Highest loading in PC2 (0.74). Likely related to <b>legacy infrastructure</b> (aged piping systems, deteriorated lead-based paint) or <b>past industrial activity</b>.
+                        </li>
+                        <li>
+                          <b><i>E. coli:</i></b> Strongest contributor in PC3 (–0.72). This reflects <b>fecal contamination</b> from raw sewage, livestock, or pet waste.
+                        </li>
+                      </ol>
+                      <p>
+                      These dominant parameters help us understand what’s shaping water quality at Fall Creek and point to likely sources such as <b>urban development, industrial legacy pollutants, and biological waste inputs</b>.
+                      </p>
+                    </div>
+                  </div>
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('fall-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('fall-pca-steps')"></button>
+                  </div>
+                  
+              </div>
+
+              <!-- Step 6 -->
+              <div class="step" id="final-step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 6: Cluster the Results</u></center>
+                  </h4>
+                  <div class="callout">
+                  <p>To explore how water quality varies across sampling locations at this site, we used two statistical tools:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>K-means Clustering:</b> An unsupervised technique that groups sites based on similar pollutant profiles.</li>
+                      <li><b>Linear Discriminant Analysis (LDA):</b> A supervised technique that tests how well the groupings separate and identifies which pollutants matter most for that separation.</li>
+                    </ul>
+
+                    <p>These tools allow us to turn complex PCA results into clear spatial patterns tied to actual sampling locations.</p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+                    <h4><center><b>K-means Clustering</center></b></h4>
+                    <p><b>K-means clustering</b> groups sampling sites based on similar water quality patterns. To figure out how many groups made the most sense, we used the <b>silhouette method</b>, which measures how well each site fits within its group compared to others.</p>
+                    <p>Based on the graph below, the <b>optimal number of clusters is 2</b>, meaning the data naturally separates into two distinct groups (Figure 9).</p>
+                   
+                    <p>Spatially, these clusters show that this separation does not reflect a true spatial division of the watershed (Figure 10). Instead:
+                                          <ul style="margin-left: 3rem;">
+                                            <li><b>Cluster 2 contains all Fall Creek sites</b> and represents the consistent water quality pattern of the watershed.</li>
+                                            <li><b>Cluster 1 contains only scattered outliers</b> and does not correspond to any distinct spatial region.</li>
+                                          </ul>
+                                        </p>
+
+                    <div class="row mt-4">
+                      
+                      <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                        <img src="images/fc_clusters.png" alt="FC K-means Cluster Results" style="max-width: 100%; border: none;" class="expandable-img">
+                        <figcaption class="figure-caption">Figure 9. K-means clustering groups the 10 sampling sites into two main clusters based on water quality similarities.</figcaption>
+                      </div>  
+                      
+                      <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                        <iframe src="https://baileyrava.users.earthengine.app/view/fall-creek-water-quality-clusters" alt="Cluster Map by FC Location" style="border: none;"></iframe>
+                        <figcaption class="figure-caption">Figure 10. Mapping the clusters reveals a geographic split: Cluster 1 (Downtown Fall Creek) vs. Cluster 2 (Uptown Fall Creek).</figcaption>
+                      </div>          
+                    </div>                          
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <h4><center><b>Linear Discriminant Analysis (LDA)</b></center></h4>
+
+                    <div class="callout">
+                    <p>To validate the clustering, we applied <b>Linear Discriminant Analysis (LDA)</b>. This confirmed the separation between the two groups with:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>100%</b> training accuracy</li>
+                      <li><b>93.5%</b> cross-validation accuracy</li>
+                    </ul>
+                    </div>
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <div class="mt-4 d-flex justify-content-center">
+                      <button
+                        id="fallstep6-btn"
+                        class="btn btn-primary"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#fallstep6-collapse"
+                        aria-expanded="false"
+                        aria-controls="fallstep6-collapse"
+                      >
+                      View Key Insights from Clustering
+                      </button>
+                    </div>
+
+                    <div class="collapse mt-3" id="fallstep6-collapse">
+                      <div class="card card-body custom-card">
+                        <ul style="margin-left: 2rem">
+                          <li>
+                            Fall Creek’s sites are overwhelmingly grouped into a <b>single cluster</b>, with the “second” cluster functioning only as an outlier category. 
+                            LDA verification confirmed that the meaningful structure is essentially one group of sites with occasional anomalies, not two equally distributed clusters.
+                          </li>
+                          <li>
+                            <b>Cluster 1:</b> A small set of statistical outliers, without clear spatial or environmental cohesion.
+                          <li>
+                            <b>Cluster 2:</b> All ten Fall Creek sites, representing the watershed’s consistent water quality pattern.
+                          </li>
+                          <li>
+                            This separation indicates that the watershed behaves as a <b>single system</b>, 
+                            with outliers reflecting <b>localized variability</b> or <b>data noise</b> rather than a distinct urban vs. upstream division.
+                          </li>
+                        </ul>
+                        <p>
+                        These results highlight how clustering can flag <b>anomalous sites</b> for further review, 
+                        while confirming that Fall Creek’s water quality is generally uniform across sites.</p>
+                      </div>
+                    </div>  
+
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('fall-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="window.location.href='pca_intp.html'"></button>
+                    </div>
+                
+              </div>
+
+              <!-- Dot Indicators-->
+              <div class="step-dots text-center mt-3">
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+              </div>
+
+            </div>
+          </div>
+        
+        <!-- LOWER WHITE RIVER TAB -->
+        <div class="tab-pane fade" id="white" role="tabpanel" aria-labelledby="white-tab">
+            <div class="pca-slideshow mt-4" id="white-pca-steps" role="white-pca-steps" aria-labelledby="white-tab">
+              <!-- Step 1 -->
+              <div class="step active">
+                <h4 style="margin-top: -40px"><center><u>Step 1: Descriptive Statistics</u></center></h4>
+                  <p>
+                    Before diving into patterns, we first needed to understand
+                    the <b>basic makeup</b> of the water quality data collected
+                    from the <b><i>Lower White River</i></b>.
+                  </p>
+                  <p>
+                    Key descriptive statistics were calculated for each
+                    pollutant including the <b>mean</b>,
+                    <b>standard deviation</b>, <b>minimum</b>, and
+                    <b>maximum</b>. These values help us get a sense of overall
+                    conditions and early variability in the dataset.
+                  </p>
+                  <div class="callout">
+                  <h6>This step helps answer questions like:</h6>
+                  <ul style="margin-left: 3rem">
+                    <li>What’s the typical range for each pollutant?</li>
+                    <li>Which variables show the most variability?</li>
+                    <li>
+                      Are there any extreme values or outliers we should pay
+                      attention to?
+                    </li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    To explore these questions, the descriptive statistics are
+                    summarized in the table below, showing the full range of
+                    values for each water quality parameter measured at the <b>Lower White River</b> between 1995 and 2019 (Table 7).
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="table-responsive">
+                  <table id="white-stats-table" class="table display nowrap" style="width: 100%">
+                    <caption class="table-caption">Table 7. Descriptive Statistics for the Lower White River (1995–2019)</caption>
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>Units</th>
+                        <th>Mean</th>
+                        <th>Standard Deviation</th>
+                        <th>Minimum</th>
+                        <th>Maximum</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Temp</td><td>Deg C</td><td>17.7600</td><td>13.6307</td><td>0.0010</td><td>80.9600</td></tr>
+                      <tr><td>pH</td><td>Units</td><td>7.8430</td><td>0.2596</td><td>5.8800</td><td>8.8200</td></tr>
+                      <tr><td>SpCond</td><td>uS/cm</td><td>0.9420</td><td>0.3644</td><td>0.0030</td><td>3.7660</td></tr>
+                      <tr><td>TDS</td><td>Kmg/L</td><td>0.6110</td><td>0.2541</td><td>0.0020</td><td>3.8930</td></tr>
+                      <tr><td>DO</td><td>mg/L</td><td>9.3140</td><td>2.9680</td><td>1.9800</td><td>25.2400</td></tr>
+                      <tr><td><i>E. coli</i></td><td>colonies/100mL</td><td>2471.0000</td><td>6268.2780</td><td>10.0000</td><td>98342.0000</td></tr>
+                      <tr><td>NH3</td><td>mg/L</td><td>0.6830</td><td>10.4894</td><td>0.1000</td><td>337.0000</td></tr>
+                      <tr><td>NO3</td><td>mg/L</td><td>1.0740</td><td>10.3203</td><td>0.2000</td><td>358.0000</td></tr>
+                      <tr><td>NO2</td><td>mg/L</td><td>0.3110</td><td>0.1224</td><td>0.0300</td><td>3.2000</td></tr>
+                      <tr><td>Chloride</td><td>mg/L</td><td>157.1000</td><td>382.1142</td><td>4.0000</td><td>9680.4000</td></tr>
+                      <tr><td>SO4</td><td>mg/L</td><td>51.5500</td><td>25.7232</td><td>2.3000</td><td>157.0000</td></tr>
+                      <tr><td>PO4</td><td>mg/L</td><td>0.4250</td><td>2.9270</td><td>0.1900</td><td>80.6000</td></tr>
+                      <tr><td>Arsenic</td><td>ug/L</td><td>2.1540</td><td>2.1461</td><td>1.0000</td><td>51.8000</td></tr>
+                      <tr><td>Barium</td><td>ug/L</td><td>72.9300</td><td>31.1374</td><td>5.9000</td><td>756.0000</td></tr>
+                      <tr><td>Cadmium</td><td>ug/L</td><td>1.0000</td><td>0.0038</td><td>0.8700</td><td>1.0000</td></tr>
+                      <tr><td>Chromium</td><td>ug/L</td><td>9.9980</td><td>1.7067</td><td>1.1000</td><td>37.9000</td></tr>
+                      <tr><td>Copper</td><td>ug/L</td><td>40.5000</td><td>7.1112</td><td>20.1000</td><td>171.0000</td></tr>
+                      <tr><td>Mercury</td><td>ug/L</td><td>0.4780</td><td>2.6969</td><td>0.2000</td><td>93.9000</td></tr>
+                      <tr><td>Nickel</td><td>ug/L</td><td>4.3440</td><td>1.5575</td><td>1.0000</td><td>13.2000</td></tr>
+                      <tr><td>Lead</td><td>ug/L</td><td>11.6000</td><td>5.8972</td><td>1.2000</td><td>148.0000</td></tr>
+                      <tr><td>Zinc</td><td>ug/L</td><td>123.2000</td><td>2744.6710</td><td>1.4000</td><td>95200.0000</td></tr>
+                    </tbody>
+                  </table>
+                  </div>
+
+                <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="whitestep1-btn"
+                      class="btn custom-toggle-btn"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#whitestep1-collapse"
+                      aria-expanded="false"
+                      aria-controls="whitestep1-collapse"
+                    >
+                      View Key Insights from the Statistics
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="whitestep1-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What stands out in the table?</b></p>
+                        <ul style="margin-left: 1.5rem">
+                          <li>
+                            <b><i>E. coli</i></b> levels were extremely high and variable, with a mean of 2,471 colonies/100mL and a maximum of 98,342. Such values indicate severe fecal contamination, potentially linked to combined sewer overflows (CSOs), failing septic systems, or storm-driven runoff carrying pet and wildlife waste.
+                          </li>
+                          <li>
+                            <b>Chloride</b> reached a maximum of 9,680 mg/L, an exceptionally high concentration that strongly suggests heavy influence from winter road salt application and urban runoff.
+                          </li>
+                          <li>
+                            Nutrients such as <b>NH₃</b> and <b>NO₃</b> showed extreme maxima (NH₃ max = 337 mg/L; NO₃ max = 358 mg/L), reflecting episodic spikes likely from wastewater discharges, fertilizer inputs, or storm-related flushing.
+                          </li>
+                          <li>
+                            <b>Dissolved Oxygen (DO)</b> ranged from 1.98–25.24 mg/L. Although typical surface waters often fall within this range, the lower end suggests hypoxic conditions may occur under certain circumstances.
+                          </li>
+                          <li>
+                            Heavy metals such as <b>Arsenic (max = 51.8 µg/L), Lead (max = 148 µg/L), and Zinc (max = 95,200 µg/L)</b> were detected at concerning levels, pointing to potential industrial or urban point-source pollution.
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="returnToPlaceholder()"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('white-pca-steps')"></button>
+                  </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="step" id="step-2">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 2: Standardize the Data</u></center>
+                  </h4>
+                  <p>
+                    Each pollutant is measured in different units. Some are measured in mg/L,
+                    others in μg/L, some with small values, others much bigger.
+                  </p>
+                   <div class="callout">
+                  <p>
+                    To fairly compare them, we <b>standardized</b> all variables
+                    by calculating a <b>z-score</b> for every value.
+                  </p>
+                  <p>
+                    This puts everything on the same scale, where each variable now
+                    has:
+                  </p>
+                  <ul>
+                    <li>A mean of <b>0</b></li>
+                    <li>A standard deviation of <b>1</b></li>
+                  </ul>
+                  <p>
+                    Without this, bigger-numbered pollutants (like TDS) could
+                    dominate the results just because of their scale.
+                  </p>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    Additionally, data passed the Kaiser-Meyer-Olkin (KMO) and
+                    Bartlett’s tests, confirming it was suitable for PCA.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>KMO Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Is this data good for
+                      finding patterns?"
+                    </li>
+                    <li>
+                      It tells you if your variables share enough in common to
+                      group them into broader trends.
+                    </li>
+                    <li>
+                      A KMO value of 0.6 or greater indicates the data works well
+                      for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="lwkmoInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#lwkmoInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="lwkmoInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center>KMO value = <b>0.737</b></center>
+                        </p>
+                        <p>
+                          This score suggests the dataset is <b>reasonably suitable</b> for 
+                          pattern detection, meaning PCA can uncover meaningful groupings.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <h4><b>Bartlett's Test</b></h4>
+                  <ul>
+                    <li>
+                      This test answers this question: "Are these variables
+                      connected at all?"
+                    </li>
+                    <li>
+                      It tells you if there are real connections between your
+                      variables or if they’re all doing their own thing.
+                    </li>
+                    <li>
+                      If the test result is significant (<i>p</i> < 0.05), it
+                      means your variables are related and good for PCA.
+                    </li>
+                  </ul>
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="lwbartlettInsights-btn"
+                      class="btn btn-primary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#lwbartlettInsights-collapse"
+                    >
+                      RESULT
+                    </button>
+                    <div class="collapse" id="lwbartlettInsights-collapse">
+                      <div class="card card-body custom-card mt-2">
+                        <p>
+                          <center><i>p</i> = <b>0</b></center>
+                        </p>
+                        <p>
+                          A <i>p-value</i> of 0 indicates that the variables are
+                          <b>strongly correlated</b>, meaning PCA has a good
+                          chance of revealing meaningful patterns in the data.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('white-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('white-pca-steps')"></button>
+                  </div>
+                  
+              </div>
+
+              <!--Step 3-->
+              <div class="step" id="step-3">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 3: Correlation Matrix</u></center>
+                  </h4>
+                  <p>Now we ask: <b>How do the variables move together?</b></p>
+                       <div class="callout">
+                  <p>
+                    To find out, we created a <b>correlation matrix</b>: a table
+                    that compares each pair of variables.
+                  </p>
+                  <ul>
+                    <li>
+                      A <b>positive value</b> means both variables tend to
+                      increase (or decrease) together
+                    </li>
+                    <li>
+                      A <b>negative value</b> means one increases as the other
+                      decreases
+                    </li>
+                  </ul>
+                  <p>
+                    This step lays the groundwork for uncovering patterns hidden
+                    across all variables.
+                  </p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+                  <p>
+                    Below, the correlation plot gives a visual summary of those
+                    relationships, where darker shades of either
+                    <b style="color: #003b2c">green (positive)</b> or
+                    <b style="color: #623100">orange (negative)</b> indicate
+                    stronger connections (Figure 6).
+                  </p>
+                  <div style="text-align: center">
+                    <img
+                      src="images/lww_corrplot.png"
+                      class="expandable-img"
+                      alt="Pearson correlation plot for the Lower White River"
+                      style="width: auto; height: auto; border: none"
+                    />
+                  </div>
+                  <figcaption class="figure-caption">Figure 11. Lower White River correlation matrix</figcaption>
+                  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="whitestep3-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#whitestep3-collapse"
+                      aria-expanded="false"
+                      aria-controls="whitestep3-collapse"
+                    >
+                      View Key Insights from the Correlation Matrix
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="whitestep3-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What does the correlation matrix reveal?</b></p>
+                      <p>
+                        For the Lower White River dataset, no pairs exceeded the <b>r > 0.60</b> threshold for strong correlation. 
+                        However, there are a few moderate associations worth noting:
+                      </p>
+                      <ul style="margin-left: 1.5rem">
+                        <li>
+                          <b>SO₄ & TDS</b>: 
+                          <span style="color: green"><b>r = 0.43</b></span> 
+                          (moderate positive correlation), suggesting that dissolved solids in the river are partly driven by sulfate concentrations.
+                        </li>
+                        <li>
+                          <b>Chloride & TDS</b>: 
+                          <span style="color: green"><b>r = 0.40</b></span> 
+                          (moderate positive correlation), reflecting the contribution of chloride salts to overall dissolved solids.
+                        </li>
+                        <li>
+                          Other weak correlations (for example, <b>Nickel–Chromium</b> at r = 0.31 or <b>Sulfate–Chloride</b> at r = 0.28) suggest minor shared sources or background geochemical processes, but none are strong enough to indicate dominant drivers.
+                        </li>
+                      </ul>
+                      <p>
+                        Overall, the Lower White River matrix shows relatively weak to moderate correlations among pollutants, 
+                        which suggests that multiple, independent sources are influencing water quality rather than a single dominant input.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('white-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('white-pca-steps')"></button>
+                  </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="step" id="step-4">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 4: Extract Principal Components</u></center>
+                  </h4>
+                  <p>Here’s where the real pattern-finding begins.</p>
+                                    <div class="callout">
+                  <p>
+                    We used PCA to transform our dataset into a set of
+                    <b>principal components</b>: new variables that capture the
+                    biggest differences in the data. PCA does this by calculating:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>
+                      <b>Eigenvectors:</b> The new directions or axes that
+                      maximize variance.
+                    </li>
+                    <li>
+                      <b>Eigenvalues:</b> How much variance is explained along
+                      each direction.
+                    </li>
+                  </ul>
+                  <p>
+                    The <b>first component</b> captures the most important
+                    variation. The <b>second</b> captures the next most. In many
+                    cases, only the first few components are needed to explain the
+                    majority of the variance in the dataset.
+                  </p>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <h4><b><center>Scree Plots</center></b></h4>
+                  <div>
+                    <p>
+                        We used two scree plots to decide how many components to
+                        keep. <b>Figure 12</b> displays the eigenvalues from the PCA, where according to the <b>Kaiser Criterion</b> (Chatfield &
+                            Collin, 1980), only components with eigenvalues
+                            greater than 1 are retained. <b>Figure 13</b> displays the principal components, showing how much of the total variance is
+                            explained by each component.
+                    </p>
+                    <p style="margin-bottom: 50px;"></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <img
+                          src="images/lww_eigenvalue_plot.png"
+                          class="expandable-img"
+                          alt="LWW Scree plot - Eigenvalues"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption" >
+                          <i
+                            >Figure 12. Lower White River eigenvalues from PCA
+                          </i>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <img
+                          src="images/lww_variance_plot.png"
+                          class="expandable-img"
+                          alt="Explained LWW Variance Plot"
+                          style="max-width: 100%; border: none"
+                        />
+                        <p class="figure-caption">
+                          <i
+                            >Figure 13. Lower White River scree plot of the principal components
+                          </i>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4><b><center>Principal Component Loadings</center></b></h4>
+                  <p>
+                    The table below shows how strongly each original variable is
+                    associated with the first three principal components (Table 8):
+                  </p>
+                 <table class="table table-bordered table-striped mt-3" style="font-size: 16px">
+                  <caption class="table-caption">Table 8. Lower White River PCA Loadings</caption>
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>PC1</th>
+                      <th>PC2</th>
+                      <th>PC3</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>TDS</td><td>-1.856</td><td>0.059</td><td>0.603</td></tr>
+                    <tr><td><i>E. coli</i></td><td>8.392</td><td>-0.028</td><td>-0.717</td></tr>
+                    <tr><td>Arsenic</td><td>-2.084</td><td>0.052</td><td>0.119</td></tr>
+                    <tr><td>Barium</td><td>-7.305</td><td>0.047</td><td>0.203</td></tr>
+                    <tr><td>Chromium</td><td>1.505</td><td>0.130</td><td>-0.012</td></tr>
+                    <tr><td>Nickel</td><td>2.105</td><td>0.967</td><td>-0.027</td></tr>
+                    <tr><td>Chloride</td><td>-3.486</td><td>-0.015</td><td>0.151</td></tr>
+                    <tr><td>NO₂</td><td>-1.472</td><td>0.003</td><td>-0.009</td></tr>
+                    <tr><td>SO₄</td><td>-9.522</td><td>0.198</td><td>-0.210</td></tr>
+                    <tr><td>NH₃</td><td>8.462</td><td>0.006</td><td>0.012</td></tr>
+                    <tr class="table-primary">
+                      <td><b>Total Variance (%)</b></td>
+                      <td><b>47.70%</b></td>
+                      <td><b>25.81%</b></td>
+                      <td><b>7.13%</b></td>
+                    </tr>
+                    <tr class="table-info">
+                      <td><b>Cumulative Variance (%)</b></td>
+                      <td><b>47.70%</b></td>
+                      <td><b>73.51%</b></td>
+                      <td><b>80.63%</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="whitestep4-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#whitestep4-collapse"
+                      aria-expanded="false"
+                      aria-controls="whitestep4-collapse"
+                    >
+                      View Key Insights from the Scree Plots and PCA Table
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="whitestep4-collapse">
+                    <div class="card card-body custom-card">
+                      <p><b>What do the scree plots and PCA table reveal?</b></p>
+                        <ul style="margin-left: 3rem">
+                          <li>
+                            <b>Three components</b> were retained based on the Kaiser Criterion (eigenvalues > 1), which together explain nearly <b>81%</b> of the total variance.
+                          </li>
+                          <li>
+                            <b>PC1 (47.7%)</b> is strongly influenced by <b><i>E. coli</i></b> (loading = 8.392) and <b>NH₃</b> (8.462), indicating a dominant signal of <b>nutrient and fecal contamination</b>, likely from combined sewer overflows, failing septic systems, or agricultural inputs.
+                          </li>
+                          <li>
+                            <b>PC2 (25.8%)</b> is heavily defined by <b>Nickel</b> (0.967) with moderate support from <b>Chromium</b> (0.130) and <b>SO₄²⁻</b> (0.198). This points to a <b>metal signature</b> possibly tied to industrial effluent or background geochemistry.
+                          </li>
+                          <li>
+                            <b>PC3 (7.1%)</b> shows weaker overall loadings but is most influenced by <b>TDS</b> (0.603) and <b>Arsenic</b> (0.119). This may reflect <b>dissolved solids and trace metal variation</b> that are less dominant but still present in the system.
+                          </li>
+                          <li>
+                            The <b>sharp drop</b> in explained variance after the first component confirms that <b>most variation is captured early</b>, supporting the decision to focus interpretation on the first 2–3 components.
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('white-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('white-pca-steps')"></button>
+                  </div>
+                
+              </div>
+
+              <!-- Step 5 -->
+              <div class="step" id="step-5">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 5: Identify Dominant Parameters</u></center>
+                  </h4>
+                  <p>
+                    Each principal component is essentially a new “axis” built from combinations of pollutants. </p>
+                    
+                  <div class="callout">
+                  <p>To understand what those axes really mean, we look at the <b>loadings</b> which are the pollutants that most strongly shape each component. 
+                    Loadings answer two questions:
+                  </p>
+                  <ul style="margin-left: 3rem">
+                    <li>Which pollutants are driving the patterns?</li>
+                    <li>How much each one matters?</li>
+                  </ul>
+                  </div>
+                  <p style="margin-top: 15px;">
+                    We then used <b>Varimax Rotation</b>, a method that sharpens the 
+                    picture by rotating the axes so pollutants cluster more neatly 
+                    onto specific components. This makes interpretation easier and highlights 
+                    the strongest contributors.
+                  </p>
+
+                  <hr style="border: 1px solid #162e44; margin: 20px 0" />
+
+                  <p>
+                    This table shows the rotated loadings for each parameter
+                    across the three principal components (<b>VC1</b>, <b>VC2</b>, <b>VC3</b>). Strong
+                    loadings help identify which pollutants are most influential
+                    for each component.
+                  </p>
+
+                  <table class="table table-bordered table-striped mt-3" style="font-size: 16px">
+                  <caption class="table-caption">Table 9. PCA results after varimax rotation</caption>  
+                    <thead>
+                      <tr>
+                        <th>Parameter</th>
+                        <th>VC1</th>
+                        <th>VC2</th>
+                        <th>VC3</th>
+                        <th>VC4</th>
+                      </tr>
+                    </thead>
+                      <tbody>
+                        <tr><td>TDS</td><td>0.71</td><td>0.02</td><td>0.42</td><td>0.05</td></tr>
+                        <tr><td><i>E. coli</i></td><td>-0.52</td><td>0.00</td><td>0.08</td><td>0.08</td></tr>
+                        <tr><td>Arsenic</td><td>0.13</td><td>0.42</td><td>0.49</td><td>-0.33</td></tr>
+                        <tr><td>Barium</td><td>0.65</td><td>0.11</td><td>0.03</td><td>0.40</td></tr>
+                        <tr><td>Chromium</td><td>0.02</td><td>0.77</td><td>-0.03</td><td>-0.02</td></tr>
+                        <tr><td>Nickel</td><td>-0.09</td><td>0.77</td><td>-0.08</td><td>0.11</td></tr>
+                        <tr><td>Chloride</td><td>0.17</td><td>-0.15</td><td>0.68</td><td>-0.08</td></tr>
+                        <tr><td>NO₂</td><td>0.34</td><td>0.03</td><td>-0.54</td><td>-0.46</td></tr>
+                        <tr><td>SO₄</td><td>0.71</td><td>0.11</td><td>0.11</td><td>-0.04</td></tr>
+                        <tr><td>NH₃</td><td>0.08</td><td>0.04</td><td>-0.09</td><td>0.75</td></tr>
+                        <tr class="table-primary">
+                          <td><b>Total Variance (%)</b></td>
+                          <td><b>34%</b></td>
+                          <td><b>25%</b></td>
+                          <td><b>22%</b></td>
+                          <td><b>19%</b></td>
+                        </tr>
+                        <tr class="table-info">
+                          <td><b>Cumulative Variance (%)</b></td>
+                          <td><b>34%</b></td>
+                          <td><b>59%</b></td>
+                          <td><b>81%</b></td>
+                          <td><b>100%</b></td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <h4 class="mb-2" style="text-align: center;"><strong>From Loadings to Groups</strong></h4>
+                  <p class="mb-2">The PCA axes were rotated (varimax), and each pollutant was assigned to the component where it had the <em>largest absolute loading</em>. Think of each component as a pattern of pollutants that tend to change together.</p>
+
+                  <ul class="mb-3" style="margin-left:1.25rem;">
+                    <li><strong>Explained variance (%)</strong> = how much of the total variation that component explains</li>
+                    <li><strong>Loading</strong> = loading strength (closer to 1 = stronger tie). A negative (“–”) sign means it moves in the opposite direction of a component.</li>
+                  </ul>
+
+                  <div class="component-deck">
+                    <div class="component-card">
+                      <h6>Component 1</h6>
+                      <span class="variance-badge">34% variance</span>
+                      <div class="chips">
+                        <span class="chip">TDS <small>0.71</small></span>
+                        <span class="chip">SO₄ <small>0.71</small></span>
+                        <span class="chip">Barium <small>0.65</small></span>
+                        <span class="chip">E. coli <small>−0.52</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 2</h6>
+                      <span class="variance-badge">25% variance</span>
+                      <div class="chips">
+                        <span class="chip">Chromium <small>0.77</small></span>
+                        <span class="chip">Nickel <small>0.77</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 3</h6>
+                      <span class="variance-badge">22% variance</span>
+                      <div class="chips">
+                        <span class="chip">Chloride <small>0.68</small></span>
+                        <span class="chip">NO₂ <small>−0.54</small></span>
+                      </div>
+                    </div>
+
+                    <div class="component-card">
+                      <h6>Component 4</h6>
+                      <span class="variance-badge">19% variance</span>
+                      <div class="chips">
+                        <span class="chip">NH₃ <small>0.75</small></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="fw-semibold mb-1" style="margin-top: 25px;">Likely source signals</p>
+                  <div class="source-grid">
+                    <div class="source-card">
+                      <h6>Dissolved solids & geochemical inputs</h6>
+                      <div class="chips">
+                        <span class="chip">TDS</span><span class="chip">SO₄</span><span class="chip">Barium</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Fecal / organic contamination</h6>
+                      <div class="chips">
+                        <span class="chip">E. coli</span><span class="chip">NH₃</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Industrial / metal-related</h6>
+                      <div class="chips">
+                        <span class="chip">Chromium</span><span class="chip">Nickel</span>
+                      </div>
+                    </div>
+                    <div class="source-card">
+                      <h6>Urban / road salt or nutrient runoff</h6>
+                      <div class="chips">
+                        <span class="chip">Chloride</span><span class="chip">NO₂</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+
+                  <div class="mt-4 d-flex justify-content-center">
+                    <button
+                      id="whitestep5-btn"
+                      class="btn btn-primary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#whitestep5-collapse"
+                      aria-expanded="false"
+                      aria-controls="whitestep5-collapse"
+                    >
+                      What are the Most Dominant Pollutants?
+                    </button>
+                  </div>
+
+                  <div class="collapse mt-3" id="whitestep5-collapse">
+                    <div class="card card-body custom-card">
+                      <p>
+                        Among all variables, several emerged as the most dominant
+                        pollutants across components:
+                      </p>
+                      <ol style="margin-left: 2rem">
+                        <li>
+                          <b>TDS & SO₄:</b> Both had the strongest loadings in VC1 (0.71 each). These parameters dominate the first component and reflect <b>dissolved solids and geochemical influences</b>, likely from natural mineral inputs and runoff processes.
+                        </li>
+                        <li>
+                          <b>Chromium & Nickel:</b> Both showed very high loadings in VC2 (0.77 each). This strong metal signal points to <b>industrial discharges or legacy contamination</b>.
+                        </li>
+                        <li>
+                          <b>Chloride:</b> Highest loading in VC3 (0.68). This indicates contributions from <b>road salt, urban runoff, or wastewater inputs</b>.
+                        </li>
+                        <li>
+                          <b>NH₃:</b> Highest loading in VC4 (0.75). This reflects <b>nutrient and organic pollution</b> from sewage, septic failures, or agricultural waste.
+                        </li>
+                      </ol>
+                      <p>
+                        These dominant parameters help explain the major drivers of water quality in the Lower White River,
+                        highlighting the influence of <b>geochemical inputs, industrial metals, urban runoff, and nutrient/organic waste sources</b>.
+                      </p>
+                    </div>
+                  </div>
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                    <button class="btn btn-primary prev-btn" onclick="prevStep('white-pca-steps')"></button>
+                    <button class="btn btn-primary next-btn" onclick="nextStep('white-pca-steps')"></button>
+                  </div>
+              </div>
+
+              <!-- Step 6 -->
+              <div class="step" id="final-step">
+                  <h4 style="margin-top: -40px">
+                    <center><u>Step 6: Cluster the Results</u></center>
+                  </h4>
+                  <div class="callout">
+                  <p>To explore how water quality varies across sampling locations at this site, we used two statistical tools:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>K-means Clustering:</b> An unsupervised technique that groups sites based on similar pollutant profiles.</li>
+                      <li><b>Linear Discriminant Analysis (LDA):</b> A supervised technique that tests how well the groupings separate and identifies which pollutants matter most for that separation.</li>
+                    </ul>
+
+                    <p>These tools allow us to turn complex PCA results into clear spatial patterns tied to actual sampling locations.</p>
+                  </div>
+                  <hr style="border: 1px solid #162e44; margin: 30px 0" />
+                    <h4><center><b>K-means Clustering</center></b></h4>
+                    <p><b>K-means clustering</b> groups sampling sites based on similar water quality patterns. To figure out how many groups made the most sense, we used the <b>silhouette method</b>, which measures how well each site fits within its group compared to others.</p>
+                    <p>Based on the graph below, the <b>optimal number of clusters is 4</b>, meaning the data naturally separates into two distinct groups (Figure 14).</p>
+                   
+                    <p>Spatially, these clusters correspond to different parts of the watershed (Figure 15):
+                                          <ul style="margin-left: 3rem;">
+                                            <li><b>Downtown Fall Creek:</b> Cluster 1 — distinct in water quality, may reflect urban density or point-source discharges.</li>
+                                            <li><b>Uptown Fall Creek :</b> Cluster 2 — share similar characteristics, likely reflecting general watershed patterns.</li>
+                                          </ul>
+                                        </p>
+
+                    <div class="row mt-4">
+                      
+                      <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                        <img src="images/lww_clusters.png" alt="LW K-means Cluster Results" style="max-width: 100%; border: none;" class="expandable-img">
+                        <figcaption class="figure-caption">Figure 14. K-means clustering groups the 30 sampling sites into 4 main clusters based on water quality similarities.</figcaption>
+                      </div>  
+                      
+                      <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                        <iframe src="https://baileyrava.users.earthengine.app/view/lower-white-river-water-quality-clusters" allowfullscreen alt="Cluster Map by LW Location" style="border: none;"></iframe>
+                        <figcaption class="figure-caption">Figure 15. Mapping the clusters reveals one dominant group across Marion County (Cluster 4), with smaller pockets of sites in Clusters 1 and 3. No sites were primarily assigned to Cluster 2.</figcaption>
+                      </div>          
+                    </div>                          
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <h4><center><b>Linear Discriminant Analysis (LDA)</b></center></h4>
+
+                    <div class="callout">
+                    <p>To validate the clustering, we applied <b>Linear Discriminant Analysis (LDA)</b>. This confirmed the separation between the two groups with:</p>
+                    <ul style="margin-left: 3rem;">
+                      <li><b>100%</b> training accuracy</li>
+                      <li><b>93.5%</b> cross-validation accuracy</li>
+                    </ul>
+                    </div>
+
+                    <hr style="border: 1px solid #162e44; margin: 30px 0;">
+
+                    <div class="mt-4 d-flex justify-content-center">
+                      <button
+                        id="whitestep6-btn"
+                        class="btn btn-primary"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#whitestep6-collapse"
+                        aria-expanded="false"
+                        aria-controls="whitestep6-collapse"
+                      >
+                      View Key Insights from Clustering
+                      </button>
+                    </div>
+
+                    <div class="collapse mt-3" id="whitestep6-collapse">
+                      <div class="card card-body custom-card">
+                        <ul style="margin-left: 2rem">
+                          <li>
+                            Water quality patterns across the Lower White River watershed are dominated by a <b>single cluster</b>, with smaller groups of sites forming secondary clusters.
+                          </li>
+                          <li>
+                            <b>Cluster 4:</b> The dominant group, encompassing the majority of sites and representing the primary water quality pattern across the watershed.
+                          </li>
+                          <li>
+                            <b>Clusters 1 and 3:</b> Smaller subsets of sites with localized variability in pollutant profiles.
+                          </li>
+                          <li>
+                            <b>Cluster 2:</b> Did not dominate any site, suggesting it reflects sample-level variation rather than a distinct spatial zone.
+                          </li>
+                        </ul>
+                        <p>
+                          These results indicate that the Lower White River is best characterized by one prevailing water quality regime, 
+                          with a few locations showing distinct but localized differences.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 w-100">
+                      <button class="btn btn-primary prev-btn" onclick="prevStep('white-pca-steps')"></button>
+                      <button class="btn btn-primary next-btn" onclick="window.location.href='pca_intp.html'"></button>
+                    </div>
+                
+              </div>
+
+              <!-- Dot Indicators-->
+              <div class="step-dots text-center mt-3">
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+              </div>
+
+            </div>
+          </div>
+
+        <div class="modal fade" id="imgModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0 shadow-none position-relative">
+              <button type="button" class="btn-close btn-close-white position-absolute top-2 end-2 m-3"
+                      data-bs-dismiss="modal" aria-label="Close"></button>
+              <img id="modalImage" class="img-fluid d-block mx-auto rounded" alt="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <footer>
+    <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+  </footer>
+
+    <script>
+    /* ---------------- Step helpers ---------------- */
+    function updateStepDots(containerId){
+      const c = document.getElementById(containerId);
+      if(!c) return;
+      const steps = c.querySelectorAll('.step');
+      const idx = Array.from(steps).findIndex(s=>s.classList.contains('active'));
+      c.querySelectorAll('.step-dot').forEach((d,i)=>d.classList.toggle('active-dot', i===idx));
+    }
+    function updateStepControls(containerId){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+
+  const steps = c.querySelectorAll('.step');
+  const idx = Array.from(steps).findIndex(s => s.classList.contains('active'));
+
+  // Update EVERY prev/next in this container
+  const prevBtns = c.querySelectorAll('.prev-btn');
+  const nextBtns = c.querySelectorAll('.next-btn');
+
+  prevBtns.forEach(prev => {
+    if (idx === 0) {
+      prev.style.display = 'inline-block';
+      prev.textContent = '← Back to Overview';
+    } else {
+      prev.style.display = 'inline-block';
+      prev.textContent = `← Step ${idx}`;
+    }
+  });
+
+  nextBtns.forEach(next => {
+    if (idx < steps.length - 1) {
+      next.style.display = 'inline-block';
+      next.textContent = `Step ${idx + 2} →`;
+    } else {
+      next.style.display = 'inline-block';
+      next.textContent = 'Next: PCA Interpretations →';
+    }
+  });
+
+  // Dots
+  const dots = c.querySelectorAll('.step-dot');
+  dots.forEach((d,i) => d.classList.toggle('active-dot', i === idx));
+}
+    function resetSteps(containerId){
+      const c = document.getElementById(containerId);
+      if(!c) return;
+      const steps = c.querySelectorAll('.step');
+      steps.forEach((s,i)=>s.classList.toggle('active', i===0));
+      updateStepDots(containerId);
+      updateStepControls(containerId);
+    }
+    function nextStep(containerId){
+      const c = document.getElementById(containerId);
+      const steps = c.querySelectorAll('.step');
+      const i = Array.from(steps).findIndex(s=>s.classList.contains('active'));
+      if(i < steps.length-1){
+        steps[i].classList.remove('active');
+        steps[i+1].classList.add('active');
+        updateStepDots(containerId);
+        updateStepControls(containerId);
+        steps[i+1].scrollIntoView({behavior:'smooth'});
+      }else{
+        window.location.href = 'pca_intp.html';
+      }
+    }
+    function prevStep(containerId){
+      const c = document.getElementById(containerId);
+      const steps = c.querySelectorAll('.step');
+      const i = Array.from(steps).findIndex(s=>s.classList.contains('active'));
+      if(i>0){
+        steps[i].classList.remove('active');
+        steps[i-1].classList.add('active');
+        updateStepDots(containerId);
+        updateStepControls(containerId);
+        return;
+      }
+      // Step 1 -> go back to placeholder
+      const ph = document.getElementById('pcaPlaceholder');
+      const tCont = document.getElementById('pcaTabsContent');
+      if(ph){ ph.classList.remove('d-none'); ph.style.display='block'; }
+      if(tCont){ tCont.classList.remove('show','active'); }
+      const activePane = document.querySelector('.tab-pane.active.show');
+      if(activePane) activePane.classList.remove('active','show');
+      const activeTab = document.querySelector('#pcaTabs .btn.active');
+      if(activeTab){ activeTab.classList.remove('active'); activeTab.setAttribute('aria-selected','false'); }
+      setTimeout(()=>{
+        const img = document.getElementById('waterways');
+        if(img){ const base = img.src.split('?')[0]; img.src = `${base}?t=${Date.now()}`; }
+      },100);
+    }
+    function returnToPlaceholder(){
+      const ph = document.getElementById('pcaPlaceholder');
+      const tCont = document.getElementById('pcaTabsContent');
+      if(ph) ph.classList.remove('d-none');
+      if(tCont) tCont.classList.remove('show','active');
+      const activePane = document.querySelector('.tab-pane.active.show');
+      if(activePane) activePane.classList.remove('active','show');
+      const activeTab = document.querySelector('#pcaTabs .btn.active');
+      if(activeTab){ activeTab.classList.remove('active'); activeTab.setAttribute('aria-selected','false'); }
+    }
+
+    /* --------------- DataTables init (single source of truth) --------------- */
+    const DT_OPTS = {
+      paging: true,          // set to false if you prefer no paging
+      searching: true,
+      ordering: true,
+      info: false,
+      autoWidth: false,
+      scrollX: true,
+      responsive: true,
+      order: []
+    };
+    function initAllTables(scope=document){
+      scope.querySelectorAll('table.display, table[id$="-stats-table"]').forEach(tbl=>{
+        if (window.jQuery && $.fn && $.fn.DataTable && !$.fn.DataTable.isDataTable(tbl)) {
+          $(tbl).DataTable(DT_OPTS);
+        }
+      });
+    }
+      // DataTables: initialize safely everywhere (including hidden tab panes)
+      (function() {
+        const dtOpts = {
+          paging: false,        // you can flip to true if you want
+          searching: true,
+          info: false,
+          autoWidth: false,
+          scrollX: true,        // keeps wide tables usable
+          order: []             // keep your original row order
+        };
+
+        function initAllTables(scope=document) {
+          scope.querySelectorAll('table.display').forEach(tbl => {
+            if (!$.fn.DataTable.isDataTable(tbl)) {
+              $(tbl).DataTable(dtOpts);
+            }
+          });
+        }
+
+        // 1) Init on DOM ready (works if a tab is already open)
+        document.addEventListener('DOMContentLoaded', () => initAllTables());
+
+        // 2) Also init when a tab becomes visible (needed for panes added later or if CSS prevented first init)
+        document.querySelectorAll('#pcaTabs button').forEach(btn => {
+          btn.addEventListener('shown.bs.tab', ev => {
+            const targetSel = ev.target.getAttribute('data-bs-target');   // e.g. "#eagle"
+            const pane = document.querySelector(targetSel);
+            if (pane) initAllTables(pane);
+          });
+        });
+      })();
+    
+
+    /* --------------- Page setup --------------- */
+    document.addEventListener('DOMContentLoaded', function(){
+      // Initialize any visible tables right away
+      initAllTables();
+
+      // Tabs: show pane, reset steps, init tables inside the pane
+      document.querySelectorAll('#pcaTabs button').forEach(btn=>{
+        btn.addEventListener('shown.bs.tab', (ev)=>{
+          const ph = document.getElementById('pcaPlaceholder');
+          if(ph) ph.style.display='none';
+
+          // Hide all panes, show target
+          document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('show','active'));
+          const targetSel = ev.target.getAttribute('data-bs-target');
+          const pane = document.querySelector(targetSel);
+          if(pane){ pane.classList.add('show','active'); initAllTables(pane); }
+
+          // Reset steps for that site
+          if(targetSel==='#eagle'){ resetSteps('eagle-pca-steps'); }
+          if(targetSel==='#fall'){  resetSteps('fall-pca-steps'); }
+          if(targetSel==='#white'){ resetSteps('white-pca-steps'); }
+        });
+      });
+
+      // Collapse panels reset on page show (keeps them closed when coming back)
+      window.addEventListener('pageshow', ()=>{
+        document.querySelectorAll('.collapse').forEach(el=>{
+          el.classList.remove('show'); el.style.removeProperty('height');
+          const id = el.id;
+          if(id){
+            document.querySelectorAll(`[data-bs-target="#${id}"]`).forEach(btn=>{
+              btn.setAttribute('aria-expanded','false'); btn.classList.add('collapsed');
+            });
+          }
+        });
+      });
+
+    });
+
+    window.openNav = openNav; window.closeNav = closeNav;
+    window.nextStep = nextStep; window.prevStep = prevStep; window.returnToPlaceholder = returnToPlaceholder;
+    </script>
+
+
+      <script>
+(function(){
+  function toggleExpand(img){
+    const already = img.classList.contains('expanded');
+    // close any other expanded image
+    document.querySelectorAll('.expandable-img.expanded')
+      .forEach(el => el.classList.remove('expanded'));
+    // toggle this one
+    if (!already) img.classList.add('expanded');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.expandable-img').forEach(img => {
+      img.setAttribute('tabindex','0'); // keyboard friendly
+      img.addEventListener('click', () => toggleExpand(img));
+      img.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(img); }
+      });
+    });
+  });
+
+  // Press Escape to collapse any expanded image
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.expandable-img.expanded')
+        .forEach(el => el.classList.remove('expanded'));
+    }
+  });
+})();
+</script>
+
+    <script>
+    (function () {
+      // Attach ONE handler per .pca-slideshow and kill any inline onclicks
+      function wireSlides() {
+        document.querySelectorAll('.pca-slideshow').forEach(slide => {
+          // remove inline onclick so it can't double-fire
+          slide.querySelectorAll('.prev-btn, .next-btn').forEach(b => {
+            b.onclick = null;              // remove property handler
+            b.removeAttribute('onclick');  // remove attribute handler
+          });
+
+          // already wired? skip
+          if (slide.dataset.wired === '1') return;
+
+          // event delegation: one listener for prev/next
+          slide.addEventListener('click', (e) => {
+            const next = e.target.closest('.next-btn');
+            const prev = e.target.closest('.prev-btn');
+            if (!next && !prev) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const containerId = slide.id; // e.g., "eagle-pca-steps"
+            if (next) nextStep(containerId);
+            if (prev) prevStep(containerId); // step 1 goes to placeholder by your existing logic
+          });
+
+          slide.dataset.wired = '1';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', wireSlides);
+      // re-run when switching tabs so hidden panes get neutralized/wired once
+      document.querySelectorAll('#pcaTabs button').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', wireSlides);
+      });
+    })();
+    </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+      </body>
+    </html>

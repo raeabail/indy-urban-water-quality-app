@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Key Takeaways • Marion County Water Quality</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              PCA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item active" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Main content -->
+<main class="container body">
+  <h3 class="text-center fw-bold">Key Takeaways</h3>
+  <p style="margin-top: 15px;">Over 24 years of monitoring, PCA and clustering tell a clear story for <b>Eagle Creek</b>, <b>Fall Creek</b>, and the <b>Lower White River</b>.
+  Each site is governed by one prevailing water-quality regime with localized hotspots rather than distinct watershed zones.
+  The most persistent signals involve <b>chloride/sulfate/TDS</b> (road salts and urban runoff), <b>metals</b> (legacy infrastructure and
+  industrial pathways), and <b>nitrogen–microbial dynamics</b> (sewage and redox conditions). </p>
+  
+  <p>Together, the results suggest current
+  controls and natural buffering provide stability, while the biggest gains will come from <b>salt-smart operations</b>, <b>legacy
+  pipe/material replacement and pretreatment</b>, <b>riparian/green infrastructure in hotspots</b>, and <b>storm- and winter-timed monitoring</b>.
+  Long-term data and multivariate analysis are essential for setting policy and investment priorities.</p>
+
+  <hr style="border: 1px solid #162e44; margin: 15px 0" />
+
+  <p class="text-uppercase text-muted fw-semibold small mb-2" style="letter-spacing:.06em;">
+    Key takeaways at a glance
+  </p>
+
+  <div class="takeaway-card">
+  <span class="pill pill-dominant d-inline-block mb-2">Dominant Pattern</span>
+  <h5>One main water-quality regime per site</h5>
+  <p>At all three waterways, most samples fall into a single dominant cluster. Smaller groups appear but typically reflect localized variability or short-lived anomalies rather than distinct watershed zones.</p>
+</div>
+
+<div class="takeaway-card">
+  <span class="pill pill-salts d-inline-block mb-2">Salts & Metals</span>
+  <h5>Chloride, sulfate, <span class="nowrap">TDS</span>, and metals shape the components</h5>
+  <p>PCA consistently highlights Cl<sup>−</sup>, SO<sub>4</sub><sup>2−</sup>, TDS, and metals (Pb, Cr, Ni). These patterns point to <b>road salts</b>, <b>urban runoff</b>, and <b>legacy industrial materials</b> as recurring drivers.</p>
+</div>
+
+<div class="takeaway-card">
+  <span class="pill pill-sewage d-inline-block mb-2">Sewage & Nutrients</span>
+  <h5><i>E. coli</i> and ammonia flag local sewage influence</h5>
+  <p>Signals from <i>E. coli</i> and NH<sub>3</sub> indicate CSO/sewage impacts or reduced conditions, whereas PO<sub>4</sub> aligns with fertilizer use and urban nutrient inputs in specific sub-catchments.</p>
+</div>
+
+<div class="takeaway-card">
+  <span class="pill pill-stability d-inline-block mb-2">Site Stability</span>
+  <h5>Relative uniformity within sites</h5>
+  <p>Despite county-wide variability, site-level readings are fairly consistent with localized anomalies, suggesting current controls and natural buffering provide meaningful stability.</p>
+</div>
+
+  <!-- Navigation buttons -->
+  <div class="step-footer">
+    <a href="pca_intp.html" class="btn">&larr; Back PCA Interpretations</a>
+    <a href="references.html" class="btn">Next: Study References &rarr;</a>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 Marion County Water Quality Study — raeabail@iu.edu</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  window.addEventListener("scroll", function () {
+    const navbar = document.querySelector(".navbar");
+    if (window.scrollY > 20) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+</script>
+</body>
+</html>

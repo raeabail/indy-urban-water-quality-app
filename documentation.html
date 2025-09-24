@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home • Marion County Water Quality</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="noise-overlay"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="documentation.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              PCA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+              <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+              <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+              <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+              <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Title Page / Hero Card -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="kicker mb-2">1995–2019 • Marion County, IN</div>
+        <h1 class="mb-3">Spatiotemporal Trends in Urban Surface Water Quality</h1>
+        <p class="lead mb-4">
+          From two decades of monitoring, statistical analyses reveal the chemical fingerprints of Eagle Creek, Fall Creek, and the Lower White River.
+          The results highlight both persistent pollution sources and site-level stability, 
+          offering lessons in resilience and the importance of long-term monitoring for sustainable water policy.
+          <br>
+          <br>
+          Explore maps, analyses, and key insights that illuminate the story of water quality in Marion County.
+        </p>
+        <div class="cta d-flex flex-column align-items-center">
+            <!-- Primary Button -->
+            <a class="btn btn-primary mb-2" href="index.html">Start Exploring!</a>
+
+            <!-- Secondary Links -->
+            <div class="small secondary-links">
+                Or go directly to: 
+                <a href="pca_results.html">View Results</a> • 
+                <a href="key_takeaways.html">Read Key Insights</a> • 
+                <a href="whatnow.html">See What’s Next</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.navbar');
+      (window.scrollY > 20) ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
