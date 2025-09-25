@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intro • Marion County Water Quality</title>
+
+  <!-- Bootstrap + theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+  <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="introduction.html">
+        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
+        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
+        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <!-- put 'active' on the page you’re on -->
+            <li class="nav-item"><a class="nav-link active" href="index.html">Introduction</a></li>
+            <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
+            <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">PCA</a>
+            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
+                <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
+                <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
+                <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
+                <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
+            </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <main class="container body">
+        <h3><center>Introduction</center></h3>
+        <div class="row">
+            <div class="col-md-8">
+                    <p>On this dashboard, you can explore two main topics:</p>
+                <ol>
+                    <li style="margin-top: 15px;"><span style="color: #162e44;"> <b>Discover:</b> Learn about the condition of local surface water in Marion County through interactive charts, maps, and fun activities.</span></li>
+                    <li><span style="color: #162e44; margin-top: 150px;"> <b>Understand:</b> Find out why water quality is important for both the environment and your community.</span></li>
+                </ol>
+
+                <p>Water quality is measured using <b>data</b>! Since the late 1990s, the Marion County Public Health Department (MCPHD) has been collecting samples from streams and rivers such as the White River, Eagle Creek, and Fall Creek. Their findings help identify if the water is safe for activities like swimming, fishing, or playing nearby and for consumption.</p>
+
+                <p>As of 2019, MCPHD monitors 51 sites across Marion County. At these sites, they measure factors called <b>pollutants</b> to see if the water is clean or needs improvements. These pollutants include bacteria, chemicals, and physical properties of the water. Areas with low pollutants are marked “Safe,” while high levels of pollutants mean it’s “Not Safe” to swim, play, or drink from the water.</p>
+            </div>
+            
+            <div class="col-md-4 d-flex align-items-center justify-content-center flex-column">
+                <a href="https://marionhealth.org/surface-water-program/#:~:text=Watershed%20Sampling%20Program-,Watershed%20Sampling%20Program,in%20areas%20susceptible%20to%20pollution." target="_blank">
+                    <img id= "marioncounty" src="images/mc.jpg" alt="Map of Marion County" class="expandable-img" style="width: 350px; height: auto; margin-bottom: 5px;">
+                </a>
+                <p class="text-center" style="color: #001f3f; font-size: 14px; margin-top: 10px;">Click to enlarge, or use Ctrl + click (⌘ + click on Mac) for more information on the Watershed Sampling Program</p>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid #162e44; margin: 20px 0;">
+        <h4 style="text-align: center; margin-top: 20px; color: #162e44;"><b>What is Measured?</b></h4>
+        <p style="margin-top: 25px; margin-bottom: 5px;">They monitor these factors five times a month:</p>
+        <ul style="padding-left: 25px;">
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/ph.png" alt="pH Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="ph">
+            <span style="font-weight: bold; color: var(--ink);">pH → How acidic or basic is the water?</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/temp.png" alt="Temperature Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="temp">
+            <span style="font-weight: bold; color: var(--ink);">Temperature → How warm or cold is the water?</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/oxygen.png" alt="Dissolved Oxygen Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="do">
+            <span style="font-weight: bold; color: var(--ink);">Dissolved Oxygen → How much oxygen is available to fish and plants in water?</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/specific_conductivity.png" alt="Specific Conductivity Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="spcond">
+            <span style="font-weight: bold; color: var(--ink);">Specific Conductivity → What is the concentration of dissolved salts in water?</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/tds.png" alt="Total Dissolved Solids Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="tds">
+            <span style="font-weight: bold; color: var(--ink);">Total Dissolved Solids → What is the concentration of all dissolved particles in water?</span>
+            </button>
+        </li>
+        </ul>
+
+        <p style="margin-top: 25px; margin-bottom: 7px;">They also check quarterly for the concentration of these factors:</p>
+        <ul style="padding-left: 20px;">
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/metals.png" alt="Heavy Metals Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="metals">
+            <span style="font-weight: bold; color: var(--ink);">Heavy Metals → Arsenic, Barium, Cadmium, Chromium, Copper, Lead, Mercury, Nickel, and Zinc</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/ammonia.png" alt="Ammonia Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="nh3">
+            <span style="font-weight: bold; color: var(--ink);">Ammonia → NH<sub>3</sub></span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/nitrite.png" alt="Nitrite Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="no2">
+            <span style="font-weight: bold; color: var(--ink);">Nitrite → NO<sub>2</sub></span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/nitrate.png" alt="Nitrate Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="no3">
+            <span style="font-weight: bold; color: var(--ink);">Nitrate → NO<sub>3</sub></span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/chloride.png" alt="Chloride Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="chloride">
+            <span style="font-weight: bold; color: var(--ink);">Chloride → Cl<sup>-</sup></span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/sulfate.png" alt="Sulfate Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="sulfate">
+            <span style="font-weight: bold; color: var(--ink);">Sulfate → SO<sub>4</sub><sup>2-</sup></span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/ecoli.png" alt="E. coli Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="ecoli">
+            <span style="font-weight: bold; color: var(--ink);"><i>E. coli →</i> bacteria indicating contamination</span>
+            </button>
+        </li>
+
+        <li style="margin-bottom: 10px; display: flex; align-items: center;">
+            <img src="icons/hardness.png" alt="Water Hardness Icon" style="width: 40px; height: 40px; margin-right: 10px;">
+            <button class="param-trigger" data-param="hardness">
+            <span style="font-weight: bold; color: var(--ink);">Water Hardness → Mineral content</span>
+            </button>
+        </li>
+        </ul>
+
+        <!-- Reusable modal/card -->
+        <dialog id="paramModal" aria-labelledby="paramTitle">
+        <button class="param-close" aria-label="Close">×</button>
+        <h3 id="paramTitle"></h3>
+        <div id="paramDesc"></div>
+        <div class="param-img-wrapper">
+            <img id="paramImg" alt="">
+        </div>
+        <div class="param-more-wrapper">
+            <a id="paramMore" href="#" target="_blank" rel="noopener">Learn more</a>
+        </div>
+        </dialog>
+
+        <hr style="border: 1px solid #162e44; margin: 20px 0;"><h4 style="text-align: center; margin-top: 20px; color: #162e44;"><b>What are the Challenges?</b></h4>
+        <p>Urbanization in Marion County has created some challenges. As more buildings, roads, and neighborhoods are built, rainwater collects more pollution like oil, trash, and chemicals. This pollution flows into our rivers and streams, which can hurt the fish, plants, and even people who rely on the water.</p>
+        
+        <p>But here’s the good news: scientists are studying these changes to figure out where the problems are coming from and how we can fix them. To understand the bigger picture, we need to learn about <b>Marion County</b> meaning where it is located, what its rivers and streams look like, and how the land around them impacts the water.</p>
+        
+        <p>Ready to explore? Click Next to dive into the County Overview!</p>
+
+        <div class="d-flex justify-content-between" style="margin-top: 40px;">
+            <button type="button" class="btn btn-primary" onclick="window.location.href = 'title.html'">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="window.location.href = 'studyarea.html'">Next: Learn about Marion County →</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
+    </footer>
+
+    <!-- Image modal -->
+    <div class="modal fade" id="imgModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-transparent border-0">
+        <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+        <img id="modalImage" class="img-fluid rounded shadow" alt="">
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.navbar');
+        (window.scrollY > 20) ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
+    });
+    </script>
+
+  <script>
+  
+  // Content for each parameter
+  const PARAM_CONTENT = {
+    ph: {
+      title: "pH", 
+      img: "images/ph_chart.gif",
+      desc:`
+        <ul>
+            <li><b>What it is:</b> Scale of how acidic or basic water is (0–14, 7 = neutral).</li>
+            <li><b>Healthy range:</b> Most freshwater organisms thrive around <b>6.5–8.5</b>.</li>
+            <li><b>Why it matters:</b> pH controls metal solubility and nutrient form; extremes stress fish and invertebrates.</li>
+            <li><b>Natural variation:</b> Can shift daily—photosynthesis raises pH in daylight, respiration lowers it at night.</li>
+            <li><b>Common causes:</b> <i>Low pH</i> → acid mine drainage, acid rain; <i>High pH</i> → intense algal growth, carbonate geology.</li>
+            <li><b>Field notes:</b> Measure with a calibrated probe; temperature compensation improves accuracy (units: “standard units”).</li>
+            <li><b>Red flags:</b> Persistent <b>&lt;6.0</b> or <b>&gt;9.0</b> warrants follow-up and source investigation.</li>
+        </ul>
+       `,
+       more: "https://www.youtube.com/watch?v=lUa7QN18WPA&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=6"
+    },
+    temp: {
+      title: "Temperature",
+      desc: `
+        <ul>
+        <li><b>What it is:</b> A measure of water warmth or coldness (°C or °F).</li>
+        <li><b>Healthy range:</b> Most freshwater fish thrive between ~10–25 °C; extremes stress aquatic life.</li>
+        <li><b>Why it matters:</b> Directly controls metabolic rates, growth, and reproduction of aquatic organisms.</li>
+        <li><b>Connection to oxygen:</b> Warm water holds <i>less</i> dissolved oxygen; cold water holds <i>more</i>.</li>
+        <li><b>Natural variation:</b> Seasonal cycles, daily sun exposure, and groundwater inputs all shift stream temperature.</li>
+        <li><b>Common causes:</b> <i>Thermal pollution</i> from power plants, urban runoff from hot pavement, or loss of riparian shade.</li>
+        <li><b>Field notes:</b> Measure with a thermometer or probe; often paired with dissolved oxygen to assess stress.</li>
+        <li><b>Red flags:</b> Sudden changes of >2–3 °C in a short time can shock or kill sensitive species.</li>
+        </ul>
+        `,
+      img: "images/temp_chart.jpeg",
+      more: "https://www.youtube.com/watch?v=5Jg4ld2cx9k&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=7"
+    },
+    do: {
+      title: "Dissolved Oxygen (DO)",
+        desc: `
+            <ul>
+            <li><b>What it is:</b> Amount of oxygen available in water for fish, invertebrates, and plants.</li>
+            <li><b>Healthy range:</b> Most aquatic life needs ≥5 mg/L; coldwater species may require >8 mg/L.</li>
+            <li><b>Why it matters:</b> Essential for respiration; low DO (“hypoxia”) can cause fish kills.</li>
+            <li><b>Natural variation:</b> Higher in cold, flowing waters; lower in warm or stagnant waters.</li>
+            <li><b>Common causes:</b> Excess nutrients (algal blooms), organic matter decay, thermal pollution.</li>
+            <li><b>Field notes:</b> Measured with an oxygen probe; report in mg/L.</li>
+            <li><b>Red flags:</b> Levels <3 mg/L stress most fish; <1 mg/L is often lethal.</li>
+            </ul>
+        `,
+        img: "images/do_chart.jpg",
+      more: "https://www.youtube.com/watch?v=RxIkIUkg8sg&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=5"
+    },
+    spcond: {
+      title: "Specific Conductivity",
+      desc: `
+            <ul>
+            <li><b>What it is:</b> A measure of water’s ability to conduct electricity, linked to dissolved ions.</li>
+            <li><b>Why it matters:</b> Acts as a quick proxy for total dissolved salts and pollutants.</li>
+            <li><b>Healthy range:</b> Freshwater streams often fall between 50–1500 µS/cm depending on geology.</li>
+            <li><b>Common causes:</b> Road salt, wastewater discharge, industrial effluent.</li>
+            <li><b>Field notes:</b> Measured with a probe; often paired with TDS.</li>
+            <li><b>Red flags:</b> Sudden spikes often signal contamination events.</li>
+            </ul>
+        `,
+        img: "images/spcond_chart.png",
+      more: "https://www.youtube.com/watch?v=VEOjtGQ-05s&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=1"
+    },
+    tds: {
+      title: "Total Dissolved Solids (TDS)",
+      desc: `
+            <ul>
+            <li><b>What it is:</b> Combined content of all dissolved particles (salts, minerals, organics).</li>
+            <li><b>Healthy range:</b> Drinking water guideline ~500 mg/L; aquatic life tolerances vary.</li>
+            <li><b>Why it matters:</b> Affects clarity, taste, habitat quality, and organism health.</li>
+            <li><b>Common causes:</b> Soil erosion, wastewater, fertilizers, road salt.</li>
+            <li><b>Field notes:</b> Derived from conductivity or measured gravimetrically.</li>
+            <li><b>Red flags:</b> Rapid increases may point to runoff or industrial inputs.</li>
+            </ul>
+        `,
+        img: "images/tds_chart.webp",
+      more: "https://www.youtube.com/watch?v=z2qpNmhznQ0"
+    },
+    metals: {
+      title: "Heavy Metals",
+        desc: `
+            <ul>
+            <li><b>What it is:</b> Screening for toxic trace metals like As, Cd, Cr, Cu, Pb, Hg, Ni, Zn.</li>
+            <li><b>Why it matters:</b> Many are toxic at low levels, bioaccumulate, and affect reproduction.</li>
+            <li><b>Common sources:</b> Mining, industry, stormwater, old pipes and paints.</li>
+            <li><b>Impacts:</b> Neurological damage, endocrine disruption, fish kills.</li>
+            <li><b>Field notes:</b> Collected in clean bottles, analyzed in a lab.</li>
+            </ul>
+        `,
+        img: "images/metals_chart.jpg",
+      more: "https://www.youtube.com/watch?v=ZMDi0U_HAaU"
+    },
+    nh3: {
+      title: "Ammonia (NH₃)",
+      desc: `
+            <ul>
+            <li><b>What it is:</b> A nitrogen compound toxic to aquatic organisms at low concentrations.</li>
+            <li><b>Why it matters:</b> Interferes with fish gill function and survival.</li>
+            <li><b>Common sources:</b> Wastewater, manure, fertilizers, stormwater runoff.</li>
+            <li><b>Field notes:</b> Strongly pH- and temperature-dependent; reported in mg/L.</li>
+            <li><b>Red flags:</b> Even 0.2–0.5 mg/L free ammonia can stress fish.</li>
+            </ul>
+        `,
+        img: "images/nitrogen_chart.jpg",
+      more: "https://www.youtube.com/watch?v=T8-3CMY90fc"
+    },
+    no2: {
+      title: "Nitrite (NO₂⁻)",
+        desc: `
+            <ul>
+            <li><b>What it is:</b> An intermediate form of nitrogen in the cycle.</li>
+            <li><b>Why it matters:</b> Toxic to fish; interferes with oxygen transport in blood (“brown blood disease”).</li>
+            <li><b>Common sources:</b> Wastewater, fertilizers, incomplete nitrification.</li>
+            <li><b>Field notes:</b> Unstable, so testing should be done promptly.</li>
+            <li><b>Red flags:</b> Any sustained detection may indicate pollution.</li>
+            </ul>
+        `,
+        img: "images/nitrogen_chart.jpg",
+      more: "https://www.youtube.com/watch?v=m6y_tdbTuAU"
+    },
+    no3: {
+      title: "Nitrate (NO₃⁻)",
+        desc: `
+            <ul>
+            <li><b>What it is:</b> A stable form of nitrogen, essential nutrient but pollutant at high levels.</li>
+            <li><b>Why it matters:</b> Fuels algal blooms and eutrophication.</li>
+            <li><b>Common sources:</b> Fertilizer runoff, septic systems, wastewater.</li>
+            <li><b>Field notes:</b> Measured in mg/L; EPA drinking water limit = 10 mg/L as N.</li>
+            <li><b>Red flags:</b> High levels signal nutrient pollution and algal risk.</li>
+            </ul>
+        `,
+        img: "images/nitrate_chart.webp",
+      more: "https://www.youtube.com/watch?v=m6y_tdbTuAU"
+    },
+    chloride: {
+      title: "Chloride (Cl⁻)",
+      desc: `
+            <ul>
+            <li><b>What it is:</b> Major anion in water, often from salts.</li>
+            <li><b>Why it matters:</b> Elevated levels harm freshwater organisms and shift community composition.</li>
+            <li><b>Common sources:</b> Road salt, water softeners, wastewater.</li>
+            <li><b>Field notes:</b> Stable; usually measured with probes or titration.</li>
+            <li><b>Red flags:</b> Winter spikes from road salt can persist well into spring.</li>
+            </ul>
+        `,
+        img: "images/chloride_chart.webp",
+      more: "https://www.youtube.com/watch?v=9pCrHs8HxM8"
+    },
+    sulfate: {
+      title: "Sulfate (SO₄²⁻)",
+       desc: `
+            <ul>
+            <li><b>What it is:</b> Naturally occurring ion in many waters.</li>
+            <li><b>Why it matters:</b> In high concentrations, can impact taste, laxative effect, and aquatic health.</li>
+            <li><b>Common sources:</b> Mining, industry, gypsum soils.</li>
+            <li><b>Field notes:</b> Can convert to sulfide in low-oxygen waters, stressing organisms.</li>
+            </ul>
+        `,
+        img: "images/sulfate_chart.webp",
+      more: "https://www.health.state.mn.us/communities/environment/water/wells/waterquality/sulfate.html"
+    },
+    ecoli: {
+      title: "E. coli",
+        desc: `
+            <ul>
+            <li><b>What it is:</b> Indicator bacteria for fecal contamination.</li>
+            <li><b>Why it matters:</b> Suggests risk of pathogens harmful to humans and pets.</li>
+            <li><b>Common sources:</b> Sewage leaks, livestock waste, failing septic systems.</li>
+            <li><b>Field notes:</b> Tested by lab culture or rapid molecular methods.</li>
+            <li><b>Red flags:</b> Any exceedance of water-quality standards warrants public health concern.</li>
+            </ul>
+        `,
+        img: "images/ecoli_chart.png",
+      more: "https://www.youtube.com/watch?v=QKHV9zyaT8A"
+    },
+    hardness: {
+      title: "Water Hardness",
+     desc: `
+            <ul>
+            <li><b>What it is:</b> Concentration of calcium (Ca²⁺) and magnesium (Mg²⁺) in water.</li>
+            <li><b>Why it matters:</b> Buffers pH, influences solubility of metals, affects taste and scaling.</li>
+            <li><b>Common sources:</b> Limestone geology, groundwater inputs.</li>
+            <li><b>Field notes:</b> Expressed as mg/L CaCO₃; categories: soft (<60), moderately hard (61–120), hard (121–180), very hard (>180).</li>
+            <li><b>Red flags:</b> Extremely soft water increases metal toxicity; extremely hard causes scaling.</li>
+            </ul>
+        `,
+        img: "images/hardness_chart.webp",
+      more: "https://www.youtube.com/watch?v=kdZdQBVBxwo"
+    }
+  };
+
+  const modal = document.getElementById("paramModal");
+  const titleEl = document.getElementById("paramTitle");
+  const descEl  = document.getElementById("paramDesc");
+  const moreEl  = document.getElementById("paramMore");
+  const imgEl   = document.getElementById("paramImg");
+
+  // Open handlers
+document.querySelectorAll(".param-trigger").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const key = btn.dataset.param;
+    const data = PARAM_CONTENT[key];
+    if (!data) return;
+
+    titleEl.textContent = data.title;
+    descEl.innerHTML = data.desc;
+
+    if (data.img) {
+      imgEl.src = data.img;
+      imgEl.style.display = "block";
+    } else {
+      imgEl.style.display = "none";
+    }
+
+    moreEl.href = data.more || "#";
+    moreEl.style.display = data.more ? "inline-block" : "none";
+
+    modal.showModal();
+  });
+});
+
+
+  // Close handlers
+  modal.querySelector(".param-close").addEventListener("click", () => modal.close());
+  modal.addEventListener("click", (e) => {
+    // click outside the card area closes (backdrop click)
+    const rect = modal.getBoundingClientRect();
+    const inDialog = (
+      e.clientX >= rect.left && e.clientX <= rect.right &&
+      e.clientY >= rect.top  && e.clientY <= rect.bottom
+    );
+    if (!inDialog) modal.close();
+  });
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.open) modal.close();
+  });
+</script>
+
+    <script>
+        function openFullscreen() {
+            var img = document.getElementById("upperwhite");
+            if (img.requestFullscreen) {
+                img.requestFullscreen();
+            } else if (img.mozRequestFullScreen) { /* Firefox */
+                img.mozRequestFullScreen();
+            } else if (img.webkitRequestFullscreen) { /* Chrome, Safari, and Opera */
+                img.webkitRequestFullscreen();
+            } else if (img.msRequestFullscreen) { /* IE/Edge */
+                img.msRequestFullscreen();
+            }
+        }
+    </script>   
+    
+    <script>
+    document.querySelectorAll('.expandable-img').forEach(img => {
+        img.style.cursor = 'zoom-in';
+
+        img.addEventListener('click', e => {
+        // If Ctrl/⌘ or middle mouse button is used → follow the link normally
+        if (e.ctrlKey || e.metaKey || e.button === 1) return;
+
+        e.preventDefault(); // stop the <a> link
+        const modalImg = document.getElementById('modalImage');
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        const modal = new bootstrap.Modal(document.getElementById('imgModal'));
+        modal.show();
+        });
+    });
+    </script>
+
+
+</body>
+</html>

@@ -786,10 +786,6 @@ ul li a:hover {
   margin: 1.25rem 0 0 0;
 }
 
-/* Make sure dropdowns/menus sit above tables/figures if needed */
-.dropdown-menu{ z-index: 1040; }
-
-
 /* 1) Bootstrap tab panes: hide all, show only the active one */
 .tab-content > .tab-pane { 
   display: none;            /* prevents stacking */
@@ -824,9 +820,6 @@ body:has(.tab-content > .tab-pane.active) #pcaPlaceholder {
   background-color: #162e44;
   border-color: #162e44;
 }
-
-/* 5) Keep dropdowns above content if used nearby */
-.dropdown-menu { z-index: 1040; }
 
 /* 6) Minor: make prev/next group neat on narrow screens */
 .prev-btn, .next-btn { min-width: 9rem; }

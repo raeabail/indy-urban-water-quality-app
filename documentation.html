@@ -1,499 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Intro • Marion County Water Quality</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Documentation • Spatiotemporal Trends in Urban Surface Water Quality</title>
+  <meta name="description" content="Methods, results, and references for the Indianapolis urban surface water quality analysis and dashboard."/>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --accent:#0ea5e9;
+      --code:#0b1020;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"}
+    a{color:#0369a1;text-decoration:underline;text-underline-offset:2px}
+    header{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--line);z-index:10}
+    header .wrap{max-width:1100px;margin:0 auto;padding:16px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between}
+    header h1{margin:0;font-size:18px;line-height:1.2}
 
-  <!-- Bootstrap + theme -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="css/style.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800&display=swap" rel="stylesheet" />
+    .container{max-width:1100px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns: 260px 1fr;gap:28px}
+    nav.toc{position:sticky;top:64px;align-self:start;border:1px solid var(--line);border-radius:12px;padding:16px}
+    nav.toc h2{font-size:14px;margin:0 0 8px 0;color:var(--muted)}
+    nav.toc ol{margin:0;padding-left:18px}
+    nav.toc li{margin:6px 0}
+
+    main h2{margin-top:28px;border-top:1px solid var(--line);padding-top:24px}
+    h2{font-size:24px}
+    h3{font-size:18px;margin-top:20px}
+    p{margin:12px 0}
+    .meta{color:var(--muted)}
+
+    .keyline{border:1px solid var(--line);border-radius:12px;padding:16px;margin:16px 0}
+
+    figure{margin:16px 0;border:1px dashed var(--line);border-radius:10px;padding:10px}
+    figcaption{color:var(--muted);font-size:14px}
+
+    table{width:100%;border-collapse:collapse;margin:16px 0;border:1px solid var(--line)}
+    th, td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+    thead th{background:#f8fafc}
+    code, pre{background:#0f172a10;border:1px solid #0f172a20;border-radius:8px;padding:2px 6px}
+
+    .callout{background:#f0f9ff;border-left:4px solid var(--accent);padding:12px 14px;border-radius:8px;margin:16px 0}
+
+    @media (max-width: 900px){
+      .container{grid-template-columns: 1fr}
+      nav.toc{position:static}
+    }
+
+    /* Print tweaks */
+    @media print{
+      header, nav.toc{display:none}
+      .container{max-width:none;padding:0}
+      main{padding:0 12px}
+      a{text-decoration:none}
+    }
+  </style>
 </head>
-
 <body>
-    <div class="noise-overlay"></div>
-  <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="documentation.html">
-        <img src="images/IUI-logo.png" alt="IUI logo" width="126.98412698412697" height="60" class="me-2">
-        <img src="images/mcphd_logo.png" alt="MCPHD logo" width="121.31147540983606" height="60" class="me-2">
-        <span class="brand-title">Spatiotemporal Trends in Urban Surface Water Quality</span>
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <!-- put 'active' on the page you’re on -->
-            <li class="nav-item"><a class="nav-link active" href="index.html">Introduction</a></li>
-            <li class="nav-item"><a class="nav-link" href="studyarea.html">County Overview</a></li>
-            <li class="nav-item"><a class="nav-link" href="interactivemap.html">Sampling Map</a></li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="pcaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">PCA</a>
-            <ul class="dropdown-menu" aria-labelledby="pcaDropdown">
-                <li><a class="dropdown-item" href="pca_exp.html">What is a PCA?</a></li>
-                <li><a class="dropdown-item" href="pca_results.html">Results</a></li>
-                <li><a class="dropdown-item" href="pca_intp.html">Interpretations</a></li>
-                <li><a class="dropdown-item" href="key_takeaways.html">Key Takeaways</a></li>
-            </ul>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
-        </ul>
-        </div>
+  <header>
+    <div class="wrap">
+      <h1>Spatiotemporal Trends in Urban Surface Water Quality: Evidence from 24 years of Monitoring in Indianapolis, IN</h1>
+      <a href="index.html">Back to Dashboard</a>
     </div>
+  </header>
+
+  <div class="container">
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#citation">Citation and Authors</a></li>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#keywords">Keywords</a></li>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#methods">Methods</a>
+          <ol>
+            <li><a href="#study-area">Study Area Description</a></li>
+            <li><a href="#water-sampling">Water Sampling</a></li>
+            <li><a href="#data-prep">Data Preparation</a></li>
+            <li><a href="#pca">Principal Component Analysis</a></li>
+            <li><a href="#varimax">Dominant Parameters via Varimax</a></li>
+            <li><a href="#kmeans">K-means Clustering</a></li>
+            <li><a href="#lda">Linear Discriminant Analysis</a></li>
+          </ol>
+        </li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#discussion">Discussion</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+        <li><a href="#declarations">Declarations</a></li>
+        <li><a href="#data">Data Availability</a></li>
+      </ol>
+      <div class="callout" style="margin-top:12px">
+        <strong>Interactive app</strong><br>
+        Explore site-specific graphs and maps in the companion web app:
+        <div><a href="https://raeabail.github.io/indy-urban-water-quality-app/">raeabail.github.io/indy-urban-water-quality-app</a></div>
+      </div>
     </nav>
 
-    <main class="container body">
-        <h3><center>Introduction</center></h3>
-        <div class="row">
-            <div class="col-md-8">
-                    <p>On this dashboard, you can explore two main topics:</p>
-                <ol>
-                    <li style="margin-top: 15px;"><span style="color: #162e44;"> <b>Discover:</b> Learn about the condition of local surface water in Marion County through interactive charts, maps, and fun activities.</span></li>
-                    <li><span style="color: #162e44; margin-top: 150px;"> <b>Understand:</b> Find out why water quality is important for both the environment and your community.</span></li>
-                </ol>
+    <main>
+      <section id="citation" aria-labelledby="citation-h">
+        <h2 id="citation-h">Citation and Authors</h2>
+        <p><strong>Authors:</strong> Raenah Bailey (Corresponding Author), Gabriel Filippelli, Jeffery Wilson</p>
+        <p class="meta">Department of Earth Sciences, Indiana University Indianapolis (IUI), Indianapolis, Indiana 46202, USA</p>
+        <p class="meta">Contact: <a href="mailto:raeabail@iu.edu">raeabail@iu.edu</a>, <a href="mailto:gfilippe@iu.edu">gfilippe@iu.edu</a>, <a href="mailto:gdrusche@iu.edu">gdrusche@iu.edu</a></p>
+      </section>
 
-                <p>Water quality is measured using <b>data</b>! Since the late 1990s, the Marion County Public Health Department (MCPHD) has been collecting samples from streams and rivers such as the White River, Eagle Creek, and Fall Creek. Their findings help identify if the water is safe for activities like swimming, fishing, or playing nearby and for consumption.</p>
+      <section id="abstract" aria-labelledby="abstract-h">
+        <h2 id="abstract-h">Abstract</h2>
+        <p>24 years</p>
+      </section>
 
-                <p>As of 2019, MCPHD monitors 51 sites across Marion County. At these sites, they measure factors called <b>pollutants</b> to see if the water is clean or needs improvements. These pollutants include bacteria, chemicals, and physical properties of the water. Areas with low pollutants are marked “Safe,” while high levels of pollutants mean it’s “Not Safe” to swim, play, or drink from the water.</p>
-            </div>
-            
-            <div class="col-md-4 d-flex align-items-center justify-content-center flex-column">
-                <a href="https://marionhealth.org/surface-water-program/#:~:text=Watershed%20Sampling%20Program-,Watershed%20Sampling%20Program,in%20areas%20susceptible%20to%20pollution." target="_blank">
-                    <img id= "marioncounty" src="images/mc.jpg" alt="Map of Marion County" class="expandable-img" style="width: 350px; height: auto; margin-bottom: 5px;">
-                </a>
-                <p class="text-center" style="color: #001f3f; font-size: 14px; margin-top: 10px;">Click to enlarge, or use Ctrl + click (⌘ + click on Mac) for more information on the Watershed Sampling Program</p>
-            </div>
+      <section id="keywords" aria-labelledby="keywords-h">
+        <h2 id="keywords-h">Keywords</h2>
+        <p>Urban water quality, Principal component analysis (PCA), watershed management, long-term monitoring</p>
+      </section>
+
+      <section id="intro" aria-labelledby="intro-h">
+        <h2 id="intro-h">Introduction</h2>
+        <p>Amidst accelerated urbanization and industrialization, an imperative to protect and enhance water quality has emerged as a critical concern within environmental frameworks and global health. This increased attention is attributable to water's integral role in supporting ecological systems, agricultural productivity, industrial processes, and human health (Bashir et al., 2020). Urban expansion, accompanied by infrastructure developments and increased population densities, imposes substantial stress on aquatic ecosystems through the introduction of pollutants from industrial effluents, sewage emissions, and agricultural runoff laden with pesticides and fertilizers (Abowel and Sikoki 2005; Ekubo and Abowel 2011; Bashir et al., 2020). These contaminants not only undermine the integrity of aquatic environments but also diminish the quality of potable water, thereby elevating public health risks (Morris 1999; Bashir et al., 2020).</p>
+        <p>Increased urbanization impacts water quality management by disrupting natural hydrological processes. The replacement of permeable ground with impermeable materials such as concrete and asphalt amplifies runoff, potentially overwhelming municipal drainage systems and facilitating the direct influx of untreated water into rivers and lakes (Larsen et al., 2016). This urban runoff transports a diverse array of pollutants, including heavy metals, pathogens, and microplastics, exacerbating threats to aquatic biodiversity and human health (Larsen et al., 2016). Environmental data can play a crucial role in evaluating water quality and the health of ecosystems. Regular monitoring of water quality includes measuring various parameters like dissolved oxygen, pH, conductivity, total nitrogen, and total phosphorus (Mohammed et al., 2022). These measurements may differ based on the specific needs of the area, the methods used, the sample size, and the objectives of the project (Mohammed et al., 2022).</p>
+        <p>For example, a study that assessed water quality by measuring variables like nitrate, nitrite, ammonium, alkalinity, hardness, turbidity, conductivity, dissolved oxygen, and pH, to derive the Water Quality Index (WQI) (Uddin et al., 2021). Techniques from multivariate statistics, particularly Principal Component Analysis (PCA), have been used to help interpret field data, allowing for a reduction in the complexity of the data while preserving its original structure (Shrestha and Kazama, 2022). Moreover, the use of other statistical methods including cluster analysis, discriminant analysis, and ANOVA provides deeper insights into the intricacies of water quality data. These methods facilitate the recognition of underlying factors influencing the water system, offering an effective means for managing water resources and promptly addressing pollution issues (Boyacioglu and Boyacioglu, 2008; Chen et al., 2011).</p>
+        <p>Longitudinal monitoring initiatives are essential for recognizing temporal alterations in water quality, pinpointing sources of contamination, and evaluating the efficacy of pollution mitigation efforts (Larsen et al., 2016; Girmay et al. 2020). Additionally, such data are instrumental in crafting predictive models that can inform forthcoming water management tactics and policy frameworks (Larsen et al., 2016; Shah et al. 2021). However, the implementation of effective water quality monitoring and management can be challenging, given financial limitations, logistical obstacles, and the need for specialized instrumentation and expertise (Kirschke et al., 2020). Water quality monitoring involves sampling and analyzing water constituents like chemicals, sediments, and biological indicators to assess the health of water bodies (Lee and Riskin, 2021). This process is essential for detecting pollution problems, designing remediation programs, and ensuring compliance with regulations (Lee and Riskin, 2021). The complexity arises from the multitude of agencies involved in monitoring, including state agencies, tribes, local governments, and federal entities like the EPA and USGS (Behmel et al., 2016; Lee and Riskin, 2021). These agencies conduct monitoring programs, administer grants, provide technical guidance, and conduct compliance monitoring to ensure water safety and environmental health (Behmel et al., 2016; Lee and Riskin, 2021). Additionally, private entities such as universities, watershed associations, and environmental groups also contribute to water quality monitoring efforts (Behmel et al., 2016; Lee and Riskin, 2021). The involvement of multiple agencies introduces challenges related to coordination, data sharing, resource allocation, and ensuring consistency in monitoring practices across different jurisdictions and organizations.</p>
+        <p>Marion County, Indiana, has conducted water quality monitoring programs for several decades. This study leverages the data gathered by the Marion County Public Health Department (MCPHD), conducting a comprehensive analysis of local water quality trends. The department's surface water monitoring program has expanded over time to include 54 sites, testing for a range of parameters, such as heavy metals and nutrients. By examining this extensive dataset, some stretching back to 1995, this study aims to understand the impacts of urban development, agricultural practices, and policy interventions on water quality. Furthermore, this analysis serves a dual purpose: it not only provides valuable insights into the specific water quality issues facing Marion County but also investigates how water quality parameters change at different sampling sites, allowing the determination of which parameters are most responsible for the variations in water quality.</p>
+      </section>
+
+      <section id="methods" aria-labelledby="methods-h">
+        <h2 id="methods-h">Methods</h2>
+
+        <h3 id="study-area">Study Area Description</h3>
+        <p>Marion County, IN lies in the central part of the state, facilitating access from various regions. The county was incorporated into the city limits of Indianapolis in 1970, so the geographic footprint of the two are identical. The county encompasses a mix of developed and natural landscapes, including parks, rivers, and a portion of the White River running through Indianapolis, offering opportunities for environmental and ecological studies. It is included in the largest watershed in the state of Indiana known as the Upper White River Watershed (Bowling et al., 2018). Overall, the topography is flat to undulating, with an average slope of about 1.0 percent (Bowling et al., 2018). The soils are mainly productive soils, for example alfisols, developed in glacial till, and the primary agricultural crops are corn and soybean, along with other crops such as wheat, oats, barley, and sorghum (Bowling et al., 2018).</p>
+
+        <h3 id="water-sampling">Water Sampling</h3>
+        <p>There are three waterways labelled in Figure 1: Eagle Creek (yellow), Fall Creek (red), and the Lower White River (blue). For this study, each waterway is considered a site, where Eagle Creek is Site 1, Fall Creek is Site 2, and the Lower White River is Site 3. The Lower White River samples from smaller waterways that lead into the White River (orange). The smaller waterways include Pogue's Run, Pleasant Run, Lick Creek, and Bean Creek (blue). All waterways enter into the White River in the southwest part of the county.</p>
+        <figure>
+          <figcaption>Figure 1. Study waterways map. Replace this with <code>images/fig1.png</code>.</figcaption>
+        </figure>
+
+        <div class="keyline">
+          <h4>Table 1. Site Descriptions</h4>
+          <table aria-label="Site descriptions">
+            <thead>
+              <tr><th>Marion County Sites</th><th>Descriptions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Site 1 (Eagle Creek)</td>
+                <td>
+                  <ul>
+                    <li>Upper sub-catchments are predominantly agricultural and contribute higher nutrients and pesticides in runoff.</li>
+                    <li>Lower sub-catchments are more urban and contribute urban pollutants such as heavy metals and hydrocarbons.</li>
+                    <li>Phosphate levels vary with farming practices and intensity.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Site 2 (Fall Creek)</td>
+                <td>
+                  <ul>
+                    <li>Industrial proximity increases heavy metals and chlorides due to point sources.</li>
+                    <li>Older residential infrastructure contributes additional heavy metal loading via erosion and leaching.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Site 3 (Lower White River)</td>
+                <td>
+                  <ul>
+                    <li>Downstream of historical industrial sites with legacy arsenic and cadmium in sediments.</li>
+                    <li>Modern integrated pest management lowers pesticides and nutrients in some sub-catchments relative to traditional practices.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <hr style="border: 1px solid #162e44; margin: 20px 0;">
-        <h4 style="text-align: center; margin-top: 20px; color: #162e44;"><b>What is Measured?</b></h4>
-        <p style="margin-top: 25px; margin-bottom: 5px;">They monitor these factors five times a month:</p>
-        <ul style="padding-left: 25px;">
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/ph.png" alt="pH Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="ph">
-            <span style="font-weight: bold; color: var(--ink);">pH → How acidic or basic is the water?</span>
-            </button>
-        </li>
+        <p>MCPHD started publishing sampling data in 1995. There are a total of 54 sites that are sampled. Five times a month the following parameters are tested: pH, temperature, dissolved oxygen, specific conductivity, and total dissolved solids. Quarterly, the following parameters are tested: heavy metals, ammonia, nitrite, nitrate, chloride, sulfate, and E. coli.</p>
+        <p>To investigate similarities and differences within and between sites, 24 years of raw water quality data were downloaded from the MCPHD website and analyzed for sites across Marion County, IN.</p>
 
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/temp.png" alt="Temperature Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="temp">
-            <span style="font-weight: bold; color: var(--ink);">Temperature → How warm or cold is the water?</span>
-            </button>
-        </li>
+        <h3 id="data-prep">1. Data Preparation</h3>
+        <p>To ensure uniformity across datasets from the three sites, data were centered and scaled. Kaiser Meyer Olkin and Bartlett tests were applied to assess suitability for PCA. Variables failing adequacy thresholds were omitted. Pearson correlation analysis (alpha 0.05) was used to assess linear relationships with 95 percent confidence intervals.</p>
 
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/oxygen.png" alt="Dissolved Oxygen Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="do">
-            <span style="font-weight: bold; color: var(--ink);">Dissolved Oxygen → How much oxygen is available to fish and plants in water?</span>
-            </button>
-        </li>
+        <h3 id="pca">2. Principal Component Analysis</h3>
+        <p>PCA was used to reduce dimensionality and identify orthogonal components that capture variance in the data. Components were retained based on eigenvalues greater than 1 and aided by scree plot inspection, followed by rotation for interpretability.</p>
 
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/specific_conductivity.png" alt="Specific Conductivity Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="spcond">
-            <span style="font-weight: bold; color: var(--ink);">Specific Conductivity → What is the concentration of dissolved salts in water?</span>
-            </button>
-        </li>
+        <h3 id="varimax">3. Dominant Water Quality Parameters</h3>
+        <p>Varimax rotation was used to simplify factor loadings. Loadings above 0.75 are considered strong, 0.50 to 0.75 moderate, and 0.30 to 0.50 weak.</p>
 
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/tds.png" alt="Total Dissolved Solids Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="tds">
-            <span style="font-weight: bold; color: var(--ink);">Total Dissolved Solids → What is the concentration of all dissolved particles in water?</span>
-            </button>
-        </li>
-        </ul>
+        <h3 id="kmeans">4. K-means Clustering</h3>
+        <p>Normalized parameters were clustered with K-means. The average silhouette method determined optimal k. Clusters were interpreted with respect to geography and land use context.</p>
 
-        <p style="margin-top: 25px; margin-bottom: 7px;">They also check quarterly for the concentration of these factors:</p>
-        <ul style="padding-left: 20px;">
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/metals.png" alt="Heavy Metals Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="metals">
-            <span style="font-weight: bold; color: var(--ink);">Heavy Metals → Arsenic, Barium, Cadmium, Chromium, Copper, Lead, Mercury, Nickel, and Zinc</span>
-            </button>
-        </li>
+        <h3 id="lda">5. Linear Discriminant Analysis</h3>
+        <p>LDA validated K-means clusters and created low dimensional projections that maximize separation between cluster centroids. Accuracy was evaluated with training and cross validation results.</p>
+      </section>
 
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/ammonia.png" alt="Ammonia Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="nh3">
-            <span style="font-weight: bold; color: var(--ink);">Ammonia → NH<sub>3</sub></span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/nitrite.png" alt="Nitrite Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="no2">
-            <span style="font-weight: bold; color: var(--ink);">Nitrite → NO<sub>2</sub></span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/nitrate.png" alt="Nitrate Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="no3">
-            <span style="font-weight: bold; color: var(--ink);">Nitrate → NO<sub>3</sub></span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/chloride.png" alt="Chloride Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="chloride">
-            <span style="font-weight: bold; color: var(--ink);">Chloride → Cl<sup>-</sup></span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/sulfate.png" alt="Sulfate Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="sulfate">
-            <span style="font-weight: bold; color: var(--ink);">Sulfate → SO<sub>4</sub><sup>2-</sup></span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/ecoli.png" alt="E. coli Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="ecoli">
-            <span style="font-weight: bold; color: var(--ink);"><i>E. coli →</i> bacteria indicating contamination</span>
-            </button>
-        </li>
-
-        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-            <img src="icons/hardness.png" alt="Water Hardness Icon" style="width: 40px; height: 40px; margin-right: 10px;">
-            <button class="param-trigger" data-param="hardness">
-            <span style="font-weight: bold; color: var(--ink);">Water Hardness → Mineral content</span>
-            </button>
-        </li>
-        </ul>
-
-        <!-- Reusable modal/card -->
-        <dialog id="paramModal" aria-labelledby="paramTitle">
-        <button class="param-close" aria-label="Close">×</button>
-        <h3 id="paramTitle"></h3>
-        <div id="paramDesc"></div>
-        <div class="param-img-wrapper">
-            <img id="paramImg" alt="">
+      <section id="results" aria-labelledby="results-h">
+        <h2 id="results-h">Results</h2>
+        <p>This study assessed 24 years of surface water quality data across three major waterways in Indianapolis, Indiana. Statistical methods including PCA, K-means clustering, and LDA were used to identify patterns in pollution drivers, land use impacts, and spatial variability.</p>
+        <div class="callout">
+          A companion interactive web application allows users to explore detailed site specific data, temporal trends, clustering results, and visualizations: 
+          <a href="https://raeabail.github.io/indy-urban-water-quality-app/">interactive app</a>.
         </div>
-        <div class="param-more-wrapper">
-            <a id="paramMore" href="#" target="_blank" rel="noopener">Learn more</a>
-        </div>
-        </dialog>
 
-        <hr style="border: 1px solid #162e44; margin: 20px 0;"><h4 style="text-align: center; margin-top: 20px; color: #162e44;"><b>What are the Challenges?</b></h4>
-        <p>Urbanization in Marion County has created some challenges. As more buildings, roads, and neighborhoods are built, rainwater collects more pollution like oil, trash, and chemicals. This pollution flows into our rivers and streams, which can hurt the fish, plants, and even people who rely on the water.</p>
-        
-        <p>But here’s the good news: scientists are studying these changes to figure out where the problems are coming from and how we can fix them. To understand the bigger picture, we need to learn about <b>Marion County</b> meaning where it is located, what its rivers and streams look like, and how the land around them impacts the water.</p>
-        
-        <p>Ready to explore? Click Next to dive into the County Overview!</p>
-
-        <div class="d-flex justify-content-between" style="margin-top: 40px;">
-            <button type="button" class="btn btn-primary" onclick="window.location.href = 'title.html'">← Back</button>
-            <button type="button" class="btn btn-primary" onclick="window.location.href = 'studyarea.html'">Next: Learn about Marion County →</button>
+        <h3>Site 1: Eagle Creek</h3>
+        <h4>Table 2. Descriptive Statistics</h4>
+        <div class="keyline" aria-label="Descriptive statistics table wrapper">
+          <div role="note">For brevity, this table includes the header. Populate with your full values as provided.</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th><th>Units</th><th>Mean</th><th>Std Dev</th><th>Min</th><th>Max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Temp</td><td>Deg C</td><td>20.0194</td><td>11.6221</td><td>-0.3000</td><td>82.9400</td></tr>
+              <tr><td>pH</td><td>Units</td><td>7.9358</td><td>0.5847</td><td>6.5900</td><td>12.6000</td></tr>
+              <tr><td>SpCond</td><td>uS/cm</td><td>2.6081</td><td>1.09132</td><td>0.5005</td><td>5982.0000</td></tr>
+              <tr><td>TDS</td><td>mg/L</td><td>403.7268</td><td>235.5649</td><td>0.7000</td><td>7100.0000</td></tr>
+              <!-- Add remaining rows here or replace whole table with full dataset -->
+            </tbody>
+          </table>
         </div>
+
+        <h4>Pearson Correlation Analysis</h4>
+        <figure>
+          <figcaption>Figure 3. Correlation heatmap. Replace with <code>images/fig3.png</code>.</figcaption>
+        </figure>
+
+        <h4>Principal Component Analysis</h4>
+        <h5>Table 3. PCA loadings and variance</h5>
+        <table>
+          <thead>
+            <tr><th></th><th>PC1</th><th>PC2</th><th>PC3</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TDS</td><td>0.076</td><td>-0.096</td><td>0.068</td></tr>
+            <tr><td>E. coli</td><td>-0.013</td><td>-0.035</td><td>-0.121</td></tr>
+            <tr><td>Arsenic</td><td>0.001</td><td>0.014</td><td>-0.033</td></tr>
+            <!-- Truncated for brevity. Insert all rows as needed -->
+            <tr><td><strong>Total Variance percent</strong></td><td>64.543</td><td>11.913</td><td>5.666</td></tr>
+            <tr><td><strong>Cumulative Variance percent</strong></td><td>64.543</td><td>76.457</td><td>82.123</td></tr>
+          </tbody>
+        </table>
+        <figure>
+          <figcaption>Figure 5. Scree plot for Site 1. Replace with <code>images/fig5.png</code>.</figcaption>
+        </figure>
+
+        <h5>Table 4. PCA after varimax rotation</h5>
+        <table>
+          <thead>
+            <tr><th>Parameters</th><th>VC1</th><th>VC2</th><th>VC3</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TDS</td><td>-0.01</td><td>0.64</td><td>0.08</td></tr>
+            <tr><td>E. coli</td><td>0.01</td><td>0.02</td><td>-0.71</td></tr>
+            <tr><td>Arsenic</td><td>0.93</td><td>-0.02</td><td>0.03</td></tr>
+            <!-- Add remaining rows -->
+            <tr><td><strong>Proportion percent</strong></td><td>0.45</td><td>0.35</td><td>0.20</td></tr>
+            <tr><td><strong>Cumulative percent</strong></td><td>0.45</td><td>0.80</td><td>1.00</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Dominant parameters:</strong> PO4, Chloride, Chromium.</p>
+
+        <h4>Multivariate Statistical Analysis</h4>
+        <figure><figcaption>Figure 6. Silhouette plot for k selection. Replace with <code>images/fig6.png</code>.</figcaption></figure>
+        <figure><figcaption>Figure 7. K means clusters. Replace with <code>images/fig7.png</code>.</figcaption></figure>
+        <p>LDA training accuracy 100 percent and cross validation accuracy 93.53 percent.</p>
+
+        <h3>Site 2: Fall Creek</h3>
+        <h4>Table 5. Descriptive Statistics</h4>
+        <figure><figcaption>Insert full Site 2 table as needed.</figcaption></figure>
+        <h4>Pearson Correlation Analysis</h4>
+        <figure><figcaption>Figure 9. Correlation heatmap. Replace with <code>images/fig9.png</code>.</figcaption></figure>
+        <h4>Principal Component Analysis</h4>
+        <h5>Table 6. PCA loadings and variance</h5>
+        <figure><figcaption>Insert full table values as provided.</figcaption></figure>
+        <h5>Table 7. PCA after varimax rotation</h5>
+        <figure><figcaption>Insert full table values as provided.</figcaption></figure>
+        <p><strong>Dominant parameters:</strong> Chloride, Lead, E. coli.</p>
+        <figure><figcaption>Figures 12 to 14. Clustering and spatial distribution placeholders.</figcaption></figure>
+
+        <h3>Site 3: Lower White River</h3>
+        <h4>Table 8. Descriptive Statistics</h4>
+        <figure><figcaption>Insert full Site 3 table as needed.</figcaption></figure>
+        <h4>Pearson Correlation Analysis</h4>
+        <figure><figcaption>Figure 15. Correlation heatmap.</figcaption></figure>
+        <h4>Principal Component Analysis</h4>
+        <h5>Table 9. PCA loadings and variance</h5>
+        <figure><figcaption>Insert full table values as provided.</figcaption></figure>
+        <h5>Table 10. PCA after varimax rotation</h5>
+        <table>
+          <thead>
+            <tr><th>Parameters</th><th>VC1</th><th>VC2</th><th>VC3</th><th>VC4</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TDS</td><td>0.71</td><td>0.02</td><td>0.42</td><td>0.05</td></tr>
+            <tr><td>E. coli</td><td>-0.52</td><td>0.00</td><td>0.08</td><td>0.08</td></tr>
+            <tr><td>Arsenic</td><td>0.13</td><td>0.42</td><td>0.49</td><td>-0.33</td></tr>
+            <tr><td>Barium</td><td>0.65</td><td>0.11</td><td>0.03</td><td>0.40</td></tr>
+            <tr><td>Chromium</td><td>0.02</td><td>0.77</td><td>-0.03</td><td>-0.02</td></tr>
+            <tr><td>Nickel</td><td>-0.09</td><td>0.77</td><td>-0.08</td><td>0.11</td></tr>
+            <tr><td>Chloride</td><td>0.17</td><td>-0.15</td><td>0.68</td><td>-0.08</td></tr>
+            <tr><td>NO2</td><td>0.34</td><td>0.03</td><td>-0.54</td><td>-0.46</td></tr>
+            <tr><td>SO4</td><td>0.71</td><td>0.11</td><td>0.11</td><td>-0.04</td></tr>
+            <tr><td>NH3</td><td>0.08</td><td>0.04</td><td>-0.09</td><td>0.75</td></tr>
+            <tr><td><strong>Proportion percent</strong></td><td>0.34</td><td>0.25</td><td>0.22</td><td>0.19</td></tr>
+            <tr><td><strong>Cumulative percent</strong></td><td>0.34</td><td>0.59</td><td>0.81</td><td>1.00</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Dominant parameters:</strong> TDS, SO4, Chromium, Nickel, Chloride, NH3.</p>
+        <figure><figcaption>Figures 18 and 19. Silhouette and cluster plots placeholders.</figcaption></figure>
+      </section>
+
+      <section id="discussion" aria-labelledby="discussion-h">
+        <h2 id="discussion-h">Discussion</h2>
+        <p>The comprehensive study of water quality in Marion County, Indiana, conducted an in depth analysis revealing significant spatial variability in parameters such as heavy metals, nutrients, and microbial indicators across Sites 1, 2 and 3, attributable to various anthropogenic activities and natural processes. Key findings highlighted fluctuations in levels of arsenic, phosphate, chloride, and E. coli, each tied to different sources and carrying implications for water resource management. These findings align with established literature noting urbanization and agricultural runoff as pivotal factors impacting water quality. The results further validate the hypothesis that localized land use practices, especially in areas close to intensive farming operations, significantly affect water quality. Elevated phosphate levels, primarily due to fertilizer runoff, exemplify the predominant source of phosphorus affecting the region, underscoring the complex interplay between land use patterns and water quality outcomes.</p>
+        <p>However, the variance in water quality parameters within each site underscores the influence of localized environmental factors and pollution sources, despite overarching similarities in urban development and land use across these sites. Notably, the lack of significant fluctuation within each site points to the possible effectiveness of existing water management strategies and natural resilience of these water bodies. Table 11 displays key findings for each site.</p>
+
+        <div class="keyline">
+          <h4>Table 11. Key Findings for Each Site</h4>
+          <table>
+            <thead>
+              <tr><th>Marion County Sites</th><th>Key Findings</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Site 1 (Eagle Creek)</td>
+                <td>
+                  <ul>
+                    <li>Dominated by agricultural influences with elevated phosphate and E. coli.</li>
+                    <li>Suggests agricultural runoff and potential fecal contamination.</li>
+                    <li>Phosphate variation likely reflects differences in farming practices.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Site 2 (Fall Creek)</td>
+                <td>
+                  <ul>
+                    <li>Urban influences with higher heavy metals and chloride.</li>
+                    <li>Road salt runoff impacts chloride, industrial discharges are possible contributors.</li>
+                    <li>Legacy infrastructure in residential areas adds to the pollution profile.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Site 3 (Lower White River)</td>
+                <td>
+                  <ul>
+                    <li>Diverse contamination profile with significant arsenic and cadmium.</li>
+                    <li>Reflects both agricultural and industrial sources with historical sediments.</li>
+                    <li>Integrated pest management correlates with lower pollutants in some sub-catchments.</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>While this study centers on Indianapolis, the methods and insights are broadly applicable to urban environments facing similar stressors, including aging infrastructure, mixed land use, and legacy industrial pollution. The dominance of chloride from road salts, phosphate from agriculture, and heavy metals like chromium and lead mirrors findings in other Midwestern cities, which reinforces the importance of long term monitoring and integrated watershed management strategies for urban water quality planning.</p>
+        <p>The clustering results revealing relative stability within sub watersheds, despite external urban pressures, are consistent with findings from longitudinal studies in other urban rivers. Therefore, this study's approach and insights can inform urban watershed assessments globally.</p>
+      </section>
+
+      <section id="conclusion" aria-labelledby="conclusion-h">
+        <h2 id="conclusion-h">Conclusion</h2>
+        <p>The analysis of water quality in Marion County, Indiana, over a multi decade period identified dominant parameters across the three main sites and underscored stability within each site that hints at effective local policies and natural resilience. Findings support sustained and adaptive management strategies, expanded monitoring, community engagement, and strong regulatory frameworks to mitigate pollution. Lessons learned here can inform policy and practice in similar urban regions.</p>
+      </section>
+
+      <section id="declarations" aria-labelledby="declarations-h">
+        <h2 id="declarations-h">Declarations</h2>
+        <p>All authors have read, understood, and have complied as applicable with the statement on ethical responsibilities of authors as found in the Instructions for Authors.</p>
+      </section>
+
+      <section id="data" aria-labelledby="data-h">
+        <h2 id="data-h">Data Availability</h2>
+        <p>The data for this study are owned by the Marion County Public Health Department in Marion County, Indiana. The individual record datasets for 1995 to 2019 were used for this study and can be obtained here: <a href="https://marionhealth.org/surface-water-program/">https://marionhealth.org/surface-water-program/</a></p>
+      </section>
+
+      <footer style="margin-top:32px;color:var(--muted);font-size:14px">
+        <p>Prepared as a companion to the Indianapolis Urban Water Quality Dashboard. Replace placeholder figures and truncated tables with your final assets before publishing.</p>
+      </footer>
     </main>
-
-    <footer>
-        <div class="container">© 2025 Marion County Water Quality • raeabail@iu.edu</div>
-    </footer>
-
-    <!-- Image modal -->
-    <div class="modal fade" id="imgModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content bg-transparent border-0">
-        <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
-        <img id="modalImage" class="img-fluid rounded shadow" alt="">
-        </div>
-    </div>
-    </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    window.addEventListener('scroll', () => {
-        const nav = document.querySelector('.navbar');
-        (window.scrollY > 20) ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
-    });
-    </script>
-
-  <script>
-  
-  // Content for each parameter
-  const PARAM_CONTENT = {
-    ph: {
-      title: "pH", 
-      img: "images/ph_chart.gif",
-      desc:`
-        <ul>
-            <li><b>What it is:</b> Scale of how acidic or basic water is (0–14, 7 = neutral).</li>
-            <li><b>Healthy range:</b> Most freshwater organisms thrive around <b>6.5–8.5</b>.</li>
-            <li><b>Why it matters:</b> pH controls metal solubility and nutrient form; extremes stress fish and invertebrates.</li>
-            <li><b>Natural variation:</b> Can shift daily—photosynthesis raises pH in daylight, respiration lowers it at night.</li>
-            <li><b>Common causes:</b> <i>Low pH</i> → acid mine drainage, acid rain; <i>High pH</i> → intense algal growth, carbonate geology.</li>
-            <li><b>Field notes:</b> Measure with a calibrated probe; temperature compensation improves accuracy (units: “standard units”).</li>
-            <li><b>Red flags:</b> Persistent <b>&lt;6.0</b> or <b>&gt;9.0</b> warrants follow-up and source investigation.</li>
-        </ul>
-       `,
-       more: "https://www.youtube.com/watch?v=lUa7QN18WPA&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=6"
-    },
-    temp: {
-      title: "Temperature",
-      desc: `
-        <ul>
-        <li><b>What it is:</b> A measure of water warmth or coldness (°C or °F).</li>
-        <li><b>Healthy range:</b> Most freshwater fish thrive between ~10–25 °C; extremes stress aquatic life.</li>
-        <li><b>Why it matters:</b> Directly controls metabolic rates, growth, and reproduction of aquatic organisms.</li>
-        <li><b>Connection to oxygen:</b> Warm water holds <i>less</i> dissolved oxygen; cold water holds <i>more</i>.</li>
-        <li><b>Natural variation:</b> Seasonal cycles, daily sun exposure, and groundwater inputs all shift stream temperature.</li>
-        <li><b>Common causes:</b> <i>Thermal pollution</i> from power plants, urban runoff from hot pavement, or loss of riparian shade.</li>
-        <li><b>Field notes:</b> Measure with a thermometer or probe; often paired with dissolved oxygen to assess stress.</li>
-        <li><b>Red flags:</b> Sudden changes of >2–3 °C in a short time can shock or kill sensitive species.</li>
-        </ul>
-        `,
-      img: "images/temp_chart.jpeg",
-      more: "https://www.youtube.com/watch?v=5Jg4ld2cx9k&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=7"
-    },
-    do: {
-      title: "Dissolved Oxygen (DO)",
-        desc: `
-            <ul>
-            <li><b>What it is:</b> Amount of oxygen available in water for fish, invertebrates, and plants.</li>
-            <li><b>Healthy range:</b> Most aquatic life needs ≥5 mg/L; coldwater species may require >8 mg/L.</li>
-            <li><b>Why it matters:</b> Essential for respiration; low DO (“hypoxia”) can cause fish kills.</li>
-            <li><b>Natural variation:</b> Higher in cold, flowing waters; lower in warm or stagnant waters.</li>
-            <li><b>Common causes:</b> Excess nutrients (algal blooms), organic matter decay, thermal pollution.</li>
-            <li><b>Field notes:</b> Measured with an oxygen probe; report in mg/L.</li>
-            <li><b>Red flags:</b> Levels <3 mg/L stress most fish; <1 mg/L is often lethal.</li>
-            </ul>
-        `,
-        img: "images/do_chart.jpg",
-      more: "https://www.youtube.com/watch?v=RxIkIUkg8sg&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=5"
-    },
-    spcond: {
-      title: "Specific Conductivity",
-      desc: `
-            <ul>
-            <li><b>What it is:</b> A measure of water’s ability to conduct electricity, linked to dissolved ions.</li>
-            <li><b>Why it matters:</b> Acts as a quick proxy for total dissolved salts and pollutants.</li>
-            <li><b>Healthy range:</b> Freshwater streams often fall between 50–1500 µS/cm depending on geology.</li>
-            <li><b>Common causes:</b> Road salt, wastewater discharge, industrial effluent.</li>
-            <li><b>Field notes:</b> Measured with a probe; often paired with TDS.</li>
-            <li><b>Red flags:</b> Sudden spikes often signal contamination events.</li>
-            </ul>
-        `,
-        img: "images/spcond_chart.png",
-      more: "https://www.youtube.com/watch?v=VEOjtGQ-05s&list=PL9g5HBosOKtrMxcjox_WZScTGxM5thkjp&index=1"
-    },
-    tds: {
-      title: "Total Dissolved Solids (TDS)",
-      desc: `
-            <ul>
-            <li><b>What it is:</b> Combined content of all dissolved particles (salts, minerals, organics).</li>
-            <li><b>Healthy range:</b> Drinking water guideline ~500 mg/L; aquatic life tolerances vary.</li>
-            <li><b>Why it matters:</b> Affects clarity, taste, habitat quality, and organism health.</li>
-            <li><b>Common causes:</b> Soil erosion, wastewater, fertilizers, road salt.</li>
-            <li><b>Field notes:</b> Derived from conductivity or measured gravimetrically.</li>
-            <li><b>Red flags:</b> Rapid increases may point to runoff or industrial inputs.</li>
-            </ul>
-        `,
-        img: "images/tds_chart.webp",
-      more: "https://www.youtube.com/watch?v=z2qpNmhznQ0"
-    },
-    metals: {
-      title: "Heavy Metals",
-        desc: `
-            <ul>
-            <li><b>What it is:</b> Screening for toxic trace metals like As, Cd, Cr, Cu, Pb, Hg, Ni, Zn.</li>
-            <li><b>Why it matters:</b> Many are toxic at low levels, bioaccumulate, and affect reproduction.</li>
-            <li><b>Common sources:</b> Mining, industry, stormwater, old pipes and paints.</li>
-            <li><b>Impacts:</b> Neurological damage, endocrine disruption, fish kills.</li>
-            <li><b>Field notes:</b> Collected in clean bottles, analyzed in a lab.</li>
-            </ul>
-        `,
-        img: "images/metals_chart.jpg",
-      more: "https://www.youtube.com/watch?v=ZMDi0U_HAaU"
-    },
-    nh3: {
-      title: "Ammonia (NH₃)",
-      desc: `
-            <ul>
-            <li><b>What it is:</b> A nitrogen compound toxic to aquatic organisms at low concentrations.</li>
-            <li><b>Why it matters:</b> Interferes with fish gill function and survival.</li>
-            <li><b>Common sources:</b> Wastewater, manure, fertilizers, stormwater runoff.</li>
-            <li><b>Field notes:</b> Strongly pH- and temperature-dependent; reported in mg/L.</li>
-            <li><b>Red flags:</b> Even 0.2–0.5 mg/L free ammonia can stress fish.</li>
-            </ul>
-        `,
-        img: "images/nitrogen_chart.jpg",
-      more: "https://www.youtube.com/watch?v=T8-3CMY90fc"
-    },
-    no2: {
-      title: "Nitrite (NO₂⁻)",
-        desc: `
-            <ul>
-            <li><b>What it is:</b> An intermediate form of nitrogen in the cycle.</li>
-            <li><b>Why it matters:</b> Toxic to fish; interferes with oxygen transport in blood (“brown blood disease”).</li>
-            <li><b>Common sources:</b> Wastewater, fertilizers, incomplete nitrification.</li>
-            <li><b>Field notes:</b> Unstable, so testing should be done promptly.</li>
-            <li><b>Red flags:</b> Any sustained detection may indicate pollution.</li>
-            </ul>
-        `,
-        img: "images/nitrogen_chart.jpg",
-      more: "https://www.youtube.com/watch?v=m6y_tdbTuAU"
-    },
-    no3: {
-      title: "Nitrate (NO₃⁻)",
-        desc: `
-            <ul>
-            <li><b>What it is:</b> A stable form of nitrogen, essential nutrient but pollutant at high levels.</li>
-            <li><b>Why it matters:</b> Fuels algal blooms and eutrophication.</li>
-            <li><b>Common sources:</b> Fertilizer runoff, septic systems, wastewater.</li>
-            <li><b>Field notes:</b> Measured in mg/L; EPA drinking water limit = 10 mg/L as N.</li>
-            <li><b>Red flags:</b> High levels signal nutrient pollution and algal risk.</li>
-            </ul>
-        `,
-        img: "images/nitrate_chart.webp",
-      more: "https://www.youtube.com/watch?v=m6y_tdbTuAU"
-    },
-    chloride: {
-      title: "Chloride (Cl⁻)",
-      desc: `
-            <ul>
-            <li><b>What it is:</b> Major anion in water, often from salts.</li>
-            <li><b>Why it matters:</b> Elevated levels harm freshwater organisms and shift community composition.</li>
-            <li><b>Common sources:</b> Road salt, water softeners, wastewater.</li>
-            <li><b>Field notes:</b> Stable; usually measured with probes or titration.</li>
-            <li><b>Red flags:</b> Winter spikes from road salt can persist well into spring.</li>
-            </ul>
-        `,
-        img: "images/chloride_chart.webp",
-      more: "https://www.youtube.com/watch?v=9pCrHs8HxM8"
-    },
-    sulfate: {
-      title: "Sulfate (SO₄²⁻)",
-       desc: `
-            <ul>
-            <li><b>What it is:</b> Naturally occurring ion in many waters.</li>
-            <li><b>Why it matters:</b> In high concentrations, can impact taste, laxative effect, and aquatic health.</li>
-            <li><b>Common sources:</b> Mining, industry, gypsum soils.</li>
-            <li><b>Field notes:</b> Can convert to sulfide in low-oxygen waters, stressing organisms.</li>
-            </ul>
-        `,
-        img: "images/sulfate_chart.webp",
-      more: "https://www.health.state.mn.us/communities/environment/water/wells/waterquality/sulfate.html"
-    },
-    ecoli: {
-      title: "E. coli",
-        desc: `
-            <ul>
-            <li><b>What it is:</b> Indicator bacteria for fecal contamination.</li>
-            <li><b>Why it matters:</b> Suggests risk of pathogens harmful to humans and pets.</li>
-            <li><b>Common sources:</b> Sewage leaks, livestock waste, failing septic systems.</li>
-            <li><b>Field notes:</b> Tested by lab culture or rapid molecular methods.</li>
-            <li><b>Red flags:</b> Any exceedance of water-quality standards warrants public health concern.</li>
-            </ul>
-        `,
-        img: "images/ecoli_chart.png",
-      more: "https://www.youtube.com/watch?v=QKHV9zyaT8A"
-    },
-    hardness: {
-      title: "Water Hardness",
-     desc: `
-            <ul>
-            <li><b>What it is:</b> Concentration of calcium (Ca²⁺) and magnesium (Mg²⁺) in water.</li>
-            <li><b>Why it matters:</b> Buffers pH, influences solubility of metals, affects taste and scaling.</li>
-            <li><b>Common sources:</b> Limestone geology, groundwater inputs.</li>
-            <li><b>Field notes:</b> Expressed as mg/L CaCO₃; categories: soft (<60), moderately hard (61–120), hard (121–180), very hard (>180).</li>
-            <li><b>Red flags:</b> Extremely soft water increases metal toxicity; extremely hard causes scaling.</li>
-            </ul>
-        `,
-        img: "images/hardness_chart.webp",
-      more: "https://www.youtube.com/watch?v=kdZdQBVBxwo"
-    }
-  };
-
-  const modal = document.getElementById("paramModal");
-  const titleEl = document.getElementById("paramTitle");
-  const descEl  = document.getElementById("paramDesc");
-  const moreEl  = document.getElementById("paramMore");
-  const imgEl   = document.getElementById("paramImg");
-
-  // Open handlers
-document.querySelectorAll(".param-trigger").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const key = btn.dataset.param;
-    const data = PARAM_CONTENT[key];
-    if (!data) return;
-
-    titleEl.textContent = data.title;
-    descEl.innerHTML = data.desc;
-
-    if (data.img) {
-      imgEl.src = data.img;
-      imgEl.style.display = "block";
-    } else {
-      imgEl.style.display = "none";
-    }
-
-    moreEl.href = data.more || "#";
-    moreEl.style.display = data.more ? "inline-block" : "none";
-
-    modal.showModal();
-  });
-});
-
-
-  // Close handlers
-  modal.querySelector(".param-close").addEventListener("click", () => modal.close());
-  modal.addEventListener("click", (e) => {
-    // click outside the card area closes (backdrop click)
-    const rect = modal.getBoundingClientRect();
-    const inDialog = (
-      e.clientX >= rect.left && e.clientX <= rect.right &&
-      e.clientY >= rect.top  && e.clientY <= rect.bottom
-    );
-    if (!inDialog) modal.close();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.open) modal.close();
-  });
-</script>
-
-    <script>
-        function openFullscreen() {
-            var img = document.getElementById("upperwhite");
-            if (img.requestFullscreen) {
-                img.requestFullscreen();
-            } else if (img.mozRequestFullScreen) { /* Firefox */
-                img.mozRequestFullScreen();
-            } else if (img.webkitRequestFullscreen) { /* Chrome, Safari, and Opera */
-                img.webkitRequestFullscreen();
-            } else if (img.msRequestFullscreen) { /* IE/Edge */
-                img.msRequestFullscreen();
-            }
-        }
-    </script>   
-    
-    <script>
-    document.querySelectorAll('.expandable-img').forEach(img => {
-        img.style.cursor = 'zoom-in';
-
-        img.addEventListener('click', e => {
-        // If Ctrl/⌘ or middle mouse button is used → follow the link normally
-        if (e.ctrlKey || e.metaKey || e.button === 1) return;
-
-        e.preventDefault(); // stop the <a> link
-        const modalImg = document.getElementById('modalImage');
-        modalImg.src = img.src;
-        modalImg.alt = img.alt;
-        const modal = new bootstrap.Modal(document.getElementById('imgModal'));
-        modal.show();
-        });
-    });
-    </script>
-
-
+  </div>
 </body>
 </html>
